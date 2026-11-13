@@ -354,13 +354,13 @@ Entschieden am 13.11.2026:
 - Zuerst Design-Prototyp mit allen Basisfunktionen; das Repo folgt.
 - Kein Cloudflare: GitHub Pages + geplante GitHub Action, Snapshot-Aktualität 10–15 min reicht.
 - Repo `World-in-a-Nutshell` unter uschweerlambers-art, öffentlich; Seite unter uschweerlambers-art.github.io/World-in-a-Nutshell.
+- Code unter MIT-Lizenz (Daten behalten die Lizenzen ihrer Quellen).
+- Die Adresse bleibt vorerst uschweerlambers-art.github.io/World-in-a-Nutshell, keine eigene Domain.
 
 Noch offen (spätestens vor M2):
 
-1. **Lizenz:** Vorschlag: Code unter MIT. Bis zur Entscheidung hat das Repo keine Lizenzdatei.
-2. **Domain:** Bleibt es bei der kostenlosen Adresse `uschweerlambers-art.github.io/World-in-a-Nutshell` oder später eine eigene Domain (der einzige Kostenpunkt)?
-3. **Impressum/Datenschutz:** Texte liefert Uwe; der Prototyp stellt Platzhalter und die Liste der Drittserver bereit. GitHub (USA) ist Hoster und wird in der Datenschutzerklärung genannt.
-4. **Kann-Features F-11/F-12** (Zeitleiste, Globus/Karte): Annahme bis auf Weiteres: im Design-Prototyp als Bedienelement sichtbar, Funktion erst später.
+1. **Impressum/Datenschutz:** Texte liefert Uwe; der Prototyp stellt Platzhalter und die Liste der Drittserver bereit. GitHub (USA) ist Hoster und wird in der Datenschutzerklärung genannt.
+2. **Kann-Features F-11/F-12** (Zeitleiste, Globus/Karte): Annahme bis auf Weiteres: im Design-Prototyp als Bedienelement sichtbar, Funktion erst später.
 
 ## 11. Risiken
 

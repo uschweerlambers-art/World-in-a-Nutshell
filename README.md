@@ -53,3 +53,7 @@ npx serve site                                               # or: python3 -m ht
 - Earthquakes: USGS, public domain
 - Aircraft: The OpenSky Network
 - Radio: Radio Browser
+
+## Licence
+
+Code: [MIT](LICENSE) © 2026 Uwe Schweer-Lambers. Data and imagery keep the licences of their sources listed above.
