@@ -46,6 +46,24 @@ jobs:
       - name: Fetch snapshots
         run: node scripts/fetch-snapshots.mjs .cache/live site/data/live
 
+      # 8k Earth textures: built once from NASA GIBS, then kept in the cache
+      - name: Restore 8k textures
+        id: tex
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/textures
+          key: textures-v1
+
+      - name: Build 8k textures (only if not cached)
+        run: node scripts/fetch-textures.mjs .cache/textures site/img/hi
+
+      - name: Save 8k textures
+        if: steps.tex.outputs.cache-hit != 'true' && hashFiles('.cache/textures/*.jpg') != ''
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/textures
+          key: textures-v1
+
       - name: Build cloud layer (NASA GIBS, at most every 3 h)
         run: node scripts/fetch-clouds.mjs .cache/live site/data/live
 
