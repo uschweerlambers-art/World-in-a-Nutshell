@@ -30,6 +30,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+
+      - name: Install build tools
+        run: npm ci --no-audit --no-fund
 
       # Snapshots are never committed. The last good ones live in the Actions cache.
       - name: Restore last snapshots
@@ -41,6 +45,9 @@ jobs:
 
       - name: Fetch snapshots
         run: node scripts/fetch-snapshots.mjs .cache/live site/data/live
+
+      - name: Build cloud layer (NASA GIBS, at most every 3 h)
+        run: node scripts/fetch-clouds.mjs .cache/live site/data/live
 
       - name: Save snapshots
         if: always()
