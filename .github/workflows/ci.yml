@@ -17,14 +17,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
+      - run: npm ci --no-audit --no-fund
       - name: Scripts parse
-        run: node --check scripts/fetch-snapshots.mjs
+        run: node --check scripts/fetch-snapshots.mjs && node --check scripts/fetch-clouds.mjs
       - name: Data files are valid JSON
         run: |
           for f in site/data/*.json; do node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" && echo "ok $f"; done
       - name: Site size stays under 1 GB (N-1.3)
         run: |
           size=$(du -sm site | cut -f1); echo "site: ${size} MB"; test "$size" -lt 900
+      # Smoke test against the real sources; neither script fails the job on a source outage
+      - name: Snapshots and clouds (smoke test)
+        run: |
+          node scripts/fetch-snapshots.mjs .cache/live site/data/live || true
+          node scripts/fetch-clouds.mjs .cache/live site/data/live
+          ls -la site/data/live
       # The preview build lets reviewers download and open the site locally (N-7.4).
       - uses: actions/upload-artifact@v4
         with:
