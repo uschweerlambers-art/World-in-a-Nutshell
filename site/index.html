@@ -755,7 +755,7 @@ if (renderer) {
 if (renderer) (async () => {
   try {
     const meta = await (await fetch('data/live/clouds.json', { cache: 'no-cache' })).json();
-    new THREE.TextureLoader().load(`data/live/clouds.png?${encodeURIComponent(meta.fetched)}`, t => {
+    new THREE.TextureLoader().load(`data/live/clouds.jpg?${encodeURIComponent(meta.fetched)}`, t => {
       t.colorSpace = THREE.NoColorSpace; t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
       uniforms.cloudMap.value = t; uniforms.cloudReal.value = 1;
       const d = new Date(meta.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });

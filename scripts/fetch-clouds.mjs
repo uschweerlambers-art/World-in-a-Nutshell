@@ -7,7 +7,7 @@
 // How: true-colour mosaics of four polar orbiters (MODIS Terra/Aqua, VIIRS SNPP/NOAA-20)
 // are turned into a cloud mask (bright and grey = cloud, colourful or dark = ground).
 // Today's passes win where they have data, yesterday's fill the gaps.
-// Output: clouds.png (grey = cloud cover, 2048×1024 equirectangular) + clouds.json.
+// Output: clouds.jpg (grey = cloud cover, 2048×1024 equirectangular) + clouds.json.
 
 import sharp from 'sharp';
 import { mkdir, readFile, writeFile, copyFile, stat } from 'node:fs/promises';
@@ -84,15 +84,16 @@ async function build() {
     for (let i = 0; i < result.length; i++) if (result[i] > 0 && ground[i] > 0) result[i] = Math.round(result[i] * (1 - 0.9 * ground[i] / 255));
   } catch (e) { console.warn(`  no ground mask: ${e.message}`); }
   const covered = result.reduce((s, v) => s + (v >= 0 ? 1 : 0), 0) / result.length;
+  const cloudy = result.reduce((s, v) => s + (v > 128 ? 1 : 0), 0) / Math.max(1, result.reduce((s, v) => s + (v >= 0 ? 1 : 0), 0));
   const grey = Buffer.alloc(W * H);
   for (let i = 0; i < grey.length; i++) grey[i] = Math.max(0, result[i]);
-  const png = await sharp(grey, { raw: { width: W, height: H, channels: 1 } }).blur(1.2).png({ compressionLevel: 9 }).toBuffer();
-  return { png, meta: { source: 'NASA GIBS (EOSDIS), corrected reflectance', sourceUrl: 'https://www.earthdata.nasa.gov/gibs', license: 'NASA imagery, no copyright', date: days[0], used, coverage: +covered.toFixed(3), fetched: new Date().toISOString() } };
+  const png = await sharp(grey, { raw: { width: W, height: H, channels: 1 } }).blur(1.2).jpeg({ quality: 82, mozjpeg: true }).toBuffer();
+  return { png, meta: { source: 'NASA GIBS (EOSDIS), corrected reflectance', sourceUrl: 'https://www.earthdata.nasa.gov/gibs', license: 'NASA imagery, no copyright', date: days[0], used, coverage: +covered.toFixed(3), cloudy: +cloudy.toFixed(3), fetched: new Date().toISOString() } };
 }
 
 await mkdir(cacheDir, { recursive: true });
 await mkdir(outDir, { recursive: true });
-const cPng = join(cacheDir, 'clouds.png'), cJson = join(cacheDir, 'clouds.json');
+const cPng = join(cacheDir, 'clouds.jpg'), cJson = join(cacheDir, 'clouds.json');
 let prev = null;
 try { prev = JSON.parse(await readFile(cJson, 'utf8')); await stat(cPng); } catch { prev = null; }
 
@@ -101,12 +102,12 @@ if (!prev || Date.now() - Date.parse(prev.fetched) > MAX_AGE_MS || fromDir) {
     const { png, meta } = await build();
     await writeFile(cPng, png); await writeFile(cJson, JSON.stringify(meta));
     prev = meta;
-    console.log(`✓ clouds: ${meta.used.length} passes, ${(meta.coverage * 100).toFixed(0)} % covered, ${(png.length / 1024).toFixed(0)} KB`);
+    console.log(`✓ clouds: ${meta.used.length} passes, ${(meta.coverage * 100).toFixed(0)} % covered, ${(meta.cloudy * 100).toFixed(0)} % cloudy, ${(png.length / 1024).toFixed(0)} KB`);
   } catch (e) {
     console.warn(`✗ clouds: ${e.message}${prev ? ' (keeping last image)' : ''}`);
   }
 } else {
   console.log(`· clouds: cached, ${Math.round((Date.now() - Date.parse(prev.fetched)) / 60000)} min old`);
 }
-if (prev) { await copyFile(cPng, join(outDir, 'clouds.png')); await copyFile(cJson, join(outDir, 'clouds.json')); }
+if (prev) { await copyFile(cPng, join(outDir, 'clouds.jpg')); await copyFile(cJson, join(outDir, 'clouds.json')); }
 // never fails the run: the site falls back to its placeholder clouds
