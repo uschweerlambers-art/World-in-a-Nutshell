@@ -1,6 +1,8 @@
 # World in a Nutshell – Product Requirements Document (PRD) für den Prototyp
 
-Version 0.4 · Stand: 13.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+Version 0.5 · Stand: 13.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+
+Änderungen in v0.5 (Ergebnis M1/D2, 13.11.2026): Repo und GitHub Pages stehen (https://uschweerlambers-art.github.io/World-in-a-Nutshell/). Spike-Ergebnis Flugzeuge: adsb.lol bietet keinen weltweiten Browser-Abruf; die Action holt stattdessen alle 15 Minuten einen weltweiten Schnappschuss der OpenSky-Network-API, der Browser bewegt die Flugzeuge dazwischen entlang Kurs und Tempo weiter. Wolken kommen als tägliche Wolkenkarte aus NASA-GIBS-Satellitenbildern, die die Action berechnet. Radiosender werden beim Rauszoomen gruppiert. Betroffen: F-03.4, F-04.3, F-04.4, F-04.6, F-07.2, Kap. 6, 6.2, 9, 10.
 
 Änderungen in v0.4 (Uwe, 13.11.2026): Kein Cloudflare. Die Seite läuft auf GitHub Pages; eine geplante GitHub Action holt die Daten, die nicht direkt im Browser abrufbar sind, alle 10–15 Minuten als Snapshot-Dateien ab und veröffentlicht die Seite neu. Diese Aktualität reicht (Kap. 6). Betroffen: F-04.4, F-05.1, F-07.1, F-10.2, N-1, N-2.3, N-2.5, N-4, N-7.4, Kap. 6, 9, 10, 11.
 
@@ -105,7 +107,7 @@ Prüfmethoden: **M** = manueller Test nach Testskript, **A** = automatisierter T
 | F-03.1 | Der Globus ist mit Maus/Trackpad (Drehen, Zoomen) und Touch (Ein-Finger-Drehen, Pinch-Zoom) bedienbar; Zoom ist begrenzt, sodass man nicht in die Erde oder ins Leere zoomt. | M |
 | F-03.2 | Die Tag-Nacht-Grenze wird aus dem aktuellen UTC-Zeitpunkt berechnet. Abweichung der Terminator-Position gegenüber einer Referenzrechnung (z. B. NOAA-Sonnenstand) ≤ 1° Länge. Aktualisierung mindestens einmal pro Minute. | A |
 | F-03.3 | Auf der Nachtseite sind Stadtlichter zu sehen (NASA Black Marble / Nachtlichter), weich überblendet am Terminator. | M |
-| F-03.4 | Eine Wolkenschicht liegt als eigene, leicht erhöhte Schale über der Erde; Quelle ist ein tagesaktuelles Satellitenbild (NASA GIBS) oder, falls nicht verfügbar, eine statische Wolkentextur mit Hinweis „Stand: Datum“. | M, R |
+| F-03.4 | Eine Wolkenschicht liegt als eigene, leicht erhöhte Schale über der Erde. Quelle: tagesaktuelle Satellitenbilder aus NASA GIBS (MODIS Terra/Aqua, VIIRS SNPP/NOAA-20), von der Action höchstens alle 3 h zu einer Wolkenkarte verrechnet (heutige Überflüge zuerst, Lücken aus dem Vortag). Die Quellenzeile nennt das Datum. Fehlt die Karte, zeigt der Globus gezeichnete Platzhalter-Wolken. | M, R |
 | F-03.5 | Wolken und Tag-Nacht lassen sich einzeln ein- und ausschalten (Toggle im UI). | M |
 | F-03.6 | Look entspricht den Tokens: Hintergrund #05070D, Liquid Glass nur auf schwebenden Bedienelementen. | R (Abgleich Styleframe) |
 
@@ -115,10 +117,10 @@ Prüfmethoden: **M** = manueller Test nach Testskript, **A** = automatisierter T
 | --- | --- | --- |
 | F-04.1 | Flugzeuge erscheinen als ausgerichtete Symbole in #64D2FF; die Richtung entspricht dem Kurs (track). | M |
 | F-04.2 | Positionen werden alle 5–15 s aktualisiert; zwischen Updates werden sie anhand von Kurs und Geschwindigkeit interpoliert, sodass keine Sprünge > 1 Symbolbreite sichtbar sind. | M |
-| F-04.3 | Primärquelle adsb.lol (ODbL), Fallback airplanes.live oder adsb.fi. Fällt die Primärquelle aus (Timeout 8 s oder HTTP-Fehler), wird automatisch umgeschaltet und die angezeigte Quellenangabe wechselt mit. | A (simulierter Ausfall) |
-| F-04.4 | Abfragestrategie hält die Rate-Limits ein: höchstens 1 Anfrage pro Sekunde pro Besucher und Quelle, Abfrage nur für den sichtbaren Ausschnitt. Erlaubt die Quelle keinen Browser-Abruf, zeigt die Ebene den Snapshot der GitHub Action (Stand max. 15 min, mit Uhrzeit) (siehe Kap. 6). | R, A |
+| F-04.3 | Quelle ist ein weltweiter Schnappschuss der OpenSky-Network-API (anonym, 4 von 400 Tagespunkten pro Abruf), den die Action alle 15 min holt. Fällt OpenSky aus, bleibt der letzte Schnappschuss mit Uhrzeit stehen und meta.json vermerkt den Fehler. (v0.5: adsb.lol bietet keinen weltweiten Browser-Abruf.) | A (simulierter Ausfall) |
+| F-04.4 | Der Browser fragt keine Flugdaten-API direkt ab, sondern lädt nur den Schnappschuss von der eigenen Seite (alle 2 min Prüfung der kleinen meta.json, Neuladen nur bei neuem Stand). Die Ebene nennt den Stand („Aircraft as of HH:MM“). | R, A |
 | F-04.5 | Ein Klick auf ein Flugzeug öffnet den Inspector mit: Rufzeichen, ICAO-Hex, Höhe, Geschwindigkeit, Kurs, Zeitpunkt der letzten Meldung, Quelle. Daten, die die Quelle nicht liefert, werden als „–“ gezeigt, nicht erfunden. | M |
-| F-04.6 | Flugzeuge, deren letzte Meldung älter als 60 s ist, werden ausgeblendet. | A |
+| F-04.6 | Zwischen zwei Schnappschüssen werden Flugzeuge entlang Kurs und Geschwindigkeit weiterbewegt, höchstens 20 min; danach bleiben sie stehen. Der Inspector zeigt die Uhrzeit der letzten Meldung und den Hinweis, dass die Position geschätzt ist. | A |
 | F-04.7 | Die Ebene zeigt die aktuelle Anzahl sichtbarer Objekte in der Seitenleiste (Styleframe Main). | M |
 
 ### F-05 Satelliten und ISS
@@ -148,7 +150,7 @@ Prüfmethoden: **M** = manueller Test nach Testskript, **A** = automatisierter T
 | AK | Kriterium | Prüfung |
 | --- | --- | --- |
 | F-07.1 | Quelle ist Radio Browser (gemeinfrei). Die Senderliste mit Koordinaten bereitet die GitHub Action täglich als Snapshot-Datei auf; nur Sender mit Koordinaten und HTTPS-Stream kommen in die Liste. | R |
-| F-07.2 | Sender erscheinen als Punkte in #30D158, bei geringem Zoom zu Clustern zusammengefasst. | M |
+| F-07.2 | Sender erscheinen als Punkte in #30D158; beim Rauszoomen werden sie auf einem Raster in zwei Stufen zu Gruppen zusammengefasst (größerer Punkt = mehr Sender). Ein Klick auf eine Gruppe zoomt hinein. | M |
 | F-07.3 | Klick auf einen Sender startet die Wiedergabe innerhalb von 5 s (bei funktionierendem Stream) und zeigt Sendername, Ort, Land, Genre, Quelle. | M |
 | F-07.4 | Ein Player bleibt sichtbar (Play/Pause, Lautstärke, Sendername), auch wenn andere Ebenen gewechselt werden. | M |
 | F-07.5 | Ist ein Stream nicht erreichbar, erscheint nach spätestens 8 s eine Meldung „Station not reachable right now“ und ein Vorschlag für einen Sender in der Nähe. | A |
@@ -263,18 +265,19 @@ Referenzgeräte: **Desktop** MacBook Air M1 (Chrome und Safari aktuell), **Mobil
 GitHub-Repo (öffentlich)
  ├─ Code, Ortsindex, Weltwunder, Texturen
  └─ GitHub Action „Daten & Deploy“ (Cron alle 10–15 min, plus bei jedem Push)
-      ├─ holt: CelesTrak (≤ alle 2 h), Radio Browser (1× täglich), Flugzeug-Snapshot (falls kein Browser-Abruf möglich)
+      ├─ holt: CelesTrak (≤ alle 2 h), Radio Browser (1× täglich), OpenSky-Flugzeuge und USGS-Fallback (jeder Lauf),
+      │        NASA-GIBS-Wolkenkarte (≤ alle 3 h)
       ├─ schreibt kompakte JSON-Snapshots mit Zeitstempel nach data/live/
       └─ baut die Seite und veröffentlicht sie auf GitHub Pages (Snapshots nur im Pages-Artefakt, nicht im Repo)
 
 Browser (GitHub Pages, statisch)
  ├─ three.js ── Globus, Ebenen, Instancing
  ├─ satellite.js (Web Worker) ── Satellitenpositionen live aus den Bahndaten
- ├─ direkt live:  USGS (Erdbeben), adsb.lol / Fallbacks (Flugzeuge, falls CORS erlaubt), Radio-Streams
- └─ aus Snapshots:  data/live/*.json (Bahndaten, Senderliste, ggf. Flugzeuge)
+ ├─ direkt live:  USGS (Erdbeben), Radio-Streams
+ └─ aus Snapshots:  data/live/*.json (Bahndaten, Senderliste, Flugzeuge), clouds.jpg
 ```
 
-**Aktualität:** Erdbeben und Flugzeuge kommen, wo die Quelle es erlaubt, direkt und damit live in den Browser. Satelliten bewegen sich live, weil der Browser ihre Bahn aus den Snapshot-Bahndaten berechnet. Nur Ebenen aus Snapshots sind 10–15 Minuten alt; die Cron-Startzeit von GitHub kann sich dabei um einige Minuten verschieben. Uwe hat das am 13.11.2026 als ausreichend bestätigt.
+**Aktualität:** Erdbeben kommen direkt und damit live in den Browser. Flugzeuge kommen als 15-Minuten-Schnappschuss und werden dazwischen weiterbewegt; Wolken sind tagesaktuell. Satelliten bewegen sich live, weil der Browser ihre Bahn aus den Snapshot-Bahndaten berechnet. Nur Ebenen aus Snapshots sind 10–15 Minuten alt; die Cron-Startzeit von GitHub kann sich dabei um einige Minuten verschieben. Uwe hat das am 13.11.2026 als ausreichend bestätigt.
 
 
 ### 6.1 Design-Prototyp (vor dem Repo)
@@ -290,9 +293,9 @@ Solange das Repo noch nicht steht, läuft der Prototyp als statische Vorschau oh
 
 Technische Klärung im ersten Sprint (Spike, Ergebnis ins PRD zurückschreiben):
 
-- **Flugzeuge:** Erlaubt adsb.lol CORS-Abrufe direkt aus dem Browser, und gibt es einen weltweiten Abruf oder nur Umkreisabfragen? Davon hängt ab, ob der Browser live pro Ausschnitt abfragt oder die Action alle 10–15 min einen weltweiten Snapshot erstellt.
+- **Flugzeuge (geklärt in v0.5):** adsb.lol bietet nur Umkreisabfragen. Die Action holt einen weltweiten OpenSky-Schnappschuss; der erste Lauf lieferte rund 10 600 Flugzeuge.
 - **Radio Browser:** Snapshot über die Action (kompakter, schneller, keine Besucher-IP an Radio Browser).
-- **Größe der Snapshots:** Senderliste und Bahndaten komprimiert jeweils < 2 MB halten.
+- **Größe der Snapshots (geprüft):** Flugzeuge rund 700 KB, Senderliste und Bahndaten deutlich kleiner, Wolkenkarte rund 240 KB.
 
 ## 7. Design-Vorgaben
 
@@ -334,8 +337,8 @@ Der Prototyp gilt als abgenommen, wenn alle Muss-AK aus Kap. 4 und 5 bestanden s
 | M | Inhalt | Ergebnis |
 | --- | --- | --- |
 | D1 | Design-Prototyp, Teil 1: Globus mit Tag/Nacht und Wolken, Startscreen mit Ortssuche, Start auf Bielefeld, Ankunft, „Surprise me“ mit Wikipedia-Links, Ebenen-UI nach Styleframes (Desktop und Mobil) | Look und Einstieg zur Abnahme durch Uwe (D-1) |
-| D2 | Design-Prototyp, Teil 2: Erdbeben, Flugzeuge, Satelliten/ISS, Radio, Inspector, Quellenzeile | Alle Basisfunktionen im Design-Prototyp |
-| M1 | Repo, GitHub-Pages-Deploy, CI, geplante Action „Daten & Deploy“, Technik-Spikes aus Kap. 6.2 | Prototyp öffentlich erreichbar, Live-Ebenen (D2) laufen |
+| D2 | Design-Prototyp, Teil 2: Erdbeben, Flugzeuge, Satelliten/ISS, Radio, Inspector, Quellenzeile | Alle Basisfunktionen im Design-Prototyp · **erledigt 13.11.2026** (direkt im Repo statt im Artefakt) |
+| M1 | Repo, GitHub-Pages-Deploy, CI, geplante Action „Daten & Deploy“, Technik-Spikes aus Kap. 6.2 | Prototyp öffentlich erreichbar, Live-Ebenen (D2) laufen · **erledigt 13.11.2026** |
 | M2 | Performance-Messung und Optimierung, Impressum/Datenschutz/Lizenzen | Performance- und Rechts-AK geprüft |
 | M3 | Gesamt-QA nach Kap. 8, Korrekturen, Abnahme | Abgenommener Prototyp |
 
@@ -350,14 +353,14 @@ Entschieden am 13.11.2026:
 - Der Startscreen bekommt ein Symbol (stilisierter Globus).
 - Zuerst Design-Prototyp mit allen Basisfunktionen; das Repo folgt.
 - Kein Cloudflare: GitHub Pages + geplante GitHub Action, Snapshot-Aktualität 10–15 min reicht.
+- Repo `World-in-a-Nutshell` unter uschweerlambers-art, öffentlich; Seite unter uschweerlambers-art.github.io/World-in-a-Nutshell.
+- Code unter MIT-Lizenz (Daten behalten die Lizenzen ihrer Quellen).
+- Die Adresse bleibt vorerst uschweerlambers-art.github.io/World-in-a-Nutshell, keine eigene Domain.
 
-Noch offen (spätestens vor M1):
+Noch offen (spätestens vor M2):
 
-1. **Repo-Name und Lizenz:** Vorschlag `world-in-a-nutshell` unter uschweerlambers-art, Code unter MIT.
-2. **GitHub-Zugang:** Für M1 legt Uwe das Repo an (oder verbindet GitHub mit Claude), damit Code, Action und Pages eingerichtet werden können.
-3. **Domain:** Zunächst die kostenlose Adresse `uschweerlambers-art.github.io/world-in-a-nutshell` oder eine eigene Domain (der einzige Kostenpunkt)?
-4. **Impressum/Datenschutz:** Texte liefert Uwe; der Prototyp stellt Platzhalter und die Liste der Drittserver bereit. GitHub (USA) ist Hoster und wird in der Datenschutzerklärung genannt.
-5. **Kann-Features F-11/F-12** (Zeitleiste, Globus/Karte): Annahme bis auf Weiteres: im Design-Prototyp als Bedienelement sichtbar, Funktion erst später.
+1. **Impressum/Datenschutz:** Texte liefert Uwe; der Prototyp stellt Platzhalter und die Liste der Drittserver bereit. GitHub (USA) ist Hoster und wird in der Datenschutzerklärung genannt.
+2. **Kann-Features F-11/F-12** (Zeitleiste, Globus/Karte): Annahme bis auf Weiteres: im Design-Prototyp als Bedienelement sichtbar, Funktion erst später.
 
 ## 11. Risiken
 
