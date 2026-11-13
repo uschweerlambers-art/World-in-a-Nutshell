@@ -67,6 +67,9 @@ jobs:
       - name: Build cloud layer (NASA GIBS, at most every 3 h)
         run: node scripts/fetch-clouds.mjs .cache/live site/data/live
 
+      - name: Weather maps (GFS wind and temperature, IMERG rain, aerosols)
+        run: node scripts/fetch-weather.mjs .cache/live site/data/live
+
       - name: Save snapshots
         if: always()
         uses: actions/cache/save@v4

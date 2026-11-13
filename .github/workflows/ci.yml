@@ -20,7 +20,7 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Scripts parse
-        run: node --check scripts/fetch-snapshots.mjs && node --check scripts/fetch-clouds.mjs && node --check scripts/fetch-textures.mjs
+        run: node --check scripts/fetch-snapshots.mjs && node --check scripts/fetch-clouds.mjs && node --check scripts/fetch-textures.mjs && node --check scripts/fetch-weather.mjs
       - name: Data files are valid JSON
         run: |
           for f in site/data/*.json; do node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" && echo "ok $f"; done
@@ -32,6 +32,8 @@ jobs:
         run: |
           node scripts/fetch-snapshots.mjs .cache/live site/data/live || true
           node scripts/fetch-clouds.mjs .cache/live site/data/live
+          node scripts/fetch-weather.mjs .cache/live site/data/live
+          cat site/data/live/weather.json || true
           node scripts/fetch-textures.mjs .cache/textures site/img/hi
           ls -la site/img/hi || true
           ls -la site/data/live
