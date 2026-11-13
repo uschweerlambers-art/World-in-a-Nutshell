@@ -27,6 +27,7 @@
   --c-sat: #BF5AF2;
   --c-quake: #FF9F0A;
   --c-radio: #30D158;
+  --c-place: #40E0D0;
   --blur: blur(30px) saturate(1.4);
   --ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -219,6 +220,16 @@ button:disabled { cursor: default; }
 #dots span { width: 8px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.3); transition: width .3s; }
 #dots span.on { width: 24px; background: var(--text); }
 
+/* Orientation labels */
+#geo-labels { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+#geo-labels > * { position: absolute; left: 0; top: 0; visibility: hidden; opacity: 0; transition: opacity .25s; white-space: nowrap; will-change: transform; }
+.gl-country { font-size: 10.5px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(245,245,247,0.78); text-shadow: 0 0 4px rgba(0,0,0,.95), 0 1px 8px rgba(0,0,0,.8); }
+.gl-cap { pointer-events: auto; border: 0; background: none; padding: 2px 4px 2px 0; display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #E9FFFC; text-shadow: 0 0 4px rgba(0,0,0,.95), 0 1px 8px rgba(0,0,0,.8); cursor: pointer; }
+.gl-cap i { width: 8px; height: 8px; border-radius: 50%; background: var(--c-place); box-shadow: 0 0 0 1.5px rgba(5,7,13,.9), 0 0 8px rgba(64,224,208,.6); flex-shrink: 0; }
+.gl-cap.dot-only span { display: none; }
+.gl-cap:hover span, .gl-cap:focus-visible span { text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) { #geo-labels > * { transition: none; } }
+
 /* Layer extras */
 .sub { margin: 2px 0 6px 42px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--text-3); }
 .mini-seg { display: flex; gap: 4px; }
@@ -242,6 +253,7 @@ button:disabled { cursor: default; }
 #insp dd.t { font-family: inherit; }
 .i-hint { margin: 0; font-size: 12px; color: var(--c-quake); }
 #i-act { display: flex; flex-direction: column; }
+#i-act:has(a + a) { display: grid; grid-template-columns: 1fr 1fr; column-gap: 12px; }
 #i-act:empty { display: none; }
 #i-act .btn-line { height: 40px; font-size: 14px; }
 #i-act a.w-link { color: var(--link); min-height: 36px; }
@@ -322,6 +334,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 </style>
 
 <canvas id="globe" aria-label="Interactive 3D globe. Drag to rotate, scroll or pinch to zoom." role="img"></canvas>
+<div id="geo-labels" aria-hidden="false"></div>
 <div id="nogl" hidden><p>Your browser can’t use WebGL right now, and the globe needs it. Try a current browser or turn on hardware acceleration.</p></div>
 
 <div class="marker" id="marker" hidden><span class="r3"></span><span class="r2"></span><span class="r1"></span></div>
@@ -418,12 +431,15 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
         <span>Nearby stations</span>
         <ul id="nearby-list"></ul>
       </div>
+      <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 18c4-1 6-5 8-8s5-5 8-6"/><path d="M15 4h5v5"/></svg></span><span class="nm">Routes &amp; directions</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show routes and directions" data-toggle="routes"></button></span></div>
       <p class="note" id="live-note">Aircraft, orbits and stations are refreshed every 15 minutes, earthquakes every 5.</p>
     </section>
     <section class="sec" aria-labelledby="h-view">
       <h3 id="h-view">Earth</h3>
       <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 010 16z" fill="#F5F5F7"/></svg></span><span class="nm">Day and night</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show day and night" data-toggle="night"></button></span></div>
       <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#F5F5F7" aria-hidden="true"><path d="M7 18a4.5 4.5 0 01-.6-8.96A6 6 0 0117.7 8.5 4.75 4.75 0 0117.5 18z"/></svg></span><span class="nm">Clouds</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show clouds" data-toggle="clouds"></button></span></div>
+      <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span><span class="nm">Countries &amp; borders</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show countries and borders" data-toggle="borders"></button></span></div>
+      <div class="row"><span class="ico" style="background:var(--c-place)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><circle cx="12" cy="12" r="5"/></svg></span><span class="nm">Capitals</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show capitals" data-toggle="capitals"></button></span></div>
     </section>
     <button type="button" class="btn-wonder" data-act="wonder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>Surprise me</button>
     <footer class="side-foot">
@@ -449,6 +465,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <li>“Surprise me” takes you to remarkable places on Earth.</li>
       <li>Day and night match the current time.</li>
       <li>Click a dot on the globe for details. A click on a radio station plays it.</li>
+      <li>Click the marker of a place you searched, or a capital, for facts and map links.</li>
     </ul>
   </div>
 
@@ -524,6 +541,9 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
         <li>Place search: GeoNames, places with 5,000 inhabitants or more, CC BY 4.0. Search runs entirely in your browser.</li>
         <li>Outline of Antarctica: Natural Earth 1:110m, public domain. Outline of the Sahara: simplified drawing, to be replaced by Natural Earth.</li>
         <li>Wonders &amp; records: our own short texts, figures as given by the source on each card, links to English Wikipedia.</li>
+        <li>Country borders and names: Natural Earth 1:50m, public domain. Capitals: GeoNames, CC BY 4.0.</li>
+        <li>Elevation in the place details: Open-Meteo elevation API (CC BY 4.0), asked only when you open a place.</li>
+        <li>Sharper Earth on large screens: NASA GIBS Blue Marble Next Generation and VIIRS Black Marble.</li>
         <li id="src-clouds">Clouds: daily satellite imagery from NASA GIBS (MODIS and VIIRS true colour, turned into a cloud mask by our GitHub Action). If it is missing, a drawn placeholder is shown.</li>
       </ul>
       <h3>Software</h3>
@@ -545,7 +565,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <div data-pane="datenschutz" hidden>
       <h3>Placeholder</h3>
       <p>The privacy policy follows before launch. It will name every server your browser contacts, and GitHub Pages as the host.</p>
-      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you play a radio station, the stream comes directly from that station’s server. Both see your IP address, like any website you visit.</p>
+      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you play a radio station, the stream comes directly from that station’s server. Both see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up the elevation.</p>
       <p>Already true today: this site sets no cookies, counts no visits and only asks for your location when you click. What you type into search never leaves your browser.</p>
     </div>
   </div>
@@ -746,8 +766,8 @@ if (renderer) {
     manager.onLoad = null;
     // progressive: swap to 4k once the light version is up
     const hi = new THREE.TextureLoader();
-    hi.load('img/earth-blue-marble.jpg', t => { t.colorSpace = THREE.NoColorSpace; t.anisotropy = uniforms.dayMap.value.anisotropy; uniforms.dayMap.value = t; });
-    hi.load('img/earth-night.jpg', t => { t.colorSpace = THREE.NoColorSpace; t.anisotropy = uniforms.nightMap.value.anisotropy; uniforms.nightMap.value = t; });
+    hi.load('img/earth-blue-marble.jpg', t => { if (uniforms.dayMap.value?.image?.width >= 8192) return; setTimeout(loadHiResEarth, 300); t.colorSpace = THREE.NoColorSpace; t.anisotropy = uniforms.dayMap.value.anisotropy; uniforms.dayMap.value = t; });
+    hi.load('img/earth-night.jpg', t => { if (uniforms.nightMap.value?.image?.width >= 8192) return; t.colorSpace = THREE.NoColorSpace; t.anisotropy = uniforms.nightMap.value.anisotropy; uniforms.nightMap.value = t; });
   };
 }
 
@@ -973,6 +993,7 @@ function goToPlace(p, opts = {}) {
   showOutline(null);
   setMarker(p.lat, p.lon);
   here = { lat: p.lat, lon: p.lon, name: p.label || p.name };
+  currentPlace = p;
   if (L.radio.on && L.radio.loaded) showNearby();
   if (!opts.keepHash) try { history.replaceState(null, '', '#' + slug(p)); } catch {}
   $('#picker').classList.add('is-out');
@@ -1088,6 +1109,11 @@ document.addEventListener('keydown', e => {
 function setToggle(key, on) {
   if (key === 'night') uniforms.nightOn.value = on ? 1 : 0;
   if (key === 'clouds') uniforms.cloudsOn.value = on ? 1 : 0;
+  if (key in ORIENT) {
+    ORIENT[key] = on;
+    if (key === 'borders' && borderLines) borderLines.visible = on;
+    layoutLabels(true); routesTick = 0;
+  }
   $$(`[data-toggle="${key}"]`).forEach(el => el.setAttribute(el.getAttribute('role') === 'switch' ? 'aria-checked' : 'aria-pressed', String(on)));
 }
 document.addEventListener('click', e => {
@@ -1216,7 +1242,7 @@ function pointsMaterial(kind, color, opts = {}) {
         vPulse = 0.0;
         ${kind === 2 ? `if (flag > 0.5 && pulse > 0.5) { vPulse = fract(time * 0.012 + idx * 0.137); }` : ''}
         if (vSel > 0.5) s *= 1.6;
-        gl_PointSize = s * zoom * px * (1.0 + vPulse * 1.4);
+        gl_PointSize = s * 1.15 * zoom * px * (1.0 + vPulse * 1.4); // +15 % (Uwe, 13.11.)
       }`,
     fragmentShader: `
       uniform vec3 color; uniform sampler2D glyph;
@@ -1589,6 +1615,7 @@ let downAt = null;
 canvas.addEventListener('pointerdown', e => { downAt = [e.clientX, e.clientY]; });
 canvas.addEventListener('pointerup', e => {
   if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6) return;
+  if (hitMarker(e.clientX, e.clientY)) { showPlaceInfo(currentPlace); return; }
   const hit = pick(e.clientX, e.clientY);
   if (hit?.group) {
     // zoom into a group of stations
@@ -1691,7 +1718,207 @@ function updateLayers() {
     for (const x of RADIO_LEVELS) if (x.obj) { x.obj.visible = x === lv; x.obj.material.uniforms.zoom.value = 1; }
   }
   placeIssLabel();
+  updateOrientation();
 }
+
+/* ---------- Orientation: borders, country names, capitals ---------- */
+const ORIENT = { borders: true, capitals: true, routes: false };
+let borderLines = null, countryLabels = [], capitalLabels = [], geoLoaded = false;
+const labelBox = $('#geo-labels');
+async function loadGeo() {
+  if (geoLoaded || !renderer) return;
+  geoLoaded = true;
+  try {
+    const [c, k] = await Promise.all([getJSON('data/countries.json'), getJSON('data/capitals.json')]);
+    // borders as one LineSegments object, slightly above the surface
+    const pts = [];
+    for (const line of c.borders) {
+      for (let i = 0; i + 3 < line.length; i += 2) {
+        const a = vecFromLatLon(line[i + 1], line[i], 1.0012), b = vecFromLatLon(line[i + 3], line[i + 2], 1.0012);
+        pts.push(a.x, a.y, a.z, b.x, b.y, b.z);
+      }
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pts), 3));
+    borderLines = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: 0xF5F5F7, transparent: true, opacity: 0.32, depthWrite: false }));
+    borderLines.renderOrder = 1; borderLines.visible = ORIENT.borders; scene.add(borderLines);
+    const frag = document.createDocumentFragment();
+    countryLabels = c.labels.map(l => {
+      const el = document.createElement('span'); el.className = 'gl-country'; el.textContent = l.name; frag.appendChild(el);
+      return { el, v: vecFromLatLon(l.lat, l.lon, 1.002), prio: l.area, kind: 'country' };
+    });
+    capitalLabels = k.rows.map(([name, lat, lon, cc, popK]) => {
+      const el = document.createElement('button'); el.type = 'button'; el.className = 'gl-cap';
+      el.innerHTML = `<i></i><span>${esc(name)}</span>`; el.setAttribute('aria-label', `${name}, capital of ${countryName(cc)}`);
+      const item = { el, v: vecFromLatLon(lat, lon, 1.002), prio: popK, kind: 'cap', place: { name, lat, lon, cc, popK, region: '', capital: true } };
+      el.addEventListener('click', () => showPlaceInfo(matchPlace(item.place)));
+      frag.appendChild(el); return item;
+    });
+    labelBox.appendChild(frag);
+    // measure once; labels keep their size
+    for (const l of [...countryLabels, ...capitalLabels]) { l.w = l.el.offsetWidth; l.h = l.el.offsetHeight; }
+    layoutLabels(true);
+  } catch { geoLoaded = false; }
+}
+function matchPlace(p) {
+  if (!places) return p;
+  let best = null, bd = 0.05;
+  for (const q of places) { if (q.cc !== p.cc) continue; const d = Math.abs(q.lat - p.lat) + Math.abs(q.lon - p.lon); if (d < bd) { bd = d; best = q; } }
+  return best ? { ...best, capital: true } : p;
+}
+// greedy placement: capitals first (by population), then country names (by area); overlapping names are hidden
+let lastLayout = 0, lastCam = new THREE.Vector3();
+const lv = new THREE.Vector3();
+function layoutLabels(force) {
+  if (!countryLabels.length) return;
+  const now = performance.now();
+  const moved = lastCam.distanceToSquared(camera.position) > 1e-7;
+  if (!force && (now - lastLayout < 90 || (!moved && now - lastLayout < 600))) return;
+  lastLayout = now; lastCam.copy(camera.position);
+  const camDir = camera.position.clone().normalize(), dist = camera.position.length();
+  const boxes = [];
+  const fits = (x, y, w, h) => { for (const b of boxes) if (x < b[2] && x + w > b[0] && y < b[3] && y + h > b[1]) return false; return true; };
+  const place = (l, show, x, y, alpha) => {
+    if (!show) { if (l.shown) { l.el.style.opacity = 0; l.el.style.visibility = 'hidden'; l.shown = false; } return; }
+    l.el.style.visibility = 'visible'; l.el.style.opacity = alpha;
+    l.el.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`; l.shown = true;
+  };
+  const project = l => {
+    const facing = lv.copy(l.v).normalize().dot(camDir);
+    if (facing < 0.18) return null;
+    lv.copy(l.v).project(camera);
+    return { x: (lv.x * 0.5 + 0.5) * innerWidth, y: (-lv.y * 0.5 + 0.5) * innerHeight, a: Math.min(1, (facing - 0.18) * 5) };
+  };
+  // capitals: the dot always shows, the name only where it has room
+  for (const l of ORIENT.capitals ? capitalLabels : []) {
+    const p = project(l);
+    if (!p) { place(l, false); continue; }
+    const x = p.x - 5, y = p.y - l.h / 2;
+    const room = fits(x, y, l.w, l.h);
+    if (room) boxes.push([x, y, x + l.w, y + l.h]);
+    l.el.classList.toggle('dot-only', !room);
+    if (!room) boxes.push([p.x - 5, p.y - 5, p.x + 5, p.y + 5]);
+    place(l, true, x, y, p.a);
+  }
+  if (!ORIENT.capitals) capitalLabels.forEach(l => place(l, false));
+  // country names: big countries even when zoomed out, small ones only closer in
+  const minArea = dist > 3.2 ? 60 : dist > 2.2 ? 12 : dist > 1.6 ? 2 : 0;
+  for (const l of ORIENT.borders ? countryLabels : []) {
+    const p = l.prio >= minArea && project(l);
+    if (!p) { place(l, false); continue; }
+    const x = p.x - l.w / 2, y = p.y - l.h / 2;
+    if (!fits(x - 4, y - 2, l.w + 8, l.h + 4)) { place(l, false); continue; }
+    boxes.push([x - 4, y - 2, x + l.w + 4, y + l.h + 2]);
+    place(l, true, x, y, p.a * 0.9);
+  }
+  if (!ORIENT.borders) countryLabels.forEach(l => place(l, false));
+}
+
+/* ---------- Place info (search result, capitals) ---------- */
+let currentPlace = null;
+function showPlaceInfo(p) {
+  if (!p) return;
+  selected = { key: 'place' };
+  for (const k of Object.keys(L)) if (L[k].obj) L[k].obj.material.uniforms.sel.value = -1;
+  hideIssOrbit();
+  $('#i-sw').style.background = 'var(--c-place)';
+  $('#i-cat-t').textContent = p.capital ? 'Capital' : 'Place';
+  $('#i-head').textContent = p.label || p.name;
+  const pop = p.popK ? (p.popK >= 1000 ? `${(p.popK / 1000).toFixed(p.popK >= 10000 ? 1 : 2)} million` : `≈ ${fmtInt(p.popK * 1000)}`) : '–';
+  $('#i-dl').innerHTML = row('Country', esc(countryName(p.cc) || '–'), 't') + (p.region ? row('Region', esc(p.region), 't') : '') + row('Coordinates', fmtCoord(p.lat, p.lon)) + row('Population', pop) + row('Elevation', '<span id="i-elev">…</span>');
+  $('#i-hint').hidden = true;
+  const ll = `${p.lat.toFixed(5)},${p.lon.toFixed(5)}`;
+  const link = (href, text) => `<a class="w-link" href="${href}" target="_blank" rel="noopener noreferrer"><span class="t">${text}</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>`;
+  $('#i-act').innerHTML = link(`https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(p.name)}&go=Go`, 'Wikipedia')
+    + link(`https://www.openstreetmap.org/?mlat=${p.lat}&mlon=${p.lon}#map=12/${p.lat}/${p.lon}`, 'OpenStreetMap')
+    + link(`https://www.google.com/maps/search/?api=1&query=${ll}`, 'Google Maps')
+    + link(`https://www.waze.com/live-map/directions?to=ll.${encodeURIComponent(ll)}`, 'Waze');
+  $('#i-src').innerHTML = 'Place: <a href="https://www.geonames.org" target="_blank" rel="noopener noreferrer">GeoNames</a> (CC BY 4.0) · Elevation: <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a> (CC BY 4.0)';
+  $('#help').hidden = true; $('#help-btn').setAttribute('aria-expanded', 'false');
+  const box = $('#insp'); box.hidden = false; requestAnimationFrame(() => box.classList.remove('is-out'));
+  if (innerWidth < 768) { hidePicker(); $('#sidebar').classList.add('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'false'); }
+  // elevation of the place (not of the visitor): one request, only on this click
+  const want = p;
+  getJSON(`https://api.open-meteo.com/v1/elevation?latitude=${p.lat}&longitude=${p.lon}`, 6000)
+    .then(j => { if (selected?.key === 'place' && want === shownPlace) { const m = j.elevation?.[0]; $('#i-elev').textContent = Number.isFinite(m) ? `${fmtInt(Math.round(m))} m above sea level` : '–'; } })
+    .catch(() => { if (want === shownPlace) $('#i-elev').textContent = '–'; });
+  shownPlace = p;
+}
+let shownPlace = null;
+// a click on the place marker opens the place info
+function hitMarker(x, y) {
+  if (!markerAt || !currentPlace || markerEl.hidden) return false;
+  if (markerAt.clone().normalize().dot(camera.position.clone().normalize()) < 0.2) return false;
+  lv.copy(markerAt).project(camera);
+  return Math.hypot((lv.x * 0.5 + 0.5) * innerWidth - x, (-lv.y * 0.5 + 0.5) * innerHeight - y) < 22;
+}
+
+/* ---------- Routes and directions (toggle, default off) ---------- */
+let airRoutes = null, satRoutes = null, satRoutesAt = 0;
+const AIR_AHEAD_S = 15 * 60; // show where each aircraft will be in 15 minutes
+function updateAirRoutes() {
+  const show = ORIENT.routes && L.air.on && L.air.loaded;
+  if (!show) { if (airRoutes) airRoutes.visible = false; return; }
+  const n = L.air.items.length;
+  if (!airRoutes || airRoutes.userData.n !== n) {
+    if (airRoutes) { scene.remove(airRoutes); airRoutes.geometry.dispose(); }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 6), 3).setUsage(THREE.DynamicDrawUsage));
+    airRoutes = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: COLORS.air, transparent: true, opacity: 0.4, depthWrite: false }));
+    airRoutes.userData.n = n; airRoutes.renderOrder = 2; airRoutes.frustumCulled = false; scene.add(airRoutes);
+  }
+  const arr = airRoutes.geometry.attributes.position.array, pos = L.air.pos, dir = L.air.obj.geometry.attributes.dir.array;
+  for (let i = 0; i < n; i++) {
+    const a = L.air.items[i], ang = (a.spd * AIR_AHEAD_S) / (R_EARTH_KM * 1000), c = Math.cos(ang), s = Math.sin(ang);
+    const x = pos[i * 3], y = pos[i * 3 + 1], z = pos[i * 3 + 2], r = Math.hypot(x, y, z);
+    arr.set([x, y, z, (x / r * c + dir[i * 3] * s) * r, (y / r * c + dir[i * 3 + 1] * s) * r, (z / r * c + dir[i * 3 + 2] * s) * r], i * 6);
+  }
+  airRoutes.geometry.attributes.position.needsUpdate = true; airRoutes.visible = true;
+}
+// satellites: the path of the next quarter orbit, recomputed every 5 s
+function updateSatRoutes() {
+  const show = ORIENT.routes && L.sat.on && L.sat.loaded;
+  if (!show) { if (satRoutes) satRoutes.visible = false; return; }
+  const now = Date.now();
+  if (satRoutes && satRoutes.visible && now - satRoutesAt < 5000) return;
+  satRoutesAt = now;
+  const STEPS = 24, pts = [];
+  for (const s of L.sat.items) {
+    const period = 1440 / s.o.MEAN_MOTION * 60000;
+    let prev = null;
+    for (let k = 0; k <= STEPS; k++) {
+      const e = satEcf(s, new Date(now + k / STEPS * period * 0.25));
+      if (e && prev) pts.push(prev.x, prev.y, prev.z, e.x, e.y, e.z);
+      prev = e;
+    }
+  }
+  if (!satRoutes) {
+    satRoutes = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: COLORS.sat, transparent: true, opacity: 0.22, depthWrite: false }));
+    satRoutes.renderOrder = 2; satRoutes.frustumCulled = false; scene.add(satRoutes);
+  }
+  satRoutes.geometry.dispose();
+  satRoutes.geometry = new THREE.BufferGeometry();
+  satRoutes.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pts), 3));
+  satRoutes.visible = true;
+}
+let routesTick = 0;
+function updateOrientation() {
+  layoutLabels();
+  const now = performance.now();
+  if (now - routesTick > 250) { routesTick = now; updateAirRoutes(); updateSatRoutes(); }
+}
+
+/* ---------- Sharper Earth on large screens ---------- */
+function loadHiResEarth() {
+  if (!renderer) return;
+  const big = renderer.capabilities.maxTextureSize >= 8192 && Math.min(screen.width, screen.height) >= 700 && !navigator.connection?.saveData;
+  if (!big) return;
+  const l = new THREE.TextureLoader();
+  const apply = (key, t) => { t.colorSpace = THREE.NoColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy(); uniforms[key].value = t; };
+  l.load('img/hi/earth-day-8k.jpg', t => { apply('dayMap', t); l.load('img/hi/earth-night-8k.jpg', t2 => apply('nightMap', t2), undefined, () => {}); }, undefined, () => {});
+}
+
+loadGeo();
 
 // warm the place index once the start screen stands (non-blocking, PRD F-01.5)
 (window.requestIdleCallback || (f => setTimeout(f, 1200)))(() => loadPlaces());
