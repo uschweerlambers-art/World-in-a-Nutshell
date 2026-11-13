@@ -35,6 +35,15 @@ jobs:
           node scripts/fetch-textures.mjs .cache/textures site/img/hi
           ls -la site/img/hi || true
           ls -la site/data/live
+      - name: Probe (temporary)
+        run: |
+          for f in events volcanoes satcat aircraft; do echo "== $f"; node -e "const j=require('./site/data/live/$f.json');console.log(j.count, JSON.stringify(j.rows.slice(0,3)).slice(0,1500)); if('$f'==='events'){const c={};for(const r of j.rows)c[r[2]]=(c[r[2]]||0)+1;console.log(c);console.log(JSON.stringify(j.rows.filter(r=>r[2]==='severeStorms').slice(0,2)).slice(0,1500))}" || true; done
+          echo "== adsbdb"; curl -s -D - -o /tmp/a.json -H 'Origin: https://uschweerlambers-art.github.io' 'https://api.adsbdb.com/v0/aircraft/3c6444?callsign=DLH9U' | grep -i 'access-control\|HTTP/'; head -c 1500 /tmp/a.json; echo
+          echo "== imerg"; curl -s -o /tmp/i.png -w '%{http_code} %{content_type} %{size_download}\n' "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&LAYERS=IMERG_Precipitation_Rate&STYLES=&CRS=EPSG:4326&BBOX=-90,-180,90,180&WIDTH=1024&HEIGHT=512&FORMAT=image/png&TIME=$(date -u -d '-6 hours' +%Y-%m-%dT%H:00:00Z)"
+          curl -s 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0' | grep -o '<Name>[^<]*\(IMERG\|Precip\|Aerosol\|Carbon_Monoxide\|Nitrogen\|PM2\|Wind\)[^<]*</Name>' | sort -u | head -40
+          echo "== nomads"; d=$(date -u -d '-6 hours' +%Y%m%d); h=$(( ($(date -u -d '-6 hours' +%-H) / 6) * 6 )); hh=$(printf %02d $h); curl -s -o /tmp/g.grb -w '%{http_code} %{size_download}\n' "https://nomads.ncep.noaa.gov/cgi-bin/filter_gfs_1p00.pl?dir=%2Fgfs.$d%2F$hh%2Fatmos&file=gfs.t${hh}z.pgrb2.1p00.f000&var_UGRD=on&var_VGRD=on&var_TMP=on&lev_10_m_above_ground=on&lev_2_m_above_ground=on"
+          echo "== openmeteo aq"; curl -s 'https://air-quality-api.open-meteo.com/v1/air-quality?latitude=52.02&longitude=8.53&current=european_aqi,pm2_5,pm10,nitrogen_dioxide,ozone' | head -c 600; echo
+          echo "== eccodes"; apt-cache policy libeccodes-tools | head -3
       # The preview build lets reviewers download and open the site locally (N-7.4).
       - uses: actions/upload-artifact@v4
         with:
