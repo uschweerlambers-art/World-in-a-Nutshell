@@ -49,6 +49,13 @@ jobs:
           path: .cache/live
           key: live-${{ github.run_id }}-${{ github.run_attempt }}
 
+      # Same snapshots as a plain artifact, for QA and local testing (kept 2 days)
+      - uses: actions/upload-artifact@v4
+        with:
+          name: live-snapshots
+          path: site/data/live
+          retention-days: 2
+
       - uses: actions/configure-pages@v5
 
       - uses: actions/upload-pages-artifact@v3

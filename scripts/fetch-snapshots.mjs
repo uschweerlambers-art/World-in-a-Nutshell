@@ -20,7 +20,7 @@ const SOURCES = {
   satellites: {
     maxAge: 120 * MIN, // CelesTrak asks for at most one download per group every 2 h
     async fetch() {
-      const groups = ['stations', 'visual'];
+      const groups = ['stations', 'visual', 'weather', 'gnss']; // curated set, well under 2 000 objects (F-05.4)
       const seen = new Set();
       const sats = [];
       for (const g of groups) {
