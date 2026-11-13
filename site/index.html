@@ -28,6 +28,9 @@
   --c-quake: #FF9F0A;
   --c-radio: #30D158;
   --c-place: #40E0D0;
+  --c-volcano: #FF453A;
+  --c-storm: #9FE3FF;
+  --c-event: #FF6B35;
   --c-country: rgba(245,245,247,0.78);
   --c-cap: #E9FFFC;
   --win: 1; --lbl: 1; --sym: 1;
@@ -232,6 +235,11 @@ button:disabled { cursor: default; }
 .gl-cap.dot-only span { display: none; }
 .gl-cap:hover span, .gl-cap:focus-visible span { text-decoration: underline; }
 @media (prefers-reduced-motion: reduce) { #geo-labels > * { transition: none; } }
+.gl-grid { font-family: var(--mono); font-size: calc(10px * var(--lbl)); color: rgba(255,255,255,0.62); text-shadow: 0 0 3px rgba(0,0,0,.95); }
+.apt-label { position: fixed; left: 0; top: 0; z-index: 2; pointer-events: none; font-family: var(--mono); font-size: calc(11px * var(--lbl)); font-weight: 600; color: #05070D; padding: 1px 6px; border-radius: 6px; background: color-mix(in srgb, var(--c-air) 92%, transparent); white-space: nowrap; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.legend span { display: inline-flex; align-items: center; gap: 5px; }
+.legend i { width: 9px; height: 9px; border-radius: 5px; flex-shrink: 0; box-shadow: 0 0 0 1px rgba(0,0,0,.4); }
 
 /* Layer extras */
 .sub { margin: 2px 0 6px 42px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--text-3); }
@@ -491,10 +499,20 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 18c4-1 6-5 8-8s5-5 8-6"/><path d="M15 4h5v5"/></svg></span><span class="nm">Routes &amp; directions</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show routes and directions" data-toggle="routes"></button></span></div>
       <p class="note" id="live-note">Aircraft, orbits and stations are refreshed every 15 minutes, earthquakes every 5.</p>
     </section>
+    <section class="sec" aria-labelledby="h-nature">
+      <h3 id="h-nature">Nature</h3>
+      <div class="row off" data-layer="volcano"><span class="ico" style="background:var(--c-volcano)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><path d="M2.5 20.5L9.3 8.2h5.4l6.8 12.3z"/><path d="M12 6.5c0-2 1.2-3.3 3-3.5" fill="none" stroke="#05070D" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="nm">Volcanoes</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show volcanoes" data-layer-switch="volcano"></button></span></div>
+      <div class="sub" id="volcano-sub" hidden><span>Ringed: reported active in the Smithsonian weekly report.</span></div>
+      <div class="row off" data-layer="storm"><span class="ico" style="background:var(--c-storm)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05070D" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M15.5 11.5C16 6 12 4 7 4.5M8.5 12.5C8 18 12 20 17 19.5"/></svg></span><span class="nm">Tropical storms</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show tropical storms" data-layer-switch="storm"></button></span></div>
+      <div class="sub legend" id="storm-sub" hidden></div>
+      <div class="row off" data-layer="event"><span class="ico" style="background:var(--c-event)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><path d="M12 2.5c.5 3.5 5.5 5.8 5.5 11a5.5 5.5 0 01-11 0c0-2.6 1.3-4.3 2.6-5.6.2 1.8 1 2.9 2 3.3-.6-3 .2-6.2.9-8.7z"/></svg></span><span class="nm">Fires, ice &amp; more</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show natural events: wildfires, ice, floods and more" data-layer-switch="event"></button></span></div>
+      <div class="sub legend" id="event-sub" hidden></div>
+    </section>
     <section class="sec" aria-labelledby="h-view">
       <h3 id="h-view">Earth</h3>
       <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 010 16z" fill="#F5F5F7"/></svg></span><span class="nm">Day and night</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show day and night" data-toggle="night"></button></span></div>
       <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#F5F5F7" aria-hidden="true"><path d="M7 18a4.5 4.5 0 01-.6-8.96A6 6 0 0117.7 8.5 4.75 4.75 0 0117.5 18z"/></svg></span><span class="nm">Clouds</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show clouds" data-toggle="clouds"></button></span></div>
+      <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M5 7.5h14M5 16.5h14M12 3c-3 3-3 15 0 18M12 3c3 3 3 15 0 18"/></svg></span><span class="nm">Graticule</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show graticule (latitude and longitude lines)" data-toggle="grid"></button></span></div>
       <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span><span class="nm">Countries &amp; borders</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show countries and borders" data-toggle="borders"></button></span></div>
       <div class="row"><span class="ico" style="background:var(--c-place)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><circle cx="12" cy="12" r="5"/></svg></span><span class="nm">Capitals</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show capitals" data-toggle="capitals"></button></span></div>
     </section>
@@ -592,6 +610,8 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   <button type="button" class="x" id="pl-close" aria-label="Stop and close player"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
 </div>
 <div class="iss-label" id="iss-label" hidden>ISS</div>
+<div class="apt-label" id="apt-from" hidden></div>
+<div class="apt-label" id="apt-to" hidden></div>
 
 <section id="place-pop" class="glass is-out" aria-labelledby="pp-head" hidden>
   <div class="w-top"><span><span class="sw" style="background:var(--c-place)"></span><span id="pp-cat">Place</span></span><button type="button" class="x" aria-label="Close place info" id="pp-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
@@ -632,7 +652,10 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <h3>Live layers</h3>
       <ul>
         <li>Aircraft: The OpenSky Network, snapshot every 15 minutes, positions moved on along course and speed in your browser.</li>
-        <li>Satellites and ISS: orbit data from CelesTrak (at most every 2 hours), positions computed live in your browser with satellite.js (MIT).</li>
+        <li>Satellites and ISS: orbit data from CelesTrak (at most every 2 hours), positions computed live in your browser with satellite.js (MIT). Owner, launch date and site: CelesTrak SATCAT.</li>
+        <li>Flight route, airline and aircraft type: adsbdb.com (open API), asked only when you click an aircraft. Routes come from a community database and can be out of date.</li>
+        <li>Volcanoes: Smithsonian Institution, Global Volcanism Program, Volcanoes of the World (Holocene list) and the weekly volcanic activity report.</li>
+        <li>Tropical storms, wildfires, sea and lake ice and other open natural events: NASA EONET, public domain (storm tracks from JTWC and NHC).</li>
         <li>Earthquakes of the last 24 hours: USGS Earthquake Hazards Program, public domain, loaded directly every 5 minutes.</li>
         <li>Radio stations: Radio Browser community database, public domain. Streams come straight from each station.</li>
       </ul>
@@ -644,7 +667,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <div data-pane="datenschutz" hidden>
       <h3>Placeholder</h3>
       <p>The privacy policy follows before launch. It will name every server your browser contacts, and GitHub Pages as the host.</p>
-      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you play a radio station, the stream comes directly from that station’s server. Both see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up weather, time zone and elevation.</p>
+      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you play a radio station, the stream comes directly from that station’s server. Both see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up weather, time zone and elevation. When you click an aircraft, its transponder code and call sign go to adsbdb.com to look up route and type.</p>
       <p>Already true today: this site sets no cookies, counts no visits and only asks for your location when you click. What you type into search never leaves your browser. Your display settings (sizes and colours) are kept in your own browser’s storage and are never sent anywhere.</p>
     </div>
   </div>
@@ -681,11 +704,11 @@ function toast(msg, ms = 3800) {
 /* ---------- Display settings and colour schemes ---------- */
 // Kept in this browser only (localStorage), never sent anywhere.
 const SCHEMES = {
-  night:    { name: 'Night', air: '#64D2FF', sat: '#BF5AF2', quake: '#FF9F0A', radio: '#30D158', border: '#F5F5F7', borderA: 0.5, lineMul: 1, country: 'rgba(245,245,247,0.8)', cap: '#E9FFFC' },
-  contrast: { name: 'High contrast', air: '#40E8FF', sat: '#E68CFF', quake: '#FFB938', radio: '#4DFF7C', border: '#FFFFFF', borderA: 0.85, lineMul: 1.5, country: '#FFFFFF', cap: '#FFFFFF',
+  night:    { name: 'Night', volcano: '#FF453A', air: '#64D2FF', sat: '#BF5AF2', quake: '#FF9F0A', radio: '#30D158', border: '#F5F5F7', borderA: 0.5, lineMul: 1, country: 'rgba(245,245,247,0.8)', cap: '#E9FFFC' },
+  contrast: { name: 'High contrast', volcano: '#FF6B5E', air: '#40E8FF', sat: '#E68CFF', quake: '#FFB938', radio: '#4DFF7C', border: '#FFFFFF', borderA: 0.85, lineMul: 1.5, country: '#FFFFFF', cap: '#FFFFFF',
               css: { '--glass': 'rgba(12,14,20,0.9)', '--glass-soft': 'rgba(12,14,20,0.86)', '--glass-deep': 'rgba(10,12,18,0.94)', '--text-2': '#E5E5EA', '--text-3': '#C7C7CC', '--text-4': '#AEAEB2', '--edge': 'rgba(255,255,255,0.28)', '--edge-strong': 'rgba(255,255,255,0.36)' } },
-  atlas:    { name: 'Atlas', air: '#9CC8FF', sat: '#FF8AD8', quake: '#FF6A4D', radio: '#B8E35A', border: '#FFD27A', borderA: 0.7, lineMul: 1.15, country: '#FFE3A8', cap: '#E9FFFC' },
-  cvd:      { name: 'Colour-blind safe', air: '#56B4E9', sat: '#CC79A7', quake: '#D55E00', radio: '#F0E442', border: '#FFFFFF', borderA: 0.6, lineMul: 1.15, country: '#FFFFFF', cap: '#FFFFFF' },
+  atlas:    { name: 'Atlas', volcano: '#E8442E', air: '#9CC8FF', sat: '#FF8AD8', quake: '#FF6A4D', radio: '#B8E35A', border: '#FFD27A', borderA: 0.7, lineMul: 1.15, country: '#FFE3A8', cap: '#E9FFFC' },
+  cvd:      { name: 'Colour-blind safe', volcano: '#E69F00', air: '#56B4E9', sat: '#CC79A7', quake: '#D55E00', radio: '#F0E442', border: '#FFFFFF', borderA: 0.6, lineMul: 1.15, country: '#FFFFFF', cap: '#FFFFFF' },
 };
 const SCHEME_CSS = [...new Set(Object.values(SCHEMES).flatMap(x => Object.keys(x.css || {})))];
 const SET_DEFAULT = { win: 100, lbl: 100, sym: 100, line: 100, scheme: 'night' };
@@ -1221,6 +1244,7 @@ function setToggle(key, on) {
   if (key in ORIENT) {
     ORIENT[key] = on;
     if (key === 'borders' && borderLines) borderLines.visible = on;
+    if (key === 'grid') { if (on) buildGrid(); if (gridLines) gridLines.visible = on; if (!on) gridLabels.forEach(l => { l.el.style.visibility = 'hidden'; l.el.style.opacity = 0; l.shown = false; }); }
     layoutLabels(true); routesTick = 0;
   }
   $$(`[data-toggle="${key}"]`).forEach(el => el.setAttribute(el.getAttribute('role') === 'switch' ? 'aria-checked' : 'aria-pressed', String(on)));
@@ -1266,7 +1290,7 @@ function saveSettings() { try { localStorage.setItem('wian-settings', JSON.strin
 function applySettings() {
   const root = document.documentElement.style, sc = scheme();
   root.setProperty('--win', SET.win / 100); root.setProperty('--lbl', SET.lbl / 100); root.setProperty('--sym', SET.sym / 100);
-  for (const k of ['air', 'sat', 'quake', 'radio']) { root.setProperty('--c-' + k, sc[k]); COLORS[k] = sc[k]; }
+  for (const k of ['air', 'sat', 'quake', 'radio', 'volcano']) { root.setProperty('--c-' + k, sc[k]); COLORS[k] = sc[k]; }
   root.setProperty('--c-country', sc.country); root.setProperty('--c-cap', sc.cap);
   for (const v of SCHEME_CSS) { if (sc.css?.[v]) root.setProperty(v, sc.css[v]); else root.removeProperty(v); }
   // globe: point colours and line styles
@@ -1315,13 +1339,17 @@ tick(); setInterval(tick, 20000);
 // Earthquakes load straight from USGS, satellites are propagated live with satellite.js.
 const LIVE = 'data/live/';
 const R_EARTH_KM = 6371;
-const COLORS = { air: scheme().air, sat: scheme().sat, quake: scheme().quake, radio: scheme().radio };
-const LAYER_NAMES = { air: 'Aircraft', sat: 'Satellite', quake: 'Earthquake', radio: 'Radio station' };
+const COLORS = { air: scheme().air, sat: scheme().sat, quake: scheme().quake, radio: scheme().radio, volcano: scheme().volcano, storm: '#9FE3FF', event: '#FF6B35' };
+const LAYER_NAMES = { air: 'Aircraft', sat: 'Satellite', quake: 'Earthquake', radio: 'Radio station', volcano: 'Volcano', storm: 'Tropical storm', event: 'Natural event' };
+const LAYER_PLURAL = { air: 'Aircraft', sat: 'Satellites', quake: 'Earthquakes', radio: 'Radio stations', volcano: 'Volcanoes', storm: 'Tropical storms', event: 'Natural events' };
 const L = {
   air: { on: false, loaded: false, items: [], pos: null, obj: null },
   sat: { on: false, loaded: false, items: [], pos: null, obj: null },
   quake: { on: false, loaded: false, items: [], pos: null, obj: null, minMag: 0 },
   radio: { on: false, loaded: false, items: [], pos: null, obj: null },
+  volcano: { on: false, loaded: false, items: [], pos: null, obj: null },
+  storm: { on: false, loaded: false, items: [], pos: null, obj: null },
+  event: { on: false, loaded: false, items: [], pos: null, obj: null },
 };
 let liveMeta = null, selected = null, here = null;
 
@@ -1357,6 +1385,23 @@ function planeTexture() {
   g.stroke(p); g.fill(p);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.NoColorSpace; return t;
 }
+// static glyphs (kind 3): white = layer colour, dark outline
+function glyphTexture(draw) {
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const g = c.getContext('2d');
+  g.translate(32, 32); g.scale(2.4, 2.4); g.translate(-12, -12);
+  g.fillStyle = '#fff'; g.strokeStyle = 'rgba(5,7,13,0.9)'; g.lineJoin = 'round'; g.lineCap = 'round';
+  draw(g);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.NoColorSpace; return t;
+}
+const volcanoGlyph = () => glyphTexture(g => {
+  const p = new Path2D('M2.5 20.5L9.3 8.2h5.4l6.8 12.3z'); g.lineWidth = 1.8; g.stroke(p); g.fill(p);
+  g.fillStyle = 'rgba(5,7,13,0.9)'; g.fill(new Path2D('M9.3 8.2h5.4l-1.2 2.2-1.5-1-1.5 1z'));
+});
+const stormGlyph = () => glyphTexture(g => {
+  const shape = () => { g.beginPath(); g.arc(12, 12, 3.6, 0, Math.PI * 2); g.moveTo(15.6, 11.5); g.quadraticCurveTo(16, 4.5, 7, 4); g.moveTo(8.4, 12.5); g.quadraticCurveTo(8, 19.5, 17, 20); };
+  g.lineWidth = 4.6; shape(); g.stroke(); g.strokeStyle = '#fff'; g.lineWidth = 2.6; shape(); g.stroke();
+});
 function pointsMaterial(kind, color, opts = {}) {
   return new THREE.ShaderMaterial({
     // surface markers skip the depth test (big sprites would be cut by the curved Earth);
@@ -1364,11 +1409,11 @@ function pointsMaterial(kind, color, opts = {}) {
     transparent: true, depthWrite: false, depthTest: (opts.limb ?? 1) === 0,
     uniforms: {
       color: { value: new THREE.Color(color) }, px: { value: Math.min(devicePixelRatio, 2) },
-      aspect: { value: innerWidth / innerHeight }, time: { value: 0 }, glyph: { value: kind === 1 ? planeTexture() : null },
+      aspect: { value: innerWidth / innerHeight }, time: { value: 0 }, glyph: { value: kind === 1 ? planeTexture() : kind === 3 ? opts.glyph : null }, useCol: { value: opts.useCol ? 1 : 0 },
       limb: { value: opts.limb ?? 1 }, zoom: { value: 1 }, pulse: { value: reduceMotion ? 0 : 1 }, sel: { value: -1 }, ui: { value: symF() },
     },
     vertexShader: `
-      attribute float size; attribute vec3 dir; attribute float flag; attribute float idx;
+      attribute float size; attribute vec3 dir; attribute float flag; attribute float idx; attribute vec3 col; varying vec3 vCol;
       uniform float px; uniform float aspect; uniform float time; uniform float limb; uniform float pulse; uniform float sel; uniform float zoom; uniform float ui;
       varying float vAng; varying float vAlpha; varying float vFlag; varying float vPulse; varying float vSel;
       void main(){
@@ -1378,7 +1423,7 @@ function pointsMaterial(kind, color, opts = {}) {
         vec3 toCam = normalize(cameraPosition - position);
         float facing = dot(n, toCam);
         vAlpha = mix(1.0, smoothstep(-0.02, 0.18, facing), limb);
-        vFlag = flag; vSel = abs(idx - sel) < 0.5 ? 1.0 : 0.0;
+        vFlag = flag; vSel = abs(idx - sel) < 0.5 ? 1.0 : 0.0; vCol = col;
         float s = size;
         ${kind === 1 ? `
         vec4 c1 = projectionMatrix * modelViewMatrix * vec4(position + dir * 0.01, 1.0);
@@ -1390,28 +1435,36 @@ function pointsMaterial(kind, color, opts = {}) {
         gl_PointSize = s * 1.15 * ui * zoom * px * (1.0 + vPulse * 1.4); // +15 % (Uwe, 13.11.), ui = symbol size setting
       }`,
     fragmentShader: `
-      uniform vec3 color; uniform sampler2D glyph;
-      varying float vAng; varying float vAlpha; varying float vFlag; varying float vPulse; varying float vSel;
+      uniform vec3 color; uniform sampler2D glyph; uniform float useCol;
+      varying float vAng; varying float vAlpha; varying float vFlag; varying float vPulse; varying float vSel; varying vec3 vCol;
       void main(){
         vec2 p = gl_PointCoord - 0.5; p.y = -p.y;
-        float a = 0.0; vec3 col = color;
+        vec3 C = useCol > 0.5 ? vCol : color;
+        float a = 0.0; vec3 col = C;
         ${kind === 1 ? `
           float c = cos(vAng), s = sin(vAng);
           vec2 q = vec2(p.x * c - p.y * s, p.x * s + p.y * c);
           vec4 g = texture2D(glyph, q + 0.5);
-          a = g.a; col = mix(vec3(0.02, 0.03, 0.05), color, g.r);
+          a = g.a; col = mix(vec3(0.02, 0.03, 0.05), C, g.r);
           if (vSel > 0.5) col = mix(col, vec3(1.0), 0.5 * g.r);`
+        : kind === 3 ? `
+          float r = length(p) * 2.0;
+          vec4 g = texture2D(glyph, clamp(p * 1.22 + 0.5, 0.0, 1.0));
+          a = g.a; col = mix(vec3(0.02, 0.03, 0.05), C, g.r);
+          float ring = (1.0 - smoothstep(0.05, 0.12, abs(r - 0.9))) * vFlag;
+          col = mix(col, C, ring * (1.0 - g.a)); a = max(a, ring);
+          if (vSel > 0.5) { col = mix(col, vec3(1.0), 0.45 * g.r); a = max(a, (1.0 - smoothstep(0.86, 0.98, r)) * step(0.8, r)); }`
         : kind === 2 ? `
           float r = length(p) * 2.0;
           float core = 1.0 - smoothstep(0.42, 0.5, r / (1.0 + vPulse * 1.4));
           float ring = (1.0 - smoothstep(0.04, 0.09, abs(r - 0.9))) * (vPulse > 0.0 ? (1.0 - vPulse) : (vFlag > 0.5 ? 0.9 : 0.0));
           a = max(core * 0.85, ring);
-          col = mix(color, vec3(1.0), vSel * 0.4);`
+          col = mix(C, vec3(1.0), vSel * 0.4);`
         : `
           float r = length(p) * 2.0;
           a = 1.0 - smoothstep(0.62, 0.9, r);
           float edge = smoothstep(0.45, 0.7, r);
-          col = mix(color * (1.0 + vFlag * 0.5), vec3(0.02, 0.03, 0.05), edge * 0.55);
+          col = mix(C * (1.0 + vFlag * 0.5), vec3(0.02, 0.03, 0.05), edge * 0.55);
           if (vFlag > 0.5) col = mix(col, vec3(1.0), 0.35 * (1.0 - edge));
           if (vSel > 0.5) a = max(a, (1.0 - smoothstep(0.86, 0.98, r)) * step(0.72, r));`}
         a *= vAlpha;
@@ -1426,6 +1479,7 @@ function makePoints(key, n, kind, opts) {
   geo.setAttribute('dir', new THREE.BufferAttribute(new Float32Array(n * 3), 3).setUsage(THREE.DynamicDrawUsage));
   geo.setAttribute('size', new THREE.BufferAttribute(new Float32Array(n), 1));
   geo.setAttribute('flag', new THREE.BufferAttribute(new Float32Array(n), 1));
+  geo.setAttribute('col', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
   const idx = new Float32Array(n); for (let i = 0; i < n; i++) idx[i] = i;
   geo.setAttribute('idx', new THREE.BufferAttribute(idx, 1));
   if (L[key].obj) { scene.remove(L[key].obj); L[key].obj.geometry.dispose(); }
@@ -1444,10 +1498,10 @@ async function loadAir() {
   airFetched = j.fetched;
   const n = j.rows.length;
   L.air.items = j.rows.map(r => {
-    const [icao, call, lat, lon, alt, hdg, spd, country] = r;
+    const [icao, call, lat, lon, alt, hdg, spd, country, vrate, squawk] = r;
     const p = vecFromLatLon(lat, lon), { n: N, e: E } = northEast(lat, lon);
     const d = N.multiplyScalar(Math.cos(hdg * DEG)).add(E.multiplyScalar(Math.sin(hdg * DEG)));
-    return { icao, call, lat, lon, alt, hdg, spd, country, p0: p, d0: d };
+    return { icao, call, lat, lon, alt, hdg, spd, country, vrate, squawk, p0: p, d0: d };
   });
   const geo = makePoints('air', n, 1, { order: 3 });
   const size = geo.attributes.size.array;
@@ -1479,8 +1533,9 @@ function stepAir(force) {
 let satLastStep = 0, issIdx = -1, issOrbit = null, issOrbitAt = 0;
 const ISS_ID = 25544;
 async function loadSat() {
-  const [j, sat] = await Promise.all([getJSON(LIVE + 'satellites.json'), import('satellite.js')]);
+  const [j, sat, cat] = await Promise.all([getJSON(LIVE + 'satellites.json'), import('satellite.js'), getJSON(LIVE + 'satcat.json').catch(() => null)]);
   L.sat.lib = sat;
+  L.sat.cat = new Map((cat?.rows || []).map(r => [r[0], r]));
   L.sat.items = j.items.map(o => { try { return { o, rec: sat.json2satrec(o), name: o.OBJECT_NAME, id: o.NORAD_CAT_ID, group: o.GROUP, epoch: Date.parse(o.EPOCH + 'Z') }; } catch { return null; } }).filter(Boolean);
   issIdx = L.sat.items.findIndex(s => s.id === ISS_ID);
   const geo = makePoints('sat', L.sat.items.length, 0, { limb: 0, order: 4 });
@@ -1691,7 +1746,7 @@ document.addEventListener('click', e => {
 });
 
 /* Switching layers */
-const loaders = { air: loadAir, sat: loadSat, quake: loadQuake, radio: loadRadio };
+const loaders = { air: loadAir, sat: loadSat, quake: loadQuake, radio: loadRadio, volcano: loadVolcano, storm: loadStorm, event: loadEvent };
 async function setLayer(key, on) {
   const st = L[key];
   st.on = on;
@@ -1709,7 +1764,7 @@ async function setLayer(key, on) {
       $$(`[data-layer-switch="${key}"]`).forEach(el => el.setAttribute('aria-checked', 'false'));
       $(`.row[data-layer="${key}"]`).classList.add('off');
       if (key === 'quake') $('#quake-filter').hidden = true;
-      toast(`${LAYER_NAMES[key] === 'Radio station' ? 'Radio stations' : LAYER_NAMES[key] + 's'} could not be loaded right now. Please try again later.`, 5000);
+      toast(`${LAYER_PLURAL[key]} could not be loaded right now. Please try again later.`, 5000);
       updateCounts(); return;
     }
   }
@@ -1717,6 +1772,8 @@ async function setLayer(key, on) {
   if (st.obj) st.obj.visible = st.on;
   if (key === 'radio' && !on) for (const x of RADIO_LEVELS) if (x.obj) x.obj.visible = false;
   if (key === 'radio' && on) showNearby();
+  const sub = $(`#${key}-sub`); if (sub) sub.hidden = !(st.on && st.loaded);
+  if (key === 'air' && !on) hideRoute();
   updateCounts(); updateLiveNote();
 }
 function updateCounts() {
@@ -1726,8 +1783,8 @@ function updateCounts() {
     ct.textContent = L[k].loaded && L[k].on ? fmtInt(L[k].items.length) : '–';
   }
   const on = Object.keys(L).filter(k => L[k].on);
-  const src = { air: 'OpenSky', sat: 'CelesTrak', quake: 'USGS', radio: 'Radio Browser' };
-  $('#attrib-live').textContent = on.length ? ' · Live: ' + on.map(k => src[k]).join(', ') : '';
+  const src = { air: 'OpenSky', sat: 'CelesTrak', quake: 'USGS', radio: 'Radio Browser', volcano: 'Smithsonian GVP', storm: 'NASA EONET', event: 'NASA EONET' };
+  $('#attrib-live').textContent = on.length ? ' · Live: ' + [...new Set(on.map(k => src[k]))].join(', ') : '';
 }
 function updateLiveNote() {
   const parts = [];
@@ -1776,7 +1833,7 @@ const projV = new THREE.Vector3();
 function pick(x, y) {
   const camDir = camera.position.clone().normalize();
   let best = null, bestD = innerWidth < 768 ? 22 : 14;
-  for (const key of ['sat', 'air', 'quake', 'radio']) {
+  for (const key of ['sat', 'air', 'storm', 'volcano', 'event', 'quake', 'radio']) {
     const st = L[key]; if (!st.on || !st.loaded || !st.pos) continue;
     const lv = key === 'radio' ? radioLevel() : null;
     const pos = lv ? lv.pos : st.pos, n = lv ? lv.groups.length : st.items.length;
@@ -1803,19 +1860,27 @@ function select(key, i) {
   selected = { key, i }; closePlacePop();
   for (const k of Object.keys(L)) if (L[k].obj) L[k].obj.material.uniforms.sel.value = k === key ? i : -1;
   if (!(key === 'sat' && it.id === ISS_ID)) hideIssOrbit();
-  const swc = { air: 'var(--c-air)', sat: 'var(--c-sat)', quake: 'var(--c-quake)', radio: 'var(--c-radio)' }[key];
-  $('#i-sw').style.background = swc;
+  if (key !== 'air') hideRoute();
+  $('#i-sw').style.background = key === 'event' ? EVENT_CATS[it.cat]?.[1] || 'var(--c-event)' : key === 'storm' ? stormCat(it.wind).col : `var(--c-${key})`;
   $('#i-cat-t').textContent = LAYER_NAMES[key];
   let head = '', dl = '', hint = '', act = '', src = '';
   if (key === 'air') {
     head = it.call || it.icao.toUpperCase();
-    dl = row('Call sign', esc(it.call || '–')) + row('ICAO hex', esc(it.icao)) + row('Altitude', fmtAlt(it.alt)) + row('Speed', it.spd ? `${Math.round(it.spd * 3.6)} km/h` : '–') + row('Course', `${Math.round(it.hdg)}°`) + row('Registered in', esc(it.country || '–'), 't') + row('Last report', `${hhmm(airSnapTime)} (${fmtAgo(airSnapTime)})`);
-    hint = Date.now() - airSnapTime > 60000 ? 'Position estimated from the last report along course and speed.' : '';
-    src = `Source: <a href="https://opensky-network.org" target="_blank" rel="noopener noreferrer">The OpenSky Network</a>`;
+    const vr = Number.isFinite(it.vrate) ? (Math.abs(it.vrate) < 0.5 ? 'Level' : `${it.vrate > 0 ? 'Climbing' : 'Descending'} ${fmtInt(Math.round(Math.abs(it.vrate) * 196.85))} ft/min`) : '–';
+    const ld = '<span class="mono" style="color:var(--text-3)">…</span>';
+    dl = row('Flight', ld).replace('<dd>', '<dd id="i-flight" class="t">') + row('Airline', ld).replace('<dd>', '<dd id="i-airline" class="t">') + row('From', ld).replace('<dd>', '<dd id="i-from" class="t">') + row('To', ld).replace('<dd>', '<dd id="i-to" class="t">') + row('Aircraft', ld).replace('<dd>', '<dd id="i-type" class="t">') + row('Registration', ld).replace('<dd>', '<dd id="i-reg">')
+      + row('Altitude', it.alt ? `${fmtInt(Math.round(it.alt))} m · ${fmtInt(Math.round(it.alt * 3.28084 / 100) * 100)} ft` : '–') + row('Speed', it.spd ? `${Math.round(it.spd * 3.6)} km/h · ${Math.round(it.spd * 1.94384)} kn` : '–') + row('Vertical', vr, 't') + row('Course', `${Math.round(it.hdg)}°`) + row('Call sign', esc(it.call || '–')) + row('ICAO hex', esc(it.icao)) + row('Registered in', esc(it.country || '–'), 't') + row('Last report', `${hhmm(airSnapTime)} (${fmtAgo(airSnapTime)})`);
+    const emergency = { '7500': 'Squawk 7500: unlawful interference.', '7600': 'Squawk 7600: radio failure.', '7700': 'Squawk 7700: general emergency.' }[it.squawk];
+    hint = [emergency, Date.now() - airSnapTime > 60000 ? 'Position estimated from the last report along course and speed.' : ''].filter(Boolean).join(' ');
+    src = `Position: <a href="https://opensky-network.org" target="_blank" rel="noopener noreferrer">The OpenSky Network</a> · Route and type: <a href="https://www.adsbdb.com" target="_blank" rel="noopener noreferrer">adsbdb</a>, may be out of date`;
   } else if (key === 'sat') {
     const c = it.cur || {};
     head = it.id === ISS_ID ? 'International Space Station' : it.name;
-    dl = row('NORAD ID', it.id) + row('Altitude', c.alt ? `${fmtInt(Math.round(c.alt))} km` : '–') + row('Speed', c.speed ? `${fmtInt(Math.round(c.speed * 3600))} km/h` : '–') + row('Inclination', `${(+it.o.INCLINATION).toFixed(1)}°`) + row('Orbit data', `${fmtAgo(it.epoch)}`);
+    const ob = orbitInfo(it.o), sc = L.sat.cat?.get(it.id);
+    const launch = sc?.[2] ? new Date(sc[2] + 'T00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }) : (it.o.OBJECT_ID || '').slice(0, 4) || '–';
+    dl = row('Owner', esc(sc ? OWNERS[sc[1]] || sc[1] : '–'), 't') + row('Launched', esc(launch + (sc?.[3] ? ` · ${SITES[sc[3]] || sc[3]}` : '')), 't') + row('Orbit', ob.type, 't')
+      + row('Altitude', c.alt ? `${fmtInt(Math.round(c.alt))} km` : '–') + row('Range', `${fmtInt(Math.round(ob.peri))}–${fmtInt(Math.round(ob.apo))} km`) + row('Speed', c.speed ? `${fmtInt(Math.round(c.speed * 3600))} km/h` : '–')
+      + row('One orbit', ob.period < 180 ? `${Math.round(ob.period)} min` : `${(ob.period / 60).toFixed(1)} h`) + row('Inclination', `${(+it.o.INCLINATION).toFixed(1)}°`) + row('NORAD ID', it.id) + row('Orbit data', `${fmtAgo(it.epoch)}`);
     hint = Date.now() - it.epoch > 24 * 3600000 ? `Orbit data from ${new Date(it.epoch).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}.` : '';
     src = `Source: <a href="https://celestrak.org" target="_blank" rel="noopener noreferrer">CelesTrak</a> · computed with satellite.js`;
     if (it.id === ISS_ID) drawIssOrbit();
@@ -1831,16 +1896,35 @@ function select(key, i) {
     dl = row('Place', esc(near && distKm(it.lat, it.lon, near.lat, near.lon) < 30 ? near.name : fmtCoord(it.lat, it.lon)), 't') + row('Country', esc(countryName(it.cc)), 't') + row('Genre', esc(it.tags?.split(',').filter(Boolean).slice(0, 2).join(', ') || '–'), 't') + row('Stream', `${esc(it.codec || '–')}${it.kbps ? ' · ' + it.kbps + ' kbit/s' : ''}`);
     act = it.homepage?.startsWith('http') ? `<a class="w-link" href="${esc(it.homepage)}" target="_blank" rel="noopener noreferrer"><span class="t">Station website</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>` : '';
     src = `Source: <a href="https://www.radio-browser.info" target="_blank" rel="noopener noreferrer">Radio Browser</a>`;
+  } else if (key === 'volcano') {
+    head = esc(it.name);
+    dl = row('Country', esc(it.country || '–'), 't') + row('Type', esc(it.type || '–'), 't') + row('Last eruption', fmtYear(it.last), 't') + row('Summit', Number.isFinite(it.elev) ? `${fmtInt(it.elev)} m` : '–') + row('Position', fmtCoord(it.lat, it.lon));
+    hint = it.week ? `Reported active in the Smithsonian weekly report${it.week[4] ? ' of ' + new Date(it.week[4]).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : ''}.` : '';
+    act = extLink(`https://volcano.si.edu/volcano.cfm?vn=${encodeURIComponent(it.num)}`, 'Smithsonian volcano profile') + extLink(`https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(it.name + ' volcano')}&go=Go`, 'Wikipedia');
+    src = `Source: <a href="https://volcano.si.edu" target="_blank" rel="noopener noreferrer">Smithsonian Global Volcanism Program</a>`;
+  } else if (key === 'storm') {
+    const c = stormCat(it.wind), mv = stormMotion(it);
+    head = esc(it.title);
+    dl = row('Strength', c.name + (c.ss ? ' <small style="color:var(--text-3)">(Saffir-Simpson)</small>' : ''), 't') + row('Max. wind', Number.isFinite(it.wind) ? `${Math.round(it.wind * 1.852)} km/h · ${it.wind} kn` : '–') + row('Moving', mv, 't') + row('Position', fmtCoord(it.lat, it.lon)) + row('As of', fmtDT(it.time)) + row('Tracked since', fmtDT(it.first));
+    act = it.url ? extLink(it.url, `Advisory at ${esc(hostOf(it.url))}`) : '';
+    src = `Source: <a href="https://eonet.gsfc.nasa.gov" target="_blank" rel="noopener noreferrer">NASA EONET</a> · track data JTWC / NHC`;
+  } else if (key === 'event') {
+    const cat = EVENT_CATS[it.cat] || [it.cat, ''];
+    head = esc(it.title);
+    dl = row('Type', /prescribed/i.test(it.title) ? 'Prescribed burn' : cat[0], 't') + (Number.isFinite(it.mag) ? row('Size', fmtEventSize(it.mag, it.unit)) : '') + row('First reported', fmtDT(it.first)) + row('Latest update', fmtDT(it.time)) + row('Position', fmtCoord(it.lat, it.lon));
+    act = it.url ? extLink(it.url, `Details at ${esc(hostOf(it.url))}`) : '';
+    src = `Source: <a href="https://eonet.gsfc.nasa.gov" target="_blank" rel="noopener noreferrer">NASA EONET</a>, public domain`;
   }
   $('#i-head').innerHTML = head; $('#i-dl').innerHTML = dl;
   $('#i-hint').hidden = !hint; $('#i-hint').textContent = hint;
   $('#i-act').innerHTML = act; $('#i-src').innerHTML = src;
+  if (key === 'air') airDetails(it);
   closePopovers();
   const box = $('#insp'); box.hidden = false; requestAnimationFrame(() => box.classList.remove('is-out'));
   if (innerWidth < 768) { hidePicker(); $('#sidebar').classList.add('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'false'); }
 }
 function closeInspector() {
-  selected = null; hideIssOrbit();
+  selected = null; hideIssOrbit(); hideRoute();
   for (const k of Object.keys(L)) if (L[k].obj) L[k].obj.material.uniforms.sel.value = -1;
   const box = $('#insp'); box.classList.add('is-out'); setTimeout(() => { if (!selected) box.hidden = true; }, 450);
 }
@@ -1848,13 +1932,181 @@ $('#i-close').addEventListener('click', closeInspector);
 // refresh the satellite inspector while it is open (altitude and speed change)
 setInterval(() => { if (selected?.key === 'sat' && !$('#insp').hidden) select('sat', selected.i); }, 2000);
 
+/* ---------- Nature: volcanoes, tropical storms, other natural events (NASA EONET) ---------- */
+const extLink = (href, text) => `<a class="w-link" href="${esc(href)}" target="_blank" rel="noopener noreferrer"><span class="t">${text}</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>`;
+const hostOf = u => { try { return new URL(u).host.replace(/^www\./, ''); } catch { return 'source'; } };
+const fmtDT = t => new Date(t).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+const fmtYear = y => y == null || y === '' ? 'Unknown' : +y < 0 ? `${fmtInt(-y)} BCE` : String(y);
+const EVENT_CATS = { wildfires: ['Wildfire', '#FF6B35'], seaLakeIce: ['Sea and lake ice', '#BFE9FF'], floods: ['Flood', '#0A84FF'], dustHaze: ['Dust and haze', '#D2B48C'], drought: ['Drought', '#E3B505'], landslides: ['Landslide', '#A2845E'], snow: ['Snow', '#F5F5F7'], tempExtremes: ['Temperature extreme', '#FF375F'], waterColor: ['Water colour', '#30D5C8'], manmade: ['Man-made', '#AEAEB2'], volcanoes: ['Volcano', '#FF453A'] };
+function fmtEventSize(v, unit) {
+  if (unit === 'acres') return `${fmtInt(Math.round(v))} acres · ${fmtInt(Math.round(v * 0.404686))} ha`;
+  if (/NM\^?2/i.test(unit)) return `${fmtInt(Math.round(v))} NM² · ${fmtInt(Math.round(v * 3.4299))} km²`;
+  return `${fmtInt(Math.round(v))} ${esc(unit || '')}`;
+}
+// strength from wind speed in knots (Saffir-Simpson scale for hurricanes and typhoons)
+function stormCat(kts) {
+  if (!Number.isFinite(kts)) return { name: 'Storm', col: '#9FE3FF' };
+  return kts < 34 ? { name: 'Tropical depression', col: '#6EC1EA' } : kts < 64 ? { name: 'Tropical storm', col: '#4DFFFF' }
+    : kts < 83 ? { name: 'Category 1', col: '#FFFFD9', ss: 1 } : kts < 96 ? { name: 'Category 2', col: '#FFD98C', ss: 1 }
+    : kts < 113 ? { name: 'Category 3', col: '#FF9E59', ss: 1 } : kts < 137 ? { name: 'Category 4', col: '#FF738A', ss: 1 } : { name: 'Category 5', col: '#A188FC', ss: 1 };
+}
+function stormMotion(s) {
+  const a = s.pts.at(-2), b = s.pts.at(-1); if (!a) return '–';
+  const km = distKm(a[1], a[0], b[1], b[0]), h = (b[2] - a[2]) / 3600000; if (!(h > 0)) return '–';
+  const y = Math.sin((b[0] - a[0]) * DEG) * Math.cos(b[1] * DEG), x = Math.cos(a[1] * DEG) * Math.sin(b[1] * DEG) - Math.sin(a[1] * DEG) * Math.cos(b[1] * DEG) * Math.cos((b[0] - a[0]) * DEG);
+  const brg = (Math.atan2(y, x) / DEG + 360) % 360;
+  return `${['north', 'north-east', 'east', 'south-east', 'south', 'south-west', 'west', 'north-west'][Math.round(brg / 45) % 8]} at ${Math.round(km / h)} km/h`;
+}
+// points along the great circle from a to b, at most 2° apart, so long segments do not cut through the Earth
+function arcPts(lat1, lon1, lat2, lon2, r, out) {
+  const a = vecFromLatLon(lat1, lon1).normalize(), b = vecFromLatLon(lat2, lon2).normalize(), ang = a.angleTo(b);
+  const n = Math.max(1, Math.ceil(ang / (2 * DEG)));
+  let prev = a.clone().multiplyScalar(r);
+  for (let k = 1; k <= n; k++) { const v = slerpDir(a, b, ang, k / n).multiplyScalar(r); out.push(prev.x, prev.y, prev.z, v.x, v.y, v.z); prev = v; }
+  return n;
+}
+let eventsData = null, stormTracks = null;
+function getEvents() { return eventsData ||= getJSON(LIVE + 'events.json').catch(e => { eventsData = null; throw e; }); }
+async function loadVolcano() {
+  const [j, w] = await Promise.all([getJSON(LIVE + 'volcanoes.json'), getJSON(LIVE + 'volcanoWeek.json').catch(() => null)]);
+  const byNum = new Map(), byName = new Map();
+  for (const r of w?.rows || []) { if (r[0]) byNum.set(String(r[0]), r); if (r[1]) byName.set(fold(r[1]), r); }
+  const items = j.rows.map(([num, name, country, type, last, elev, lat, lon]) => ({ num, name, country, type, last, elev: elev == null ? NaN : +elev, lat, lon, week: byNum.get(String(num)) || byName.get(fold(name)) || null }));
+  items.sort((a, b) => !!a.week - !!b.week); // active ones drawn last, on top
+  L.volcano.items = items;
+  const geo = makePoints('volcano', items.length, 3, { order: 2, glyph: volcanoGlyph() });
+  items.forEach((v, i) => {
+    const p = vecFromLatLon(v.lat, v.lon, 1.0018);
+    geo.attributes.position.array.set([p.x, p.y, p.z], i * 3);
+    geo.attributes.size.array[i] = v.week ? 19 : 12;
+    geo.attributes.flag.array[i] = v.week ? 1 : 0;
+  });
+  const n = items.filter(v => v.week).length;
+  $('#volcano-sub').innerHTML = `<span>${n ? `${n} ringed: reported active in the Smithsonian weekly report.` : 'All volcanoes active in the last 12,000 years.'}</span>`;
+  L.volcano.loaded = true;
+}
+async function loadStorm() {
+  const j = await getEvents();
+  const items = j.rows.filter(r => r[2] === 'severeStorms').map(([id, title, cat, url, unit, pts]) => { const last = pts.at(-1); return { id, title, url, unit, pts, lon: last[0], lat: last[1], time: last[2], wind: last[3], first: pts[0][2] }; });
+  L.storm.items = items;
+  const geo = makePoints('storm', items.length, 3, { order: 3, glyph: stormGlyph(), useCol: true });
+  const seg = [], cols = [], tmpC = new THREE.Color();
+  items.forEach((s, i) => {
+    const p = vecFromLatLon(s.lat, s.lon, 1.003);
+    geo.attributes.position.array.set([p.x, p.y, p.z], i * 3);
+    tmpC.set(stormCat(s.wind).col); geo.attributes.col.array.set([tmpC.r, tmpC.g, tmpC.b], i * 3);
+    geo.attributes.size.array[i] = 20 + Math.min(12, Math.max(0, (s.wind ?? 34) - 34) / 8);
+    for (let k = 1; k < s.pts.length; k++) {
+      const a = s.pts[k - 1], b = s.pts[k], n = arcPts(a[1], a[0], b[1], b[0], 1.0025, seg);
+      tmpC.set(stormCat(b[3]).col);
+      for (let m = 0; m < n; m++) cols.push(tmpC.r, tmpC.g, tmpC.b, tmpC.r, tmpC.g, tmpC.b);
+    }
+  });
+  if (renderer && seg.length) {
+    if (!stormTracks) { stormTracks = fatLines('storm', 2, { vertexColors: true }); scene.add(stormTracks); }
+    setFatPositions(stormTracks, new Float32Array(seg), new Float32Array(cols));
+  }
+  $('#storm-sub').innerHTML = items.length ? [['Depression', '#6EC1EA'], ['Storm', '#4DFFFF'], ['Cat 1', '#FFFFD9'], ['Cat 2', '#FFD98C'], ['Cat 3', '#FF9E59'], ['Cat 4', '#FF738A'], ['Cat 5', '#A188FC']].map(([t, c]) => `<span><i style="background:${c}"></i>${t}</span>`).join('') : '<span>No tropical storm is active right now.</span>';
+  L.storm.loaded = true;
+}
+async function loadEvent() {
+  const j = await getEvents();
+  const items = j.rows.filter(r => r[2] !== 'severeStorms' && r[2] !== 'volcanoes').map(([id, title, cat, url, unit, pts]) => { const last = pts.at(-1); return { id, title, cat, url, unit, pts, lon: last[0], lat: last[1], time: last[2], mag: last[3] ?? NaN, first: pts[0][2] }; });
+  L.event.items = items;
+  const geo = makePoints('event', items.length, 0, { order: 2, useCol: true });
+  const tmpC = new THREE.Color(), count = {};
+  items.forEach((e, i) => {
+    const p = vecFromLatLon(e.lat, e.lon, 1.0016);
+    geo.attributes.position.array.set([p.x, p.y, p.z], i * 3);
+    tmpC.set(EVENT_CATS[e.cat]?.[1] || '#FFD60A'); geo.attributes.col.array.set([tmpC.r, tmpC.g, tmpC.b], i * 3);
+    geo.attributes.size.array[i] = 11;
+    count[e.cat] = (count[e.cat] || 0) + 1;
+  });
+  $('#event-sub').innerHTML = Object.entries(count).sort((a, b) => b[1] - a[1]).map(([c, n]) => `<span><i style="background:${EVENT_CATS[c]?.[1] || '#FFD60A'}"></i>${EVENT_CATS[c]?.[0] || c} ${n}</span>`).join('') || '<span>No open events right now.</span>';
+  L.event.loaded = true;
+}
+
+/* ---------- Aircraft: route, airline and type from adsbdb (on click only) ---------- */
+const adsbCache = new Map();
+let routeLine = null;
+const aptFrom = $('#apt-from'), aptTo = $('#apt-to');
+async function adsbLookup(icao, call) {
+  const get = async url => { const r = await fetch(url, { signal: AbortSignal.timeout(8000) }); if (r.status === 404) return null; if (!r.ok) throw new Error(r.status); const j = await r.json(); return typeof j.response === 'object' ? j.response : null; };
+  const res = (await get(`https://api.adsbdb.com/v0/aircraft/${encodeURIComponent(icao)}${call ? `?callsign=${encodeURIComponent(call)}` : ''}`)) || {};
+  if (!res.flightroute && call) { const r2 = await get(`https://api.adsbdb.com/v0/callsign/${encodeURIComponent(call)}`).catch(() => null); if (r2?.flightroute) res.flightroute = r2.flightroute; }
+  return res;
+}
+function airDetails(it) {
+  const key = it.icao + '|' + (it.call || '');
+  let job = adsbCache.get(key);
+  if (!job) { job = adsbLookup(it.icao, it.call); adsbCache.set(key, job); job.catch(() => adsbCache.delete(key)); }
+  const still = () => selected?.key === 'air' && L.air.items[selected.i]?.icao === it.icao;
+  const set = (id, v) => { const el = $('#' + id); if (el) el.innerHTML = v; };
+  job.then(res => {
+    if (!still()) return;
+    const a = res.aircraft, f = res.flightroute;
+    const apt = x => x ? `<b class="mono">${esc(x.iata_code || x.icao_code || '')}</b> ${esc(x.municipality || x.name || '')}<small style="display:block;color:var(--text-3)">${esc(x.name || '')}${x.country_name ? ', ' + esc(x.country_name) : ''}</small>` : '–';
+    set('i-flight', f ? esc(f.callsign_iata || f.callsign_icao || f.callsign || '–') : '–');
+    set('i-airline', esc(f?.airline?.name || a?.registered_owner || '–'));
+    set('i-from', apt(f?.origin)); set('i-to', apt(f?.destination));
+    set('i-type', a ? esc([a.manufacturer, a.type].filter(Boolean).join(' ') || a.icao_type || '–') : '–');
+    set('i-reg', esc(a?.registration || '–'));
+    if (f?.origin && f?.destination) showRoute(f.origin, f.destination); else hideRoute();
+  }).catch(() => { if (!still()) return; for (const id of ['i-flight', 'i-airline', 'i-from', 'i-to', 'i-type', 'i-reg']) set(id, '–'); const h = $('#i-hint'); h.hidden = false; h.textContent = (h.textContent ? h.textContent + ' ' : '') + 'Route and type are not available right now.'; });
+}
+function showRoute(o, d) {
+  if (!renderer) return;
+  const seg = [];
+  arcPts(o.latitude, o.longitude, d.latitude, d.longitude, 1.004, seg);
+  if (!routeLine) { routeLine = fatLines('route', 3); scene.add(routeLine); }
+  setFatPositions(routeLine, new Float32Array(seg)); routeLine.visible = true;
+  aptFrom.textContent = o.iata_code || o.icao_code || ''; aptTo.textContent = d.iata_code || d.icao_code || '';
+  aptFrom.v = vecFromLatLon(o.latitude, o.longitude, 1.004); aptTo.v = vecFromLatLon(d.latitude, d.longitude, 1.004);
+}
+function hideRoute() { if (routeLine) routeLine.visible = false; aptFrom.hidden = aptTo.hidden = true; aptFrom.v = aptTo.v = null; }
+function placeRouteLabels() {
+  const cam = camera.position.clone().normalize();
+  for (const el of [aptFrom, aptTo]) {
+    if (!el.v) continue;
+    if (el.v.clone().normalize().dot(cam) < 0.1) { el.hidden = true; continue; }
+    tmpV.copy(el.v).project(camera); el.hidden = false;
+    el.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth - el.offsetWidth / 2}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight - 24}px)`;
+  }
+}
+
+/* ---------- Satellites: orbit facts ---------- */
+function orbitInfo(o) {
+  const n = +o.MEAN_MOTION, e = +o.ECCENTRICITY, nRad = n * 2 * Math.PI / 86400, a = Math.cbrt(398600.4418 / (nRad * nRad));
+  const apo = a * (1 + e) - 6378.137, peri = a * (1 - e) - 6378.137, period = 1440 / n;
+  const type = e > 0.25 ? 'Highly elliptical' : apo < 2000 ? 'Low Earth orbit' : Math.abs(period - 1436) < 30 && e < 0.05 ? (+o.INCLINATION < 3 ? 'Geostationary' : 'Geosynchronous') : apo < 35000 ? 'Medium Earth orbit' : 'High Earth orbit';
+  return { apo, peri, period, type };
+}
+const OWNERS = { US: 'United States', PRC: 'China', CIS: 'Russia', ESA: 'European Space Agency', JPN: 'Japan', IND: 'India', FR: 'France', UK: 'United Kingdom', GER: 'Germany', ISS: 'ISS partners', EUME: 'EUMETSAT', EUTE: 'Eutelsat', ITSO: 'Intelsat', SES: 'SES', GLOB: 'Globalstar', IRID: 'Iridium', ORB: 'Orbcomm', CA: 'Canada', SKOR: 'South Korea', KOR: 'South Korea', NOR: 'Norway', AB: 'Arabsat', SPN: 'Spain', IT: 'Italy', ISRA: 'Israel', TURK: 'Turkey', BRAZ: 'Brazil', ARGN: 'Argentina', AUS: 'Australia', NETH: 'Netherlands', SWED: 'Sweden', NZ: 'New Zealand', UAE: 'United Arab Emirates', SAUD: 'Saudi Arabia', IRAN: 'Iran', NKOR: 'North Korea', INDO: 'Indonesia', THAI: 'Thailand', MEX: 'Mexico', SING: 'Singapore', TWN: 'Taiwan', PAKI: 'Pakistan', EGYP: 'Egypt', ALG: 'Algeria', NIG: 'Nigeria', SAFR: 'South Africa', KAZ: 'Kazakhstan', UKR: 'Ukraine', FIN: 'Finland', DEN: 'Denmark', LUXE: 'Luxembourg', BEL: 'Belgium', SWTZ: 'Switzerland', POL: 'Poland', CHLE: 'Chile', VTNM: 'Vietnam', QAT: 'Qatar', TBD: 'Not yet assigned' };
+const SITES = { AFETR: 'Cape Canaveral', AFWTR: 'Vandenberg', TYMSC: 'Baikonur', PKMTR: 'Plesetsk', JSC: 'Jiuquan', XSC: 'Xichang', TSC: 'Taiyuan', TAISC: 'Taiyuan', WSC: 'Wenchang', FRGUI: 'Kourou', SRILR: 'Sriharikota', TNSTA: 'Tanegashima', KSCUT: 'Uchinoura', WLPIS: 'Wallops Island', KODAK: 'Kodiak', VOSTO: 'Vostochny', RLLB: 'Mahia (Rocket Lab)', OREN: 'Yasny', SVOBO: 'Svobodny', KWAJ: 'Kwajalein', SEAL: 'Sea Launch', YSLA: 'Yellow Sea', SEMLS: 'Semnan', NSC: 'Naro', DLS: 'Dombarovsky', ERAS: 'Air launch (Pegasus)', KYMSC: 'Kapustin Yar', HGSTR: 'Hammaguir', SNMLP: 'San Marco' };
+
+/* ---------- Graticule ---------- */
+let gridLines = null, gridLabels = [];
+function buildGrid() {
+  if (!renderer || gridLines) return;
+  const pts = [], add = (a, b) => pts.push(a.x, a.y, a.z, b.x, b.y, b.z), R = 1.0008;
+  for (let lat = -75; lat <= 75; lat += 15) for (let lon = -180; lon < 180; lon += 2) add(vecFromLatLon(lat, lon, R), vecFromLatLon(lat, lon + 2, R));
+  for (let lon = -180; lon < 180; lon += 15) for (let lat = -88; lat < 88; lat += 2) add(vecFromLatLon(lat, lon, R), vecFromLatLon(lat + 2, lon, R));
+  gridLines = fatLines('grid', 1); setFatPositions(gridLines, new Float32Array(pts)); scene.add(gridLines);
+  const frag = document.createDocumentFragment(), mk = (text, kind, val) => { const el = document.createElement('span'); el.className = 'gl-grid'; el.textContent = text; frag.appendChild(el); return { el, kind, val }; };
+  for (let lat = -75; lat <= 75; lat += 15) gridLabels.push(mk(lat === 0 ? '0°' : `${Math.abs(lat)}° ${lat > 0 ? 'N' : 'S'}`, 'lat', lat));
+  for (let lon = -165; lon <= 180; lon += 15) gridLabels.push(mk(lon === 0 || lon === 180 ? `${lon}°` : `${Math.abs(lon)}° ${lon > 0 ? 'E' : 'W'}`, 'lon', lon));
+  labelBox.appendChild(frag);
+  for (const l of gridLabels) { l.w = l.el.offsetWidth; l.h = l.el.offsetHeight; }
+}
+
 /* Per-frame work, called from the render loop */
 function updateLayers() {
   if (L.air.on && L.air.loaded) stepAir();
   if (L.sat.on && L.sat.loaded) stepSat();
   // markers shrink when zoomed out so a full globe stays readable
   const dist = camera.position.length(), zf = 1.9 / dist;
-  const ZOOM = { air: Math.min(1.2, Math.max(0.42, zf)), radio: Math.min(1.2, Math.max(0.4, zf)), quake: Math.min(1.15, Math.max(0.55, zf)), sat: 1 };
+  const ZOOM = { air: Math.min(1.2, Math.max(0.42, zf)), radio: Math.min(1.2, Math.max(0.4, zf)), quake: Math.min(1.15, Math.max(0.55, zf)), sat: 1,
+    volcano: Math.min(1.15, Math.max(0.5, zf)), storm: Math.min(1.2, Math.max(0.75, zf)), event: Math.min(1.15, Math.max(0.5, zf)) };
   for (const k of Object.keys(L)) if (L[k].obj) { const u = L[k].obj.material.uniforms; u.time.value = uniforms.time.value; u.aspect.value = innerWidth / innerHeight; u.zoom.value = ZOOM[k]; u.ui.value = symF(); }
   if (L.radio.loaded) {
     const lv = L.radio.on ? radioLevel() : null;
@@ -1862,12 +2114,14 @@ function updateLayers() {
     for (const x of RADIO_LEVELS) if (x.obj) { x.obj.visible = x === lv; x.obj.material.uniforms.zoom.value = 1; x.obj.material.uniforms.ui.value = symF(); }
   }
   placeIssLabel();
+  placeRouteLabels();
+  if (stormTracks) stormTracks.visible = L.storm.on && L.storm.loaded;
   placePop();
   updateOrientation();
 }
 
 /* ---------- Orientation: borders, country names, capitals ---------- */
-const ORIENT = { borders: true, capitals: true, routes: false };
+const ORIENT = { borders: true, capitals: true, routes: false, grid: false };
 let borderLines = null, countryLabels = [], capitalLabels = [], geoLoaded = false;
 const labelBox = $('#geo-labels');
 async function loadGeo() {
@@ -1910,6 +2164,7 @@ function matchPlace(p) {
 }
 // labels are measured once, and again when the text or symbol size changes
 function measureLabels() {
+  for (const l of gridLabels) { l.w = l.el.offsetWidth; l.h = l.el.offsetHeight; }
   const all = [...countryLabels, ...capitalLabels];
   if (!all.length) return;
   for (const l of all) l.el.classList.remove('dot-only');
@@ -1962,6 +2217,20 @@ function layoutLabels(force) {
     place(l, true, x, y, p.a * 0.9);
   }
   if (!ORIENT.borders) countryLabels.forEach(l => place(l, false));
+  // graticule: latitudes along the meridian nearest the view centre, longitudes along the nearest parallel
+  if (ORIENT.grid && gridLabels.length) {
+    const cLat = Math.asin(camDir.y) / DEG, cLon = Math.atan2(-camDir.z, camDir.x) / DEG;
+    const mLon = Math.round((cLon - 7.5) / 15) * 15 + 7.5, mLat = Math.max(-67.5, Math.min(67.5, Math.round((cLat - 7.5) / 15) * 15 + 7.5));
+    for (const l of gridLabels) {
+      l.v = vecFromLatLon(l.kind === 'lat' ? l.val : mLat, l.kind === 'lat' ? mLon : l.val, 1.001);
+      const p = project(l);
+      if (!p) { place(l, false); continue; }
+      const x = p.x - l.w / 2, y = p.y - l.h / 2;
+      if (!fits(x, y, l.w, l.h)) { place(l, false); continue; }
+      boxes.push([x, y, x + l.w, y + l.h]);
+      place(l, true, x, y, p.a * 0.95);
+    }
+  }
 }
 
 /* ---------- Place popup (search result, capitals): hovers over the place ---------- */
@@ -2111,11 +2380,14 @@ function lineStyle(role) {
     air: { color: COLORS.air, opacity: 0.65, width: 1.5 * m },
     sat: { color: COLORS.sat, opacity: 0.42, width: 1.2 * m },
     iss: { color: COLORS.sat, opacity: 0.9, width: 2.4 * m },
+    route: { color: COLORS.air, opacity: 0.95, width: 2.2 * m },
+    storm: { color: '#FFFFFF', opacity: 0.95, width: 2.4 * m },
+    grid: { color: '#FFFFFF', opacity: SET.scheme === 'contrast' ? 0.4 : 0.22, width: 1 * m },
   }[role];
 }
 function styleFat(f) { const st = lineStyle(f.role); f.mat.color.set(st.color); f.mat.opacity = st.opacity; f.mat.linewidth = st.width; }
-function fatLines(role, order) {
-  const mat = new LineMaterial({ transparent: true, depthWrite: false, worldUnits: false });
+function fatLines(role, order, opts = {}) {
+  const mat = new LineMaterial({ transparent: true, depthWrite: false, worldUnits: false, vertexColors: !!opts.vertexColors });
   mat.resolution.set(innerWidth, innerHeight);
   const f = { role, mat }; FAT.add(f); styleFat(f);
   const o = new LineSegments2(new LineSegmentsGeometry(), mat);
@@ -2123,10 +2395,11 @@ function fatLines(role, order) {
   return o;
 }
 // arr: Float32Array of segment end points (x1,y1,z1,x2,y2,z2 per segment)
-function setFatPositions(o, arr) {
+function setFatPositions(o, arr, colors) {
   o.geometry.dispose();
   o.geometry = new LineSegmentsGeometry();
   o.geometry.setPositions(arr);
+  if (colors) o.geometry.setColors(colors);
   o.userData.buf = arr;
 }
 

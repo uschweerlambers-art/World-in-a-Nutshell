@@ -127,6 +127,22 @@ const SOURCES = {
       return { source: 'Smithsonian Global Volcanism Program, Volcanoes of the World', sourceUrl: 'https://volcano.si.edu', license: 'Free use with citation (Global Volcanism Program, Smithsonian Institution)', fields: ['number', 'name', 'country', 'type', 'lastEruption', 'elevationM', 'lat', 'lon'], count: rows.length, rows };
     },
   },
+  volcanoWeek: {
+    maxAge: 12 * 60 * MIN, // the Weekly Volcanic Activity Report comes out on Wednesdays
+    async fetch() {
+      const xml = await (await get('https://volcano.si.edu/news/WeeklyVolcanoRSS.xml', 60000)).text();
+      const tag = (block, t) => (block.match(new RegExp(`<${t}[^>]*>([\\s\\S]*?)</${t}>`)) || [])[1]?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || '';
+      const rows = [];
+      for (const m of xml.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
+        const title = tag(m[1], 'title'), link = tag(m[1], 'link'), date = tag(m[1], 'pubDate');
+        const vn = (link.match(/(?:vn=|-)(\d{6})\b/) || tag(m[1], 'description').match(/vn=(\d{6})/) || [])[1] || null;
+        const name = title.split(/\s*\(/)[0].trim();
+        if (name) rows.push([vn, name, title, link, Date.parse(date) || null]);
+      }
+      if (!rows.length) throw new Error('no items in the weekly report feed');
+      return { source: 'Smithsonian / USGS Weekly Volcanic Activity Report', sourceUrl: 'https://volcano.si.edu/reports_weekly.cfm', fields: ['volcanoNumber', 'name', 'title', 'link', 'date'], count: rows.length, rows };
+    },
+  },
 };
 
 async function get(url, timeout = 30000) {
