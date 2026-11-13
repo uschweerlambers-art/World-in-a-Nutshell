@@ -28,6 +28,9 @@
   --c-quake: #FF9F0A;
   --c-radio: #30D158;
   --c-place: #40E0D0;
+  --c-country: rgba(245,245,247,0.78);
+  --c-cap: #E9FFFC;
+  --win: 1; --lbl: 1; --sym: 1;
   --blur: blur(30px) saturate(1.4);
   --ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", Inter, system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
@@ -69,7 +72,7 @@ button:disabled { cursor: default; }
 .marker span { position: absolute; border-radius: 50%; transform: translate(-50%, -50%); }
 .marker .r3 { width: 140px; height: 140px; border: 1.5px solid rgba(245,245,247,0.18); }
 .marker .r2 { width: 80px; height: 80px; border: 2px solid rgba(245,245,247,0.4); }
-.marker .r1 { width: 18px; height: 18px; background: var(--text); border: 3px solid var(--space); box-sizing: border-box; }
+.marker .r1 { width: calc(18px * var(--sym)); height: calc(18px * var(--sym)); background: var(--text); border: 3px solid var(--space); box-sizing: border-box; }
 @media (prefers-reduced-motion: no-preference) {
   .marker .r2 { animation: pulse 2.4s ease-out infinite; }
 }
@@ -223,9 +226,9 @@ button:disabled { cursor: default; }
 /* Orientation labels */
 #geo-labels { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
 #geo-labels > * { position: absolute; left: 0; top: 0; visibility: hidden; opacity: 0; transition: opacity .25s; white-space: nowrap; will-change: transform; }
-.gl-country { font-size: 10.5px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(245,245,247,0.78); text-shadow: 0 0 4px rgba(0,0,0,.95), 0 1px 8px rgba(0,0,0,.8); }
-.gl-cap { pointer-events: auto; border: 0; background: none; padding: 2px 4px 2px 0; display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; color: #E9FFFC; text-shadow: 0 0 4px rgba(0,0,0,.95), 0 1px 8px rgba(0,0,0,.8); cursor: pointer; }
-.gl-cap i { width: 8px; height: 8px; border-radius: 50%; background: var(--c-place); box-shadow: 0 0 0 1.5px rgba(5,7,13,.9), 0 0 8px rgba(64,224,208,.6); flex-shrink: 0; }
+.gl-country { font-size: calc(10.5px * var(--lbl)); font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; color: var(--c-country); text-shadow: 0 0 4px rgba(0,0,0,.95), 0 1px 8px rgba(0,0,0,.8); }
+.gl-cap { pointer-events: auto; border: 0; background: none; padding: 2px 4px 2px 0; display: flex; align-items: center; gap: 5px; font-size: calc(12px * var(--lbl)); font-weight: 600; color: var(--c-cap); text-shadow: 0 0 4px rgba(0,0,0,.95), 0 1px 8px rgba(0,0,0,.8); cursor: pointer; }
+.gl-cap i { width: calc(8px * var(--sym)); height: calc(8px * var(--sym)); border-radius: 50%; background: var(--c-place); box-shadow: 0 0 0 1.5px rgba(5,7,13,.9), 0 0 8px color-mix(in srgb, var(--c-place) 60%, transparent); flex-shrink: 0; }
 .gl-cap.dot-only span { display: none; }
 .gl-cap:hover span, .gl-cap:focus-visible span { text-decoration: underline; }
 @media (prefers-reduced-motion: reduce) { #geo-labels > * { transition: none; } }
@@ -234,7 +237,7 @@ button:disabled { cursor: default; }
 .sub { margin: 2px 0 6px 42px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--text-3); }
 .mini-seg { display: flex; gap: 4px; }
 .mini-seg button { height: 30px; padding: 0 10px; border: 1px solid var(--edge-strong); border-radius: 15px; background: transparent; font-size: 12px; color: var(--text-2); }
-.mini-seg button[aria-pressed="true"] { background: rgba(255,159,10,0.2); border-color: var(--c-quake); color: var(--text); font-weight: 600; }
+.mini-seg button[aria-pressed="true"] { background: color-mix(in srgb, var(--c-quake) 20%, transparent); border-color: var(--c-quake); color: var(--text); font-weight: 600; }
 .sub-list ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .sub-list li button { width: 100%; min-height: 40px; display: flex; align-items: center; gap: 8px; border: 0; background: none; padding: 0 6px; border-radius: 8px; text-align: left; font-size: 13px; color: var(--text); }
 .sub-list li button:hover, .sub-list li button[aria-current="true"] { background: var(--hover); }
@@ -262,13 +265,13 @@ button:disabled { cursor: default; }
 #player { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--sb) + 92px); z-index: 7; width: min(440px, calc(100vw - 32px)); box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 14px 8px 8px; border-radius: 30px; }
 #player.is-out { transform: translate(-50%, 8px); }
 .pl-btn { width: 44px; height: 44px; border-radius: 22px; border: 0; background: var(--c-radio); color: #05070D; display: grid; place-items: center; padding: 0; flex-shrink: 0; }
-.pl-btn.wait { background: rgba(48,209,88,0.35); }
+.pl-btn.wait { background: color-mix(in srgb, var(--c-radio) 35%, transparent); }
 .pl-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .pl-txt b { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pl-txt span { font-size: 12px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 #pl-vol { width: 84px; accent-color: var(--c-radio); }
 #player .x { margin: 0; width: 36px; height: 36px; }
-.iss-label { position: fixed; left: 0; top: 0; z-index: 2; pointer-events: none; font-size: 12px; font-weight: 700; color: #fff; padding: 2px 7px; border-radius: 8px; background: rgba(191,90,242,0.85); white-space: nowrap; }
+.iss-label { position: fixed; left: 0; top: 0; z-index: 2; pointer-events: none; font-size: calc(12px * var(--lbl)); font-weight: 700; color: #fff; padding: 2px 7px; border-radius: 8px; background: color-mix(in srgb, var(--c-sat) 85%, transparent); text-shadow: 0 1px 2px rgba(0,0,0,.6); white-space: nowrap; }
 
 /* Dialog */
 dialog { border: 0; padding: 0; background: transparent; color: var(--text); max-width: min(560px, calc(100vw - 32px)); width: 100%; }
@@ -282,6 +285,57 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 .dlg .tabs { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; }
 .dlg .tabs button { height: 36px; padding: 0 14px; border-radius: 18px; border: 1px solid var(--edge-strong); background: transparent; font-size: 13px; }
 .dlg .tabs button[aria-selected="true"] { background: rgba(255,255,255,0.16); border-color: transparent; font-weight: 600; }
+
+/* Place popup: hovers over the place it belongs to */
+#place-pop { position: fixed; left: 0; top: 0; z-index: 4; width: 300px; box-sizing: border-box; padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 8px; border-radius: 20px; transform-origin: 0 0; transition: opacity .25s ease; will-change: transform; }
+#place-pop.is-out { opacity: 0; pointer-events: none; }
+#place-pop::after { content: ""; position: absolute; left: calc(var(--ax, 150px) - 9px); bottom: -9px; width: 16px; height: 16px; background: inherit; border: inherit; border-top: 0; border-left: 0; transform: rotate(45deg); clip-path: polygon(100% 0, 100% 100%, 0 100%); border-bottom-right-radius: 4px; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; }
+#place-pop.below::after { bottom: auto; top: -9px; transform: rotate(225deg); }
+#place-pop .w-top > span { display: flex; align-items: center; gap: 6px; }
+#place-pop .x { width: 36px; height: 36px; margin: -8px -8px -8px 0; }
+#place-pop h2 { margin: -4px 0 0; font-size: 20px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+#place-pop .pp-sub { margin: 0; font-size: 13px; color: var(--text-2); }
+.pp-wx { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 12px; padding: 10px 0 2px; border-top: 1px solid rgba(255,255,255,0.1); min-height: 44px; }
+.pp-wx svg { grid-row: span 2; }
+.pp-wx b { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pp-wx b small { font-size: 14px; font-weight: 600; color: var(--text-2); margin-left: 6px; }
+.pp-wx span { font-size: 12px; color: var(--text-3); }
+#place-pop dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; font-size: 13px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); }
+#place-pop dt { color: var(--text-3); }
+#place-pop dd { margin: 0; text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+#place-pop dd.t { font-family: inherit; }
+#place-pop dd small { display: block; color: var(--text-3); font-size: 11.5px; }
+.pp-links { display: flex; flex-wrap: wrap; gap: 6px; }
+.pp-links a { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 11px; border-radius: 15px; border: 1px solid var(--edge-strong); color: var(--link); font-size: 12.5px; font-weight: 600; text-decoration: none; }
+.pp-links a:hover { background: var(--hover); }
+#place-pop .w-src { font-size: 11px; }
+
+/* Display settings */
+#settings { position: absolute; right: var(--sr); top: calc(var(--st) + 56px); width: min(320px, calc(100vw - 32px)); box-sizing: border-box; padding: 16px; border-radius: 22px; display: flex; flex-direction: column; gap: 10px; max-height: calc(100vh - 100px); overflow-y: auto; }
+#settings h3 { margin: 0; font-size: 13px; font-weight: 600; color: var(--text-3); }
+#settings h3 + * { margin-top: -2px; }
+.set-row { display: grid; grid-template-columns: 1fr auto; row-gap: 2px; font-size: 14px; }
+.set-row output { font-family: var(--mono); font-size: 12px; color: var(--text-3); align-self: center; }
+.set-row input { grid-column: 1 / -1; width: 100%; margin: 4px 0 0; accent-color: var(--action); height: 24px; }
+.schemes { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.schemes button { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 10px; min-height: 60px; border-radius: 14px; border: 1px solid var(--edge-strong); background: transparent; font-size: 13px; font-weight: 600; text-align: left; }
+.schemes button:hover { background: var(--hover); }
+.schemes button[aria-checked="true"] { border-color: var(--action); background: rgba(10,132,255,0.16); box-shadow: inset 0 0 0 1px var(--action); }
+.schemes .sw4 { display: flex; gap: 4px; }
+.schemes .sw4 i { width: 12px; height: 12px; border-radius: 6px; box-shadow: 0 0 0 1px rgba(0,0,0,.4); }
+.schemes .sw4 i.ln { width: 18px; height: 3px; border-radius: 2px; align-self: center; }
+#set-reset { align-self: flex-start; margin-top: 2px; font-size: 13px; }
+
+/* Panel size (desktop and tablet): panels scale around the corner they are pinned to */
+@media (min-width: 768px) {
+  .sidebar { scale: var(--win); transform-origin: 0 0; bottom: auto; height: calc((100vh - var(--st) - var(--sb)) / var(--win)); }
+  .toolbar { scale: var(--win); transform-origin: 100% 0; }
+  #help, #settings { scale: var(--win); transform-origin: 100% 0; top: calc(var(--st) + 56px * var(--win)); }
+  #settings { max-height: calc((100vh - 100px) / var(--win)); }
+  #insp { scale: var(--win); transform-origin: 100% 0; top: calc(var(--st) + 56px * var(--win)); max-height: calc((100vh - 140px) / var(--win)); }
+  #player, #picker { scale: var(--win); transform-origin: 50% 100%; }
+  #wonder { scale: var(--win); transform-origin: 100% 50%; max-height: calc((100vh - 120px) / var(--win)); }
+}
 
 /* Mobile */
 .m-top, .sheet-handle { display: none; }
@@ -315,7 +369,10 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   .sidebar .field { height: 40px; border-radius: 12px; }
   .sidebar .field input { font-size: 17px; }
   .attrib { display: none; }
-  #help { top: calc(var(--st) + 140px); }
+  #help, #settings { top: calc(var(--st) + 42px); right: calc(var(--sr) + 54px); width: min(300px, calc(100vw - 32px - 54px)); }
+  #settings { max-height: calc(100vh - var(--st) - 200px); }
+  .set-row.desk { display: none; }
+  #place-pop { width: min(300px, calc(100vw - 24px)); }
   #picker { bottom: calc(var(--sb) + 132px); }
   .pick { border-radius: 24px; }
   .pick button { font-size: 14px; }
@@ -455,7 +512,18 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     </div>
     <button type="button" class="round tn" aria-label="Day and night" aria-pressed="true" data-toggle="night"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 010 16z" fill="currentColor"/></svg></button>
     <button type="button" class="round" aria-label="Centre on my location" data-act="locate"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 3L3 10.5l7.5 3 3 7.5z"/></svg></button>
+    <button type="button" class="round" aria-label="Display settings" aria-expanded="false" aria-controls="settings" id="set-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg></button>
     <button type="button" class="round i" aria-label="Quick help" aria-expanded="false" aria-controls="help" id="help-btn">i</button>
+  </div>
+  <div id="settings" class="glass" role="group" aria-labelledby="set-h" hidden>
+    <h3 id="set-h">Sizes</h3>
+    <label class="set-row desk"><span>Panels</span><output id="o-win" class="mono">100 %</output><input type="range" min="85" max="130" step="5" value="100" data-set="win" aria-describedby="o-win"></label>
+    <label class="set-row"><span>Names on the globe</span><output id="o-lbl" class="mono">100 %</output><input type="range" min="80" max="160" step="10" value="100" data-set="lbl" aria-describedby="o-lbl"></label>
+    <label class="set-row"><span>Symbols</span><output id="o-sym" class="mono">100 %</output><input type="range" min="70" max="180" step="10" value="100" data-set="sym" aria-describedby="o-sym"></label>
+    <label class="set-row"><span>Lines</span><output id="o-line" class="mono">100 %</output><input type="range" min="50" max="300" step="25" value="100" data-set="line" aria-describedby="o-line"></label>
+    <h3 id="sch-h">Colours</h3>
+    <div class="schemes" role="radiogroup" aria-labelledby="sch-h" id="schemes"></div>
+    <button type="button" class="link-inline" id="set-reset">Reset to default</button>
   </div>
   <div id="help" class="glass" hidden>
     <h3>How to use the globe</h3>
@@ -465,7 +533,8 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <li>“Surprise me” takes you to remarkable places on Earth.</li>
       <li>Day and night match the current time.</li>
       <li>Click a dot on the globe for details. A click on a radio station plays it.</li>
-      <li>Click the marker of a place you searched, or a capital, for facts and map links.</li>
+      <li>Click the marker of a place you searched, or a capital, for weather, local time and map links.</li>
+      <li>The sliders button next to this one changes sizes and colours.</li>
     </ul>
   </div>
 
@@ -482,7 +551,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 <section id="picker" class="fade is-out" aria-label="Choose layers" hidden>
   <span>What would you like to discover here?</span>
   <div class="pick glass" role="group" aria-label="Layers">
-    <button type="button" class="primary" data-layer-pick="radio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#30D158" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.5 5.5 0 000 8M16 8a5.5 5.5 0 010 8M5 5a9.5 9.5 0 000 14M19 5a9.5 9.5 0 010 14"/></svg>Radio nearby</button>
+    <button type="button" class="primary" data-layer-pick="radio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--c-radio)" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.5 5.5 0 000 8M16 8a5.5 5.5 0 010 8M5 5a9.5 9.5 0 000 14M19 5a9.5 9.5 0 010 14"/></svg>Radio nearby</button>
     <button type="button" data-layer-pick="air"><span class="sw" style="background:var(--c-air)"></span>Aircraft</button>
     <button type="button" data-layer-pick="sat"><span class="sw" style="background:var(--c-sat)"></span>Satellites</button>
     <button type="button" data-layer-pick="quake"><span class="sw" style="background:var(--c-quake)"></span>Earthquakes</button>
@@ -524,6 +593,16 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 </div>
 <div class="iss-label" id="iss-label" hidden>ISS</div>
 
+<section id="place-pop" class="glass is-out" aria-labelledby="pp-head" hidden>
+  <div class="w-top"><span><span class="sw" style="background:var(--c-place)"></span><span id="pp-cat">Place</span></span><button type="button" class="x" aria-label="Close place info" id="pp-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <h2 id="pp-head"></h2>
+  <p class="pp-sub" id="pp-sub"></p>
+  <div class="pp-wx" id="pp-wx" aria-live="polite"></div>
+  <dl id="pp-dl"></dl>
+  <div class="pp-links" id="pp-links"></div>
+  <span class="w-src" id="pp-src"></span>
+</section>
+
 <div id="toast" class="glass fade is-out" role="status"></div>
 
 <dialog id="dlg" aria-labelledby="dlg-title">
@@ -542,7 +621,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
         <li>Outline of Antarctica: Natural Earth 1:110m, public domain. Outline of the Sahara: simplified drawing, to be replaced by Natural Earth.</li>
         <li>Wonders &amp; records: our own short texts, figures as given by the source on each card, links to English Wikipedia.</li>
         <li>Country borders and names: Natural Earth 1:50m, public domain. Capitals: GeoNames, CC BY 4.0.</li>
-        <li>Elevation in the place details: Open-Meteo elevation API (CC BY 4.0), asked only when you open a place.</li>
+        <li>Weather, local time and elevation in the place details: Open-Meteo (CC BY 4.0), asked only when you open a place.</li>
         <li>Sharper Earth on large screens: NASA GIBS Blue Marble Next Generation and VIIRS Black Marble.</li>
         <li id="src-clouds">Clouds: daily satellite imagery from NASA GIBS (MODIS and VIIRS true colour, turned into a cloud mask by our GitHub Action). If it is missing, a drawn placeholder is shown.</li>
       </ul>
@@ -565,8 +644,8 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <div data-pane="datenschutz" hidden>
       <h3>Placeholder</h3>
       <p>The privacy policy follows before launch. It will name every server your browser contacts, and GitHub Pages as the host.</p>
-      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you play a radio station, the stream comes directly from that station’s server. Both see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up the elevation.</p>
-      <p>Already true today: this site sets no cookies, counts no visits and only asks for your location when you click. What you type into search never leaves your browser.</p>
+      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you play a radio station, the stream comes directly from that station’s server. Both see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up weather, time zone and elevation.</p>
+      <p>Already true today: this site sets no cookies, counts no visits and only asks for your location when you click. What you type into search never leaves your browser. Your display settings (sizes and colours) are kept in your own browser’s storage and are never sent anywhere.</p>
     </div>
   </div>
 </dialog>
@@ -581,6 +660,9 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 <script type="module">
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { LineSegments2 } from 'three/addons/lines/LineSegments2.js';
+import { LineSegmentsGeometry } from 'three/addons/lines/LineSegmentsGeometry.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 
 document.documentElement.lang = 'en';
 const $ = (s, el = document) => el.querySelector(s);
@@ -595,6 +677,29 @@ function toast(msg, ms = 3800) {
   const t = $('#toast'); t.textContent = msg; t.classList.remove('is-out');
   clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add('is-out'), ms);
 }
+
+/* ---------- Display settings and colour schemes ---------- */
+// Kept in this browser only (localStorage), never sent anywhere.
+const SCHEMES = {
+  night:    { name: 'Night', air: '#64D2FF', sat: '#BF5AF2', quake: '#FF9F0A', radio: '#30D158', border: '#F5F5F7', borderA: 0.5, lineMul: 1, country: 'rgba(245,245,247,0.8)', cap: '#E9FFFC' },
+  contrast: { name: 'High contrast', air: '#40E8FF', sat: '#E68CFF', quake: '#FFB938', radio: '#4DFF7C', border: '#FFFFFF', borderA: 0.85, lineMul: 1.5, country: '#FFFFFF', cap: '#FFFFFF',
+              css: { '--glass': 'rgba(12,14,20,0.9)', '--glass-soft': 'rgba(12,14,20,0.86)', '--glass-deep': 'rgba(10,12,18,0.94)', '--text-2': '#E5E5EA', '--text-3': '#C7C7CC', '--text-4': '#AEAEB2', '--edge': 'rgba(255,255,255,0.28)', '--edge-strong': 'rgba(255,255,255,0.36)' } },
+  atlas:    { name: 'Atlas', air: '#9CC8FF', sat: '#FF8AD8', quake: '#FF6A4D', radio: '#B8E35A', border: '#FFD27A', borderA: 0.7, lineMul: 1.15, country: '#FFE3A8', cap: '#E9FFFC' },
+  cvd:      { name: 'Colour-blind safe', air: '#56B4E9', sat: '#CC79A7', quake: '#D55E00', radio: '#F0E442', border: '#FFFFFF', borderA: 0.6, lineMul: 1.15, country: '#FFFFFF', cap: '#FFFFFF' },
+};
+const SCHEME_CSS = [...new Set(Object.values(SCHEMES).flatMap(x => Object.keys(x.css || {})))];
+const SET_DEFAULT = { win: 100, lbl: 100, sym: 100, line: 100, scheme: 'night' };
+const SET_RANGE = { win: [85, 130], lbl: [80, 160], sym: [70, 180], line: [50, 300] };
+const SET = { ...SET_DEFAULT };
+try {
+  const j = JSON.parse(localStorage.getItem('wian-settings') || 'null');
+  if (j && typeof j === 'object') {
+    for (const k in SET_RANGE) if (Number.isFinite(j[k])) SET[k] = Math.min(SET_RANGE[k][1], Math.max(SET_RANGE[k][0], j[k]));
+    if (SCHEMES[j.scheme]) SET.scheme = j.scheme;
+  }
+} catch {}
+const symF = () => SET.sym / 100;
+const scheme = () => SCHEMES[SET.scheme];
 
 /* ---------- Geometry helpers ---------- */
 const DEG = Math.PI / 180;
@@ -893,6 +998,7 @@ if (renderer) {
   addEventListener('resize', () => {
     camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
     renderer.setSize(innerWidth, innerHeight, false);
+    for (const f of FAT) f.mat.resolution.set(innerWidth, innerHeight);
   });
 }
 
@@ -992,6 +1098,7 @@ function goToPlace(p, opts = {}) {
   mode = 'explore';
   showOutline(null);
   setMarker(p.lat, p.lon);
+  if (shownPlace !== p) closePlacePop();
   here = { lat: p.lat, lon: p.lon, name: p.label || p.name };
   currentPlace = p;
   if (L.radio.on && L.radio.loaded) showNearby();
@@ -1104,6 +1211,8 @@ document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (mode === 'start' && $('#q-list').hidden) goToPlace(BIELEFELD);
   else if (mode === 'wonder') closeWonder();
+  else if (shownPlace) closePlacePop();
+  else closePopovers();
 });
 // toggles (Tag/Nacht, Wolken), kept in sync between sidebar and toolbar
 function setToggle(key, on) {
@@ -1140,8 +1249,44 @@ $('#sheet-handle').addEventListener('click', () => {
   $('#sheet-handle').setAttribute('aria-label', open ? 'Collapse panel' : 'Expand panel');
 });
 $('#q2').addEventListener('focus', () => { const sb = $('#sidebar'); if (innerWidth < 768) { hidePicker(); sb.classList.remove('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'true'); } });
-// help
-$('#help-btn').addEventListener('click', () => { const h = $('#help'); h.hidden = !h.hidden; $('#help-btn').setAttribute('aria-expanded', String(!h.hidden)); });
+// help and display settings: small popovers under the toolbar, one at a time
+function closePopovers(except) {
+  for (const [box, btn] of [['#help', '#help-btn'], ['#settings', '#set-btn']]) if (box !== except) { $(box).hidden = true; $(btn).setAttribute('aria-expanded', 'false'); }
+}
+function togglePopover(box, btn) {
+  const open = $(box).hidden; closePopovers(box);
+  $(box).hidden = !open; $(btn).setAttribute('aria-expanded', String(open));
+}
+$('#help-btn').addEventListener('click', () => togglePopover('#help', '#help-btn'));
+$('#set-btn').addEventListener('click', () => togglePopover('#settings', '#set-btn'));
+document.addEventListener('pointerdown', e => { if (!e.target.closest('#help, #settings, #help-btn, #set-btn')) closePopovers(); });
+// settings: sizes and colour schemes
+$('#schemes').innerHTML = Object.entries(SCHEMES).map(([k, x]) => `<button type="button" role="radio" aria-checked="false" data-scheme="${k}"><span class="sw4" aria-hidden="true"><i style="background:${x.air}"></i><i style="background:${x.sat}"></i><i style="background:${x.quake}"></i><i style="background:${x.radio}"></i><i class="ln" style="background:${x.border}"></i></span>${x.name}</button>`).join('');
+function saveSettings() { try { localStorage.setItem('wian-settings', JSON.stringify(SET)); } catch {} }
+function applySettings() {
+  const root = document.documentElement.style, sc = scheme();
+  root.setProperty('--win', SET.win / 100); root.setProperty('--lbl', SET.lbl / 100); root.setProperty('--sym', SET.sym / 100);
+  for (const k of ['air', 'sat', 'quake', 'radio']) { root.setProperty('--c-' + k, sc[k]); COLORS[k] = sc[k]; }
+  root.setProperty('--c-country', sc.country); root.setProperty('--c-cap', sc.cap);
+  for (const v of SCHEME_CSS) { if (sc.css?.[v]) root.setProperty(v, sc.css[v]); else root.removeProperty(v); }
+  // globe: point colours and line styles
+  for (const k of Object.keys(L)) L[k].obj?.material.uniforms.color.value.set(COLORS[k]);
+  for (const x of RADIO_LEVELS) x.obj?.material.uniforms.color.value.set(COLORS.radio);
+  for (const f of FAT) styleFat(f);
+  // controls
+  for (const el of $$('[data-set]')) { el.value = SET[el.dataset.set]; $('#o-' + el.dataset.set).textContent = `${SET[el.dataset.set]} %`; }
+  for (const b of $$('[data-scheme]')) b.setAttribute('aria-checked', String(b.dataset.scheme === SET.scheme));
+  measureLabels(); popKey = '';
+}
+document.addEventListener('input', e => {
+  const el = e.target.closest('[data-set]'); if (!el) return;
+  SET[el.dataset.set] = +el.value; applySettings(); saveSettings();
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-scheme]'); if (!b) return;
+  SET.scheme = b.dataset.scheme; applySettings(); saveSettings();
+});
+$('#set-reset').addEventListener('click', () => { Object.assign(SET, SET_DEFAULT); applySettings(); try { localStorage.removeItem('wian-settings'); } catch {} });
 // dialog
 const dlg = $('#dlg');
 function openDlg(tab) {
@@ -1170,7 +1315,7 @@ tick(); setInterval(tick, 20000);
 // Earthquakes load straight from USGS, satellites are propagated live with satellite.js.
 const LIVE = 'data/live/';
 const R_EARTH_KM = 6371;
-const COLORS = { air: 0x64D2FF, sat: 0xBF5AF2, quake: 0xFF9F0A, radio: 0x30D158 };
+const COLORS = { air: scheme().air, sat: scheme().sat, quake: scheme().quake, radio: scheme().radio };
 const LAYER_NAMES = { air: 'Aircraft', sat: 'Satellite', quake: 'Earthquake', radio: 'Radio station' };
 const L = {
   air: { on: false, loaded: false, items: [], pos: null, obj: null },
@@ -1220,11 +1365,11 @@ function pointsMaterial(kind, color, opts = {}) {
     uniforms: {
       color: { value: new THREE.Color(color) }, px: { value: Math.min(devicePixelRatio, 2) },
       aspect: { value: innerWidth / innerHeight }, time: { value: 0 }, glyph: { value: kind === 1 ? planeTexture() : null },
-      limb: { value: opts.limb ?? 1 }, zoom: { value: 1 }, pulse: { value: reduceMotion ? 0 : 1 }, sel: { value: -1 },
+      limb: { value: opts.limb ?? 1 }, zoom: { value: 1 }, pulse: { value: reduceMotion ? 0 : 1 }, sel: { value: -1 }, ui: { value: symF() },
     },
     vertexShader: `
       attribute float size; attribute vec3 dir; attribute float flag; attribute float idx;
-      uniform float px; uniform float aspect; uniform float time; uniform float limb; uniform float pulse; uniform float sel; uniform float zoom;
+      uniform float px; uniform float aspect; uniform float time; uniform float limb; uniform float pulse; uniform float sel; uniform float zoom; uniform float ui;
       varying float vAng; varying float vAlpha; varying float vFlag; varying float vPulse; varying float vSel;
       void main(){
         vec4 mv = modelViewMatrix * vec4(position, 1.0);
@@ -1242,7 +1387,7 @@ function pointsMaterial(kind, color, opts = {}) {
         vPulse = 0.0;
         ${kind === 2 ? `if (flag > 0.5 && pulse > 0.5) { vPulse = fract(time * 0.012 + idx * 0.137); }` : ''}
         if (vSel > 0.5) s *= 1.6;
-        gl_PointSize = s * 1.15 * zoom * px * (1.0 + vPulse * 1.4); // +15 % (Uwe, 13.11.)
+        gl_PointSize = s * 1.15 * ui * zoom * px * (1.0 + vPulse * 1.4); // +15 % (Uwe, 13.11.), ui = symbol size setting
       }`,
     fragmentShader: `
       uniform vec3 color; uniform sampler2D glyph;
@@ -1372,15 +1517,14 @@ function drawIssOrbit() {
   if (issIdx < 0) return;
   issOrbitAt = Date.now();
   const s = L.sat.items[issIdx], periodMin = 1440 / s.o.MEAN_MOTION, pts = [];
+  let prev = null;
   for (let k = -120; k <= 120; k++) {
     const e = satEcf(s, new Date(issOrbitAt + k / 120 * periodMin * 60000));
-    if (e) pts.push(new THREE.Vector3(e.x, e.y, e.z));
+    if (e && prev) pts.push(prev.x, prev.y, prev.z, e.x, e.y, e.z);
+    prev = e;
   }
-  if (!issOrbit) {
-    issOrbit = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: COLORS.sat, transparent: true, opacity: 0.55, depthWrite: false }));
-    issOrbit.renderOrder = 1; scene.add(issOrbit);
-  }
-  issOrbit.geometry.setFromPoints(pts); issOrbit.visible = true;
+  if (!issOrbit) { issOrbit = fatLines('iss', 1); scene.add(issOrbit); }
+  setFatPositions(issOrbit, new Float32Array(pts)); issOrbit.visible = true;
 }
 function hideIssOrbit() { if (issOrbit) issOrbit.visible = false; issOrbitAt = 0; }
 const issLabel = $('#iss-label');
@@ -1626,7 +1770,7 @@ canvas.addEventListener('pointerup', e => {
   if (hit) {
     select(hit.key, hit.i);
     if (hit.key === 'radio') playStation(L.radio.items[hit.i]);
-  } else if (selected) closeInspector();
+  } else { if (selected) closeInspector(); closePlacePop(); }
 });
 const projV = new THREE.Vector3();
 function pick(x, y) {
@@ -1656,7 +1800,7 @@ const fmtAlt = m => m == null ? '–' : `${fmtInt(Math.round(m))} m`;
 function row(k, v, cls = '') { return `<dt>${k}</dt><dd${cls ? ` class="${cls}"` : ''}>${v}</dd>`; }
 function select(key, i) {
   const st = L[key], it = st.items[i]; if (!it) return;
-  selected = { key, i };
+  selected = { key, i }; closePlacePop();
   for (const k of Object.keys(L)) if (L[k].obj) L[k].obj.material.uniforms.sel.value = k === key ? i : -1;
   if (!(key === 'sat' && it.id === ISS_ID)) hideIssOrbit();
   const swc = { air: 'var(--c-air)', sat: 'var(--c-sat)', quake: 'var(--c-quake)', radio: 'var(--c-radio)' }[key];
@@ -1691,7 +1835,7 @@ function select(key, i) {
   $('#i-head').innerHTML = head; $('#i-dl').innerHTML = dl;
   $('#i-hint').hidden = !hint; $('#i-hint').textContent = hint;
   $('#i-act').innerHTML = act; $('#i-src').innerHTML = src;
-  $('#help').hidden = true; $('#help-btn').setAttribute('aria-expanded', 'false');
+  closePopovers();
   const box = $('#insp'); box.hidden = false; requestAnimationFrame(() => box.classList.remove('is-out'));
   if (innerWidth < 768) { hidePicker(); $('#sidebar').classList.add('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'false'); }
 }
@@ -1711,13 +1855,14 @@ function updateLayers() {
   // markers shrink when zoomed out so a full globe stays readable
   const dist = camera.position.length(), zf = 1.9 / dist;
   const ZOOM = { air: Math.min(1.2, Math.max(0.42, zf)), radio: Math.min(1.2, Math.max(0.4, zf)), quake: Math.min(1.15, Math.max(0.55, zf)), sat: 1 };
-  for (const k of Object.keys(L)) if (L[k].obj) { const u = L[k].obj.material.uniforms; u.time.value = uniforms.time.value; u.aspect.value = innerWidth / innerHeight; u.zoom.value = ZOOM[k]; }
+  for (const k of Object.keys(L)) if (L[k].obj) { const u = L[k].obj.material.uniforms; u.time.value = uniforms.time.value; u.aspect.value = innerWidth / innerHeight; u.zoom.value = ZOOM[k]; u.ui.value = symF(); }
   if (L.radio.loaded) {
     const lv = L.radio.on ? radioLevel() : null;
     L.radio.obj.visible = L.radio.on && !lv;
-    for (const x of RADIO_LEVELS) if (x.obj) { x.obj.visible = x === lv; x.obj.material.uniforms.zoom.value = 1; }
+    for (const x of RADIO_LEVELS) if (x.obj) { x.obj.visible = x === lv; x.obj.material.uniforms.zoom.value = 1; x.obj.material.uniforms.ui.value = symF(); }
   }
   placeIssLabel();
+  placePop();
   updateOrientation();
 }
 
@@ -1738,10 +1883,9 @@ async function loadGeo() {
         pts.push(a.x, a.y, a.z, b.x, b.y, b.z);
       }
     }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pts), 3));
-    borderLines = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: 0xF5F5F7, transparent: true, opacity: 0.32, depthWrite: false }));
-    borderLines.renderOrder = 1; borderLines.visible = ORIENT.borders; scene.add(borderLines);
+    borderLines = fatLines('border', 1);
+    setFatPositions(borderLines, new Float32Array(pts));
+    borderLines.visible = ORIENT.borders; scene.add(borderLines);
     const frag = document.createDocumentFragment();
     countryLabels = c.labels.map(l => {
       const el = document.createElement('span'); el.className = 'gl-country'; el.textContent = l.name; frag.appendChild(el);
@@ -1755,9 +1899,7 @@ async function loadGeo() {
       frag.appendChild(el); return item;
     });
     labelBox.appendChild(frag);
-    // measure once; labels keep their size
-    for (const l of [...countryLabels, ...capitalLabels]) { l.w = l.el.offsetWidth; l.h = l.el.offsetHeight; }
-    layoutLabels(true);
+    measureLabels();
   } catch { geoLoaded = false; }
 }
 function matchPlace(p) {
@@ -1765,6 +1907,14 @@ function matchPlace(p) {
   let best = null, bd = 0.05;
   for (const q of places) { if (q.cc !== p.cc) continue; const d = Math.abs(q.lat - p.lat) + Math.abs(q.lon - p.lon); if (d < bd) { bd = d; best = q; } }
   return best ? { ...best, capital: true } : p;
+}
+// labels are measured once, and again when the text or symbol size changes
+function measureLabels() {
+  const all = [...countryLabels, ...capitalLabels];
+  if (!all.length) return;
+  for (const l of all) l.el.classList.remove('dot-only');
+  for (const l of all) { l.w = l.el.offsetWidth; l.h = l.el.offsetHeight; }
+  layoutLabels(true);
 }
 // greedy placement: capitals first (by population), then country names (by area); overlapping names are hidden
 let lastLayout = 0, lastCam = new THREE.Vector3();
@@ -1793,11 +1943,11 @@ function layoutLabels(force) {
   for (const l of ORIENT.capitals ? capitalLabels : []) {
     const p = project(l);
     if (!p) { place(l, false); continue; }
-    const x = p.x - 5, y = p.y - l.h / 2;
+    const r = 4 * symF() + 1, x = p.x - r, y = p.y - l.h / 2;
     const room = fits(x, y, l.w, l.h);
     if (room) boxes.push([x, y, x + l.w, y + l.h]);
     l.el.classList.toggle('dot-only', !room);
-    if (!room) boxes.push([p.x - 5, p.y - 5, p.x + 5, p.y + 5]);
+    if (!room) boxes.push([p.x - r, p.y - r, p.x + r, p.y + r]);
     place(l, true, x, y, p.a);
   }
   if (!ORIENT.capitals) capitalLabels.forEach(l => place(l, false));
@@ -1814,43 +1964,170 @@ function layoutLabels(force) {
   if (!ORIENT.borders) countryLabels.forEach(l => place(l, false));
 }
 
-/* ---------- Place info (search result, capitals) ---------- */
-let currentPlace = null;
+/* ---------- Place popup (search result, capitals): hovers over the place ---------- */
+let currentPlace = null, shownPlace = null, popAt = null, popW = 300, popH = 320, popTz = null, popTimer = 0, popKey = '';
+const pop = $('#place-pop');
+if ('ResizeObserver' in window) new ResizeObserver(() => { if (!pop.hidden) { popW = pop.offsetWidth; popH = pop.offsetHeight; } }).observe(pop);
+const WMO = { 0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast', 45: 'Fog', 48: 'Freezing fog', 51: 'Light drizzle', 53: 'Drizzle', 55: 'Dense drizzle', 56: 'Freezing drizzle', 57: 'Freezing drizzle', 61: 'Light rain', 63: 'Rain', 65: 'Heavy rain', 66: 'Freezing rain', 67: 'Freezing rain', 71: 'Light snow', 73: 'Snow', 75: 'Heavy snow', 77: 'Snow grains', 80: 'Light showers', 81: 'Showers', 82: 'Heavy showers', 85: 'Snow showers', 86: 'Heavy snow showers', 95: 'Thunderstorm', 96: 'Thunderstorm with hail', 99: 'Thunderstorm with hail' };
+const WX_CLOUD = '<path d="M7 18a4.5 4.5 0 01-.6-8.96A6 6 0 0117.7 8.5 4.75 4.75 0 0117.5 18z" fill="#D1D1D6"/>';
+const WX_SUN = '<circle cx="12" cy="12" r="4.5" fill="#FFD60A"/><path d="M12 2.5V5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="#FFD60A" stroke-width="2" stroke-linecap="round"/>';
+const WX_MOON = '<path d="M19.5 14.5A8 8 0 019.5 4.5a8 8 0 1010 10z" fill="#E5E5EA"/>';
+function wxIcon(code, day) {
+  const up = `<g transform="translate(0 -2.5)">${WX_CLOUD}</g>`;
+  const k = code <= 1 ? (day ? WX_SUN : WX_MOON)
+    : code === 2 ? `<g transform="translate(-3 -4) scale(.75)">${day ? WX_SUN : WX_MOON}</g><g transform="translate(3 3) scale(.85)">${WX_CLOUD}</g>`
+    : code === 3 ? WX_CLOUD
+    : code <= 48 ? '<path d="M4 8h16M6 12h12M4 16h16M7 20h10" stroke="#D1D1D6" stroke-width="2" stroke-linecap="round"/>'
+    : code <= 67 || (code >= 80 && code <= 82) ? up + '<path d="M8.5 18.5l-1 3M12.5 18.5l-1 3M16.5 18.5l-1 3" stroke="#64D2FF" stroke-width="2" stroke-linecap="round"/>'
+    : code <= 77 || code === 85 || code === 86 ? up + '<circle cx="8" cy="20" r="1.3" fill="#fff"/><circle cx="12" cy="21.5" r="1.3" fill="#fff"/><circle cx="16" cy="20" r="1.3" fill="#fff"/>'
+    : up + '<path d="M13 13.5l-3 4.5h3.5l-2 4" fill="none" stroke="#FFD60A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+  return `<svg width="34" height="34" viewBox="0 0 24 24" aria-hidden="true">${k}</svg>`;
+}
+const compass = deg => ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][Math.round(((deg % 360) + 360) % 360 / 45) % 8];
+const fmtOffset = sec => { const m = Math.round(sec / 60), a = Math.abs(m); return `UTC${m < 0 ? '−' : '+'}${Math.floor(a / 60)}${a % 60 ? ':' + String(a % 60).padStart(2, '0') : ''}`; };
+// local time and date of the place, from its IANA time zone (falls back to the fixed offset)
+function renderPopTime() {
+  const el = $('#pp-time'); if (!el || !popTz) return;
+  const d = new Date();
+  let parts;
+  try { parts = new Intl.DateTimeFormat('en-GB', { timeZone: popTz.tz, weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(d); }
+  catch { parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date(d.getTime() + popTz.off * 1000)); }
+  const g = t => parts.find(p => p.type === t)?.value || '';
+  const zone = popTz.abbr && /^[A-Z]{2,5}$/.test(popTz.abbr) ? popTz.abbr : fmtOffset(popTz.off);
+  el.textContent = `${g('hour')}:${g('minute')} ${zone}`; el.title = fmtOffset(popTz.off);
+  $('#pp-date').textContent = `${g('weekday')} ${g('day')} ${g('month')} ${g('year')}`;
+}
+const wxCache = new Map();
+function placeWeather(p) {
+  const lat = p.lat.toFixed(3), lon = p.lon.toFixed(3), key = lat + ',' + lon;
+  const hit = wxCache.get(key);
+  if (hit && Date.now() - hit.t < 10 * 60000) return Promise.resolve(hit.j);
+  return getJSON(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day&daily=temperature_2m_max,temperature_2m_min&timezone=auto&forecast_days=1`, 8000)
+    .then(j => { wxCache.set(key, { t: Date.now(), j }); return j; });
+}
 function showPlaceInfo(p) {
   if (!p) return;
-  selected = { key: 'place' };
-  for (const k of Object.keys(L)) if (L[k].obj) L[k].obj.material.uniforms.sel.value = -1;
-  hideIssOrbit();
-  $('#i-sw').style.background = 'var(--c-place)';
-  $('#i-cat-t').textContent = p.capital ? 'Capital' : 'Place';
-  $('#i-head').textContent = p.label || p.name;
-  const pop = p.popK ? (p.popK >= 1000 ? `${(p.popK / 1000).toFixed(p.popK >= 10000 ? 1 : 2)} million` : `≈ ${fmtInt(p.popK * 1000)}`) : '–';
-  $('#i-dl').innerHTML = row('Country', esc(countryName(p.cc) || '–'), 't') + (p.region ? row('Region', esc(p.region), 't') : '') + row('Coordinates', fmtCoord(p.lat, p.lon)) + row('Population', pop) + row('Elevation', '<span id="i-elev">…</span>');
-  $('#i-hint').hidden = true;
+  if (selected) closeInspector();
+  shownPlace = p; popAt = vecFromLatLon(p.lat, p.lon, 1.002); popTz = null; popKey = '';
+  clearInterval(popTimer);
+  $('#pp-cat').textContent = p.capital ? 'Capital' : 'Place';
+  $('#pp-head').textContent = p.label || p.name;
+  $('#pp-sub').textContent = [p.region, countryName(p.cc)].filter(Boolean).join(' · ');
+  $('#pp-wx').innerHTML = '<span>Loading weather …</span>';
+  const pop1 = p.popK ? (p.popK >= 1000 ? `${(p.popK / 1000).toFixed(p.popK >= 10000 ? 1 : 2)} million` : `≈ ${fmtInt(p.popK * 1000)}`) : '–';
+  $('#pp-dl').innerHTML = row('Local time', '…').replace('<dd>', '<dd id="pp-time">') + row('Date', '…').replace('<dd>', '<dd id="pp-date">') + row('Coordinates', fmtCoord(p.lat, p.lon)) + row('Population', pop1) + row('Elevation', '…').replace('<dd>', '<dd id="pp-elev">');
   const ll = `${p.lat.toFixed(5)},${p.lon.toFixed(5)}`;
-  const link = (href, text) => `<a class="w-link" href="${href}" target="_blank" rel="noopener noreferrer"><span class="t">${text}</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>`;
-  $('#i-act').innerHTML = link(`https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(p.name)}&go=Go`, 'Wikipedia')
-    + link(`https://www.openstreetmap.org/?mlat=${p.lat}&mlon=${p.lon}#map=12/${p.lat}/${p.lon}`, 'OpenStreetMap')
+  const link = (href, text) => `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>`;
+  $('#pp-links').innerHTML = link(`https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(p.name)}&go=Go`, 'Wikipedia')
+    + link(`https://www.openstreetmap.org/?mlat=${p.lat}&mlon=${p.lon}#map=12/${p.lat}/${p.lon}`, 'OSM').replace('<a ', '<a title="OpenStreetMap" ')
     + link(`https://www.google.com/maps/search/?api=1&query=${ll}`, 'Google Maps')
     + link(`https://www.waze.com/live-map/directions?to=ll.${encodeURIComponent(ll)}`, 'Waze');
-  $('#i-src').innerHTML = 'Place: <a href="https://www.geonames.org" target="_blank" rel="noopener noreferrer">GeoNames</a> (CC BY 4.0) · Elevation: <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a> (CC BY 4.0)';
-  $('#help').hidden = true; $('#help-btn').setAttribute('aria-expanded', 'false');
-  const box = $('#insp'); box.hidden = false; requestAnimationFrame(() => box.classList.remove('is-out'));
+  $('#pp-src').innerHTML = 'Sources: <a href="https://www.geonames.org" target="_blank" rel="noopener noreferrer">GeoNames</a> · <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a> weather, both CC BY 4.0';
+  closePopovers();
+  pop.hidden = false; popW = pop.offsetWidth; popH = pop.offsetHeight; placePop();
+  requestAnimationFrame(() => pop.classList.remove('is-out'));
+  panForPop();
   if (innerWidth < 768) { hidePicker(); $('#sidebar').classList.add('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'false'); }
-  // elevation of the place (not of the visitor): one request, only on this click
-  const want = p;
-  getJSON(`https://api.open-meteo.com/v1/elevation?latitude=${p.lat}&longitude=${p.lon}`, 6000)
-    .then(j => { if (selected?.key === 'place' && want === shownPlace) { const m = j.elevation?.[0]; $('#i-elev').textContent = Number.isFinite(m) ? `${fmtInt(Math.round(m))} m above sea level` : '–'; } })
-    .catch(() => { if (want === shownPlace) $('#i-elev').textContent = '–'; });
-  shownPlace = p;
+  // weather, time zone and elevation of the place (not of the visitor): one request, only on this click
+  placeWeather(p).then(j => {
+    if (shownPlace !== p) return;
+    const c = j.current || {}, dmax = j.daily?.temperature_2m_max?.[0], dmin = j.daily?.temperature_2m_min?.[0];
+    const t = v => `${Math.round(v)} °C`.replace('-', '−');
+    if (Number.isFinite(c.temperature_2m)) {
+      const extra = [Number.isFinite(dmin) && Number.isFinite(dmax) ? `Today ${t(dmin).replace(' °C', '')} to ${t(dmax)}` : '', Number.isFinite(c.wind_speed_10m) ? `Wind ${Math.round(c.wind_speed_10m)} km/h ${Number.isFinite(c.wind_direction_10m) ? compass(c.wind_direction_10m) : ''}`.trim() : ''].filter(Boolean).join(' · ');
+      $('#pp-wx').innerHTML = `${wxIcon(c.weather_code ?? 3, c.is_day !== 0)}<b>${t(c.temperature_2m)}<small>${esc(WMO[c.weather_code] || '')}</small></b><span>${extra}</span>`;
+    } else $('#pp-wx').innerHTML = '<span>No weather data for this place.</span>';
+    if (j.timezone) { popTz = { tz: j.timezone, abbr: j.timezone_abbreviation, off: j.utc_offset_seconds || 0 }; renderPopTime(); popTimer = setInterval(renderPopTime, 20000); }
+    else $('#pp-time').textContent = $('#pp-date').textContent = '–';
+    $('#pp-elev').textContent = Number.isFinite(j.elevation) ? `${fmtInt(Math.round(j.elevation))} m above sea level` : '–';
+  }).catch(() => {
+    if (shownPlace !== p) return;
+    $('#pp-wx').innerHTML = '<span>Weather is not available right now.</span>';
+    $('#pp-time').textContent = $('#pp-date').textContent = $('#pp-elev').textContent = '–';
+  });
 }
-let shownPlace = null;
+function closePlacePop() {
+  if (!shownPlace) return;
+  shownPlace = null; popAt = null; popTz = null; clearInterval(popTimer);
+  pop.classList.add('is-out'); setTimeout(() => { if (!shownPlace) pop.hidden = true; }, 260);
+}
+$('#pp-close').addEventListener('click', closePlacePop);
+// keep the popup over its place: above it, or below when there is no room; hidden on the far side
+function placePop() {
+  if (!popAt || pop.hidden) return;
+  const facing = tmpV.copy(popAt).normalize().dot(camera.position.clone().normalize());
+  const away = facing < 0.15;
+  pop.style.visibility = away ? 'hidden' : '';
+  if (away) return;
+  tmpV.copy(popAt).project(camera);
+  const x = (tmpV.x * 0.5 + 0.5) * innerWidth, y = (-tmpV.y * 0.5 + 0.5) * innerHeight;
+  const sc = innerWidth >= 768 ? SET.win / 100 : 1, w = popW * sc, h = popH * sc, gap = 16 + 4 * symF();
+  const below = y - h - gap < 8;
+  const top = Math.min(Math.max(8, below ? y + gap : y - h - gap), innerHeight - h - 8);
+  const left = Math.min(Math.max(8, x - w / 2), innerWidth - w - 8);
+  const ax = Math.min(popW - 22, Math.max(22, (x - left) / sc));
+  const k = `${Math.round(left)},${Math.round(top)},${sc},${below},${Math.round(ax)}`;
+  if (k === popKey) return;
+  popKey = k;
+  pop.classList.toggle('below', below);
+  pop.style.setProperty('--ax', ax + 'px');
+  pop.style.transform = `translate(${Math.round(left)}px, ${Math.round(top)}px) scale(${sc})`;
+}
+// no room above the place: turn the globe a little so the place moves down and the popup fits above it
+function panForPop() {
+  if (!renderer || flight || !popAt) return;
+  const sc = innerWidth >= 768 ? SET.win / 100 : 1, gap = 16 + 4 * symF();
+  tmpV.copy(popAt).project(camera);
+  const y = (-tmpV.y * 0.5 + 0.5) * innerHeight;
+  const topSafe = innerWidth >= 768 ? 72 : 110, bottomSafe = innerWidth >= 768 ? 150 : 140;
+  const dy = Math.min(popH * sc + gap + topSafe - y, innerHeight - bottomSafe - y);
+  if (dy < 16) return;
+  const d = camera.position.length();
+  const pxPerUnit = innerHeight / (2 * (d - 1) * Math.tan(camera.fov * DEG / 2));
+  const ang = Math.min(0.5, dy / pxPerUnit);
+  const right = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0).normalize();
+  const from = camState();
+  const toDir = from.dir.clone().applyAxisAngle(right, -ang).normalize(); // camera up, place down
+  controls.autoRotate = false;
+  if (reduceMotion) { camera.position.copy(toDir.multiplyScalar(d)); camera.lookAt(0, 0, 0); controls.update(); return; }
+  flight = { from, toDir, toDist: d, angle: from.dir.angleTo(toDir), t0: performance.now(), dur: 700, done: null, bump: 0 };
+  controls.enabled = false;
+}
 // a click on the place marker opens the place info
 function hitMarker(x, y) {
   if (!markerAt || !currentPlace || markerEl.hidden) return false;
   if (markerAt.clone().normalize().dot(camera.position.clone().normalize()) < 0.2) return false;
   lv.copy(markerAt).project(camera);
-  return Math.hypot((lv.x * 0.5 + 0.5) * innerWidth - x, (-lv.y * 0.5 + 0.5) * innerHeight - y) < 22;
+  return Math.hypot((lv.x * 0.5 + 0.5) * innerWidth - x, (-lv.y * 0.5 + 0.5) * innerHeight - y) < 22 * Math.max(1, symF());
+}
+
+/* ---------- Thick lines (borders, routes, ISS orbit) ---------- */
+// LineSegments2 draws lines with a real pixel width; plain WebGL lines are always 1 px.
+const FAT = new Set();
+function lineStyle(role) {
+  const sc = scheme(), m = sc.lineMul * SET.line / 100;
+  return {
+    border: { color: sc.border, opacity: sc.borderA, width: 1.3 * m },
+    air: { color: COLORS.air, opacity: 0.65, width: 1.5 * m },
+    sat: { color: COLORS.sat, opacity: 0.42, width: 1.2 * m },
+    iss: { color: COLORS.sat, opacity: 0.9, width: 2.4 * m },
+  }[role];
+}
+function styleFat(f) { const st = lineStyle(f.role); f.mat.color.set(st.color); f.mat.opacity = st.opacity; f.mat.linewidth = st.width; }
+function fatLines(role, order) {
+  const mat = new LineMaterial({ transparent: true, depthWrite: false, worldUnits: false });
+  mat.resolution.set(innerWidth, innerHeight);
+  const f = { role, mat }; FAT.add(f); styleFat(f);
+  const o = new LineSegments2(new LineSegmentsGeometry(), mat);
+  o.renderOrder = order; o.frustumCulled = false; o.visible = false;
+  return o;
+}
+// arr: Float32Array of segment end points (x1,y1,z1,x2,y2,z2 per segment)
+function setFatPositions(o, arr) {
+  o.geometry.dispose();
+  o.geometry = new LineSegmentsGeometry();
+  o.geometry.setPositions(arr);
+  o.userData.buf = arr;
 }
 
 /* ---------- Routes and directions (toggle, default off) ---------- */
@@ -1860,20 +2137,15 @@ function updateAirRoutes() {
   const show = ORIENT.routes && L.air.on && L.air.loaded;
   if (!show) { if (airRoutes) airRoutes.visible = false; return; }
   const n = L.air.items.length;
-  if (!airRoutes || airRoutes.userData.n !== n) {
-    if (airRoutes) { scene.remove(airRoutes); airRoutes.geometry.dispose(); }
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 6), 3).setUsage(THREE.DynamicDrawUsage));
-    airRoutes = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: COLORS.air, transparent: true, opacity: 0.4, depthWrite: false }));
-    airRoutes.userData.n = n; airRoutes.renderOrder = 2; airRoutes.frustumCulled = false; scene.add(airRoutes);
-  }
-  const arr = airRoutes.geometry.attributes.position.array, pos = L.air.pos, dir = L.air.obj.geometry.attributes.dir.array;
+  if (!airRoutes) { airRoutes = fatLines('air', 2); scene.add(airRoutes); }
+  if (airRoutes.userData.buf?.length !== n * 6) setFatPositions(airRoutes, new Float32Array(n * 6));
+  const arr = airRoutes.userData.buf, pos = L.air.pos, dir = L.air.obj.geometry.attributes.dir.array;
   for (let i = 0; i < n; i++) {
     const a = L.air.items[i], ang = (a.spd * AIR_AHEAD_S) / (R_EARTH_KM * 1000), c = Math.cos(ang), s = Math.sin(ang);
     const x = pos[i * 3], y = pos[i * 3 + 1], z = pos[i * 3 + 2], r = Math.hypot(x, y, z);
     arr.set([x, y, z, (x / r * c + dir[i * 3] * s) * r, (y / r * c + dir[i * 3 + 1] * s) * r, (z / r * c + dir[i * 3 + 2] * s) * r], i * 6);
   }
-  airRoutes.geometry.attributes.position.needsUpdate = true; airRoutes.visible = true;
+  airRoutes.geometry.attributes.instanceStart.data.needsUpdate = true; airRoutes.visible = true;
 }
 // satellites: the path of the next quarter orbit, recomputed every 5 s
 function updateSatRoutes() {
@@ -1892,13 +2164,8 @@ function updateSatRoutes() {
       prev = e;
     }
   }
-  if (!satRoutes) {
-    satRoutes = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: COLORS.sat, transparent: true, opacity: 0.22, depthWrite: false }));
-    satRoutes.renderOrder = 2; satRoutes.frustumCulled = false; scene.add(satRoutes);
-  }
-  satRoutes.geometry.dispose();
-  satRoutes.geometry = new THREE.BufferGeometry();
-  satRoutes.geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pts), 3));
+  if (!satRoutes) { satRoutes = fatLines('sat', 2); scene.add(satRoutes); }
+  setFatPositions(satRoutes, new Float32Array(pts));
   satRoutes.visible = true;
 }
 let routesTick = 0;
@@ -1918,6 +2185,7 @@ function loadHiResEarth() {
   l.load('img/hi/earth-day-8k.jpg', t => { apply('dayMap', t); l.load('img/hi/earth-night-8k.jpg', t2 => apply('nightMap', t2), undefined, () => {}); }, undefined, () => {});
 }
 
+applySettings();
 loadGeo();
 
 // warm the place index once the start screen stands (non-blocking, PRD F-01.5)
