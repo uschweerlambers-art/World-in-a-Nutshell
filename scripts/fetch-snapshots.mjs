@@ -130,7 +130,7 @@ const SOURCES = {
   volcanoWeek: {
     maxAge: 12 * 60 * MIN, // the Weekly Volcanic Activity Report comes out on Wednesdays
     async fetch() {
-      const xml = await (await get('https://volcano.si.edu/news/WeeklyVolcanoRSS.xml', 60000)).text();
+      const xml = await (await get('https://volcano.si.edu/news/WeeklyVolcanoRSS.xml', 60000, 'application/rss+xml, application/xml, text/xml, */*')).text();
       const tag = (block, t) => (block.match(new RegExp(`<${t}[^>]*>([\\s\\S]*?)</${t}>`)) || [])[1]?.replace(/<!\[CDATA\[|\]\]>/g, '').trim() || '';
       const rows = [];
       for (const m of xml.matchAll(/<item>([\s\S]*?)<\/item>/g)) {
@@ -145,8 +145,8 @@ const SOURCES = {
   },
 };
 
-async function get(url, timeout = 30000) {
-  const res = await fetch(url, { headers: { 'User-Agent': UA, Accept: 'application/json' }, signal: AbortSignal.timeout(timeout) });
+async function get(url, timeout = 30000, accept = 'application/json') {
+  const res = await fetch(url, { headers: { 'User-Agent': UA, Accept: accept }, signal: AbortSignal.timeout(timeout) });
   if (!res.ok) throw new Error(`${res.status} ${res.statusText} for ${new URL(url).host}`);
   return res;
 }

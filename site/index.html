@@ -237,7 +237,7 @@ button:disabled { cursor: default; }
 @media (prefers-reduced-motion: reduce) { #geo-labels > * { transition: none; } }
 .gl-grid { font-family: var(--mono); font-size: calc(10px * var(--lbl)); color: rgba(255,255,255,0.62); text-shadow: 0 0 3px rgba(0,0,0,.95); }
 .apt-label { position: fixed; left: 0; top: 0; z-index: 2; pointer-events: none; font-family: var(--mono); font-size: calc(11px * var(--lbl)); font-weight: 600; color: #05070D; padding: 1px 6px; border-radius: 6px; background: color-mix(in srgb, var(--c-air) 92%, transparent); white-space: nowrap; }
-.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.sub.legend { flex-direction: row; flex-wrap: wrap; gap: 4px 12px; }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
 .legend i { width: 9px; height: 9px; border-radius: 5px; flex-shrink: 0; box-shadow: 0 0 0 1px rgba(0,0,0,.4); }
 
@@ -502,7 +502,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <section class="sec" aria-labelledby="h-nature">
       <h3 id="h-nature">Nature</h3>
       <div class="row off" data-layer="volcano"><span class="ico" style="background:var(--c-volcano)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><path d="M2.5 20.5L9.3 8.2h5.4l6.8 12.3z"/><path d="M12 6.5c0-2 1.2-3.3 3-3.5" fill="none" stroke="#05070D" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="nm">Volcanoes</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show volcanoes" data-layer-switch="volcano"></button></span></div>
-      <div class="sub" id="volcano-sub" hidden><span>Ringed: reported active in the Smithsonian weekly report.</span></div>
+      <div class="sub" id="volcano-sub" hidden></div>
       <div class="row off" data-layer="storm"><span class="ico" style="background:var(--c-storm)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05070D" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M15.5 11.5C16 6 12 4 7 4.5M8.5 12.5C8 18 12 20 17 19.5"/></svg></span><span class="nm">Tropical storms</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show tropical storms" data-layer-switch="storm"></button></span></div>
       <div class="sub legend" id="storm-sub" hidden></div>
       <div class="row off" data-layer="event"><span class="ico" style="background:var(--c-event)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><path d="M12 2.5c.5 3.5 5.5 5.8 5.5 11a5.5 5.5 0 01-11 0c0-2.6 1.3-4.3 2.6-5.6.2 1.8 1 2.9 2 3.3-.6-3 .2-6.2.9-8.7z"/></svg></span><span class="nm">Fires, ice &amp; more</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show natural events: wildfires, ice, floods and more" data-layer-switch="event"></button></span></div>
@@ -1899,7 +1899,7 @@ function select(key, i) {
   } else if (key === 'volcano') {
     head = esc(it.name);
     dl = row('Country', esc(it.country || '–'), 't') + row('Type', esc(it.type || '–'), 't') + row('Last eruption', fmtYear(it.last), 't') + row('Summit', Number.isFinite(it.elev) ? `${fmtInt(it.elev)} m` : '–') + row('Position', fmtCoord(it.lat, it.lon));
-    hint = it.week ? `Reported active in the Smithsonian weekly report${it.week[4] ? ' of ' + new Date(it.week[4]).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : ''}.` : '';
+    hint = it.week ? `Reported active in the weekly volcanic activity report${it.week[4] ? ' of ' + new Date(it.week[4]).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : ''}.` : it.recent ? `Erupted in ${it.last} according to the Smithsonian record.` : '';
     act = extLink(`https://volcano.si.edu/volcano.cfm?vn=${encodeURIComponent(it.num)}`, 'Smithsonian volcano profile') + extLink(`https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(it.name + ' volcano')}&go=Go`, 'Wikipedia');
     src = `Source: <a href="https://volcano.si.edu" target="_blank" rel="noopener noreferrer">Smithsonian Global Volcanism Program</a>`;
   } else if (key === 'storm') {
@@ -1971,18 +1971,20 @@ async function loadVolcano() {
   const [j, w] = await Promise.all([getJSON(LIVE + 'volcanoes.json'), getJSON(LIVE + 'volcanoWeek.json').catch(() => null)]);
   const byNum = new Map(), byName = new Map();
   for (const r of w?.rows || []) { if (r[0]) byNum.set(String(r[0]), r); if (r[1]) byName.set(fold(r[1]), r); }
-  const items = j.rows.map(([num, name, country, type, last, elev, lat, lon]) => ({ num, name, country, type, last, elev: elev == null ? NaN : +elev, lat, lon, week: byNum.get(String(num)) || byName.get(fold(name)) || null }));
-  items.sort((a, b) => !!a.week - !!b.week); // active ones drawn last, on top
+  const year = new Date().getUTCFullYear();
+  const items = j.rows.map(([num, name, country, type, last, elev, lat, lon]) => ({ num, name, country, type, last, elev: elev == null ? NaN : +elev, lat, lon, week: byNum.get(String(num)) || byName.get(fold(name)) || null, recent: last != null && +last >= year - 1 }));
+  items.sort((a, b) => !!(a.week || a.recent) - !!(b.week || b.recent)); // active ones drawn last, on top
   L.volcano.items = items;
   const geo = makePoints('volcano', items.length, 3, { order: 2, glyph: volcanoGlyph() });
   items.forEach((v, i) => {
     const p = vecFromLatLon(v.lat, v.lon, 1.0018);
     geo.attributes.position.array.set([p.x, p.y, p.z], i * 3);
-    geo.attributes.size.array[i] = v.week ? 19 : 12;
-    geo.attributes.flag.array[i] = v.week ? 1 : 0;
+    const hot = v.week || v.recent;
+    geo.attributes.size.array[i] = hot ? 21 : 14;
+    geo.attributes.flag.array[i] = hot ? 1 : 0;
   });
-  const n = items.filter(v => v.week).length;
-  $('#volcano-sub').innerHTML = `<span>${n ? `${n} ringed: reported active in the Smithsonian weekly report.` : 'All volcanoes active in the last 12,000 years.'}</span>`;
+  const n = items.filter(v => v.week || v.recent).length;
+  $('#volcano-sub').innerHTML = `<span>${fmtInt(items.length)} volcanoes active in the last 12,000 years. ${n ? `${n} ringed: erupting since ${year - 1}${w ? ' or in this week’s activity report' : ''}.` : ''}</span>`;
   L.volcano.loaded = true;
 }
 async function loadStorm() {
@@ -2460,6 +2462,8 @@ function loadHiResEarth() {
 
 applySettings();
 loadGeo();
+// test hook for local browser tests only (?debug)
+if (new URLSearchParams(location.search).has('debug')) window.__wian = { L, select, setLayer, setToggle, camera, flyTo };
 
 // warm the place index once the start screen stands (non-blocking, PRD F-01.5)
 (window.requestIdleCallback || (f => setTimeout(f, 1200)))(() => loadPlaces());
