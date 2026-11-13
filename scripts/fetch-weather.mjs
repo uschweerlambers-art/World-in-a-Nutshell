@@ -99,19 +99,19 @@ async function covered(png) { const { channels } = await sharp(png).stats(); ret
 async function rain() {
   // IMERG early run, half-hourly; step back until a slot with data shows up
   const slot = 30 * 60 * 1000;
-  for (let back = 4 * H; back <= 14 * H; back += slot) {
+  for (let back = 5 * H; back <= 16 * H; back += slot) {
     const t = new Date(Math.floor((Date.now() - back) / slot) * slot), time = t.toISOString().slice(0, 19) + 'Z';
     let png;
-    try { png = await get(gibs('IMERG_Precipitation_Rate', time, 2048, 1024)); } catch (e) { console.log(`  rain ${time}: ${e.message}`); continue; }
+    try { png = await get(gibs('IMERG_Precipitation_Rate_30min', time, 2048, 1024)); } catch (e) { console.log(`  rain ${time}: ${e.message}`); continue; }
     const cov = await covered(png);
-    if (cov < 0.01) continue; // empty slot, not processed yet
+    if (cov < 0.005) { console.log(`  rain ${time}: empty`); continue; } // slot not processed yet
     const out = await sharp(png).png({ compressionLevel: 9, palette: true }).toBuffer();
     await writeFile(join(cacheDir, 'rain.png'), out);
     meta.rain = { fetched: new Date().toISOString(), valid: time, source: 'NASA GIBS, GPM IMERG precipitation rate (early run)', license: 'Public Domain (NASA)', coverage: +cov.toFixed(3) };
     console.log(`✓ rain ${time}: ${(cov * 100).toFixed(1)} % with rain, ${(out.length / 1024).toFixed(0)} KB`);
     return;
   }
-  throw new Error('no IMERG slot with data in the last 14 h');
+  throw new Error('no IMERG slot with data in the last 16 h');
 }
 async function aerosol() {
   const layers = ['MODIS_Combined_Value_Added_AOD', 'MODIS_Terra_Aerosol_Optical_Depth_3km', 'MODIS_Aqua_Aerosol_Optical_Depth_3km', 'VIIRS_NOAA20_Aerosol_Optical_Thickness_Deep_Blue_Over_Land', 'MODIS_Terra_Aerosol'];
