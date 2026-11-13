@@ -1,6 +1,8 @@
 # World in a Nutshell – Product Requirements Document (PRD) für den Prototyp
 
-Version 0.5 · Stand: 13.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+Version 0.6 · Stand: 13.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+
+Änderungen in v0.6 (Uwes Rückmeldungen vom 13.11.2026 abends): Orientierungs-Ebenen (Grenzen, Länder, Hauptstädte) und Routen-Schalter (F-09.7), Orts-Info schwebt über dem Ort mit Wetter, Ortszeit und Datum (F-09.8, F-09.9), Anzeige-Einstellungen und vier Farbschemata (F-09.10, F-09.11), dickere Linien.
 
 Änderungen in v0.5 (Ergebnis M1/D2, 13.11.2026): Repo und GitHub Pages stehen (https://uschweerlambers-art.github.io/World-in-a-Nutshell/). Spike-Ergebnis Flugzeuge: adsb.lol bietet keinen weltweiten Browser-Abruf; die Action holt stattdessen alle 15 Minuten einen weltweiten Schnappschuss der OpenSky-Network-API, der Browser bewegt die Flugzeuge dazwischen entlang Kurs und Tempo weiter. Wolken kommen als tägliche Wolkenkarte aus NASA-GIBS-Satellitenbildern, die die Action berechnet. Radiosender werden beim Rauszoomen gruppiert. Betroffen: F-03.4, F-04.3, F-04.4, F-04.6, F-07.2, Kap. 6, 6.2, 9, 10.
 
@@ -172,6 +174,11 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | F-09.4 | Jede Ebene hat drei sichtbare Zustände: *lädt*, *aktiv (Stand: Uhrzeit)*, *Quelle nicht erreichbar*. Ein Ausfall einer Ebene beeinträchtigt keine andere. | A (Netzwerk-Mock) |
 | F-09.5 | Ebenen-Auswahl und Kameraposition werden in der URL gespiegelt (teilbar, ohne Cookies/Server). | A |
 | F-09.6 | Keine Ebene ist beim Start „laut“: Standardmäßig aktiv sind Tag/Nacht, Wolken und Erdbeben; Flugzeuge, Satelliten und Radio schaltet man selbst ein (schont Rate-Limits und Datenvolumen). | M |
+| F-09.7 | **Orientierung** (Uwe, 13.11.): Ländergrenzen mit Ländernamen und Hauptstädte als türkise Punkte mit Namen sind per Default an und je per Schalter ausblendbar. Überlappende Namen werden ausgeblendet, der Hauptstadtpunkt bleibt. Ein Schalter „Routes & directions“ (Default aus) zeigt Kurs voraus für Flugzeuge und die nächste Viertel-Umlaufbahn für Satelliten. | M |
+| F-09.8 | **Orts-Info schwebt über dem Ort** (Uwe, 13.11.): Ein Klick auf den Suchmarker oder eine Hauptstadt öffnet ein kleines Fenster mit Pfeil direkt über dem Ort (ohne Platz darüber: darunter). Es folgt dem Ort beim Drehen, verschwindet auf der Rückseite und schließt per ×, Esc oder Klick auf freien Globus. Inhalt: Name, Region und Land, aktuelles Wetter (Temperatur, Lage als Symbol und Text, Tages-Min/Max, Wind), lokale Uhrzeit und Datum mit Zeitzone, Koordinaten, Einwohner, Höhe über NN, Links zu Wikipedia, OpenStreetMap, Google Maps und Waze. | M, A |
+| F-09.9 | Wetter, Zeitzone und Höhe kommen aus **einer** Open-Meteo-Anfrage mit den Koordinaten des Ortes (nie des Besuchers), erst beim Klick, für 10 min im Browser gemerkt. Ohne Antwort zeigt das Fenster einen Hinweis, der Rest bleibt nutzbar. | R (Netzwerk-Log), A |
+| F-09.10 | **Anzeige-Einstellungen** (Uwe, 13.11.): Ein Schalter in der Werkzeugleiste öffnet Regler für Panelgröße (85–130 %, nur ab 768 px), Namen auf dem Globus (80–160 %), Symbole (70–180 %) und Linienstärke (50–300 %), dazu „Reset“. Die Werte gelten sofort und bleiben nur im lokalen Speicher des Browsers. | M, A |
+| F-09.11 | **Farbschemata:** vier Presets – Night (Standard), High contrast, Atlas, Colour-blind safe (Okabe-Ito). Sie färben Ebenen-Symbole, Seitenleiste, Linien und Globus-Namen einheitlich um; Hauptstädte bleiben türkis. Linien (Grenzen, Routen, ISS-Bahn) haben echte Pixelbreite (≥ 1,3 px bei 100 %). | M |
 
 ### F-10 Rechtliches
 
