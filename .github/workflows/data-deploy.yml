@@ -1,0 +1,66 @@
+name: Data & Deploy
+
+# Builds the site, refreshes the data snapshots and publishes to GitHub Pages.
+# Runs on every push to main, every 15 minutes, and on demand.
+# GitHub Pages allows about 10 publishes per hour, so the schedule stays at 4 per hour.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Snapshots are never committed. The last good ones live in the Actions cache.
+      - name: Restore last snapshots
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/live
+          key: live-${{ github.run_id }}
+          restore-keys: live-
+
+      - name: Fetch snapshots
+        run: node scripts/fetch-snapshots.mjs .cache/live site/data/live
+
+      - name: Save snapshots
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/live
+          key: live-${{ github.run_id }}-${{ github.run_attempt }}
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
