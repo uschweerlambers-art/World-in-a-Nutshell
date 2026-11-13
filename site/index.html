@@ -219,6 +219,45 @@ button:disabled { cursor: default; }
 #dots span { width: 8px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.3); transition: width .3s; }
 #dots span.on { width: 24px; background: var(--text); }
 
+/* Layer extras */
+.sub { margin: 2px 0 6px 42px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: var(--text-3); }
+.mini-seg { display: flex; gap: 4px; }
+.mini-seg button { height: 30px; padding: 0 10px; border: 1px solid var(--edge-strong); border-radius: 15px; background: transparent; font-size: 12px; color: var(--text-2); }
+.mini-seg button[aria-pressed="true"] { background: rgba(255,159,10,0.2); border-color: var(--c-quake); color: var(--text); font-weight: 600; }
+.sub-list ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.sub-list li button { width: 100%; min-height: 40px; display: flex; align-items: center; gap: 8px; border: 0; background: none; padding: 0 6px; border-radius: 8px; text-align: left; font-size: 13px; color: var(--text); }
+.sub-list li button:hover, .sub-list li button[aria-current="true"] { background: var(--hover); }
+.sub-list li .n { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sub-list li .d { color: var(--text-3); font-size: 12px; }
+.link-inline { border: 0; background: none; padding: 0; color: var(--link); font-size: 12px; text-decoration: underline; }
+
+/* Inspector */
+#insp { position: fixed; right: var(--sr); top: calc(var(--st) + 56px); width: 300px; box-sizing: border-box; padding: 18px 18px 14px; display: flex; flex-direction: column; gap: 10px; border-radius: 22px; z-index: 7; max-height: calc(100vh - 140px); overflow-y: auto; }
+#insp.is-out { transform: translateY(8px); }
+#insp .w-top > span { display: flex; align-items: center; gap: 6px; }
+#insp h2 { margin: 0; font-size: 20px; font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
+#insp dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 13px; padding: 10px 0; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); }
+#insp dt { color: var(--text-3); }
+#insp dd { margin: 0; text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+#insp dd.t { font-family: inherit; }
+.i-hint { margin: 0; font-size: 12px; color: var(--c-quake); }
+#i-act { display: flex; flex-direction: column; }
+#i-act:empty { display: none; }
+#i-act .btn-line { height: 40px; font-size: 14px; }
+#i-act a.w-link { color: var(--link); min-height: 36px; }
+
+/* Radio player */
+#player { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--sb) + 92px); z-index: 7; width: min(440px, calc(100vw - 32px)); box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 14px 8px 8px; border-radius: 30px; }
+#player.is-out { transform: translate(-50%, 8px); }
+.pl-btn { width: 44px; height: 44px; border-radius: 22px; border: 0; background: var(--c-radio); color: #05070D; display: grid; place-items: center; padding: 0; flex-shrink: 0; }
+.pl-btn.wait { background: rgba(48,209,88,0.35); }
+.pl-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.pl-txt b { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pl-txt span { font-size: 12px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#pl-vol { width: 84px; accent-color: var(--c-radio); }
+#player .x { margin: 0; width: 36px; height: 36px; }
+.iss-label { position: fixed; left: 0; top: 0; z-index: 2; pointer-events: none; font-size: 12px; font-weight: 700; color: #fff; padding: 2px 7px; border-radius: 8px; background: rgba(191,90,242,0.85); white-space: nowrap; }
+
 /* Dialog */
 dialog { border: 0; padding: 0; background: transparent; color: var(--text); max-width: min(560px, calc(100vw - 32px)); width: 100%; }
 dialog::backdrop { background: rgba(5,7,13,0.6); }
@@ -273,6 +312,10 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   #wonder h2 { font-size: 23px; }
   #dots { display: none !important; }
   #toast { top: calc(var(--st) + 100px); }
+  #insp { left: 8px; right: 8px; width: auto; top: auto; bottom: calc(132px + env(safe-area-inset-bottom, 0px)); max-height: 46vh; border-radius: 26px; }
+  #player { bottom: calc(132px + env(safe-area-inset-bottom, 0px)); width: calc(100vw - 16px); }
+  #pl-vol { display: none; }
+  body.playing #insp { bottom: calc(204px + env(safe-area-inset-bottom, 0px)); max-height: 40vh; }
 }
 @media (min-width: 768px) { .m-only { display: none; } }
 @media (max-width: 1100px) and (min-width: 768px) { .timeline { display: none; } .attrib { left: calc(50% + 156px); width: calc(100vw - 360px); } }
@@ -363,11 +406,19 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     </div>
     <section class="sec" aria-labelledby="h-layers">
       <h3 id="h-layers">Layers</h3>
-      <div class="row off" data-layer="air"><span class="ico" style="background:var(--c-air)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><path d="M21 15.5v-2L13.5 9V3.8a1.5 1.5 0 00-3 0V9L3 13.5v2l7.5-2.3V18L8.5 19.5V21l3.5-1 3.5 1v-1.5L13.5 18v-4.8z"/></svg></span><span class="nm">Aircraft</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show aircraft" disabled></button></span></div>
-      <div class="row off" data-layer="sat"><span class="ico" style="background:var(--c-sat)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"/></svg></span><span class="nm">Satellites &amp; ISS</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show satellites" disabled></button></span></div>
-      <div class="row off" data-layer="quake"><span class="ico" style="background:var(--c-quake)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05070D" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2.5" fill="#05070D"/><circle cx="12" cy="12" r="7"/></svg></span><span class="nm">Earthquakes <small>24 h</small></span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show earthquakes" disabled></button></span></div>
-      <div class="row off" data-layer="radio"><span class="ico" style="background:var(--c-radio)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05070D" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.5 5.5 0 000 8M16 8a5.5 5.5 0 010 8M5 5a9.5 9.5 0 000 14M19 5a9.5 9.5 0 010 14"/></svg></span><span class="nm">Radio stations</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show radio stations" disabled></button></span></div>
-      <p class="note">Live data for these layers arrives in stage D2. This preview is about look and first steps.</p>
+      <div class="row off" data-layer="air"><span class="ico" style="background:var(--c-air)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><path d="M21 15.5v-2L13.5 9V3.8a1.5 1.5 0 00-3 0V9L3 13.5v2l7.5-2.3V18L8.5 19.5V21l3.5-1 3.5 1v-1.5L13.5 18v-4.8z"/></svg></span><span class="nm">Aircraft</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show aircraft" data-layer-switch="air"></button></span></div>
+      <div class="row off" data-layer="sat"><span class="ico" style="background:var(--c-sat)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"/></svg></span><span class="nm">Satellites &amp; ISS</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show satellites" data-layer-switch="sat"></button></span></div>
+      <div class="row off" data-layer="quake"><span class="ico" style="background:var(--c-quake)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05070D" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2.5" fill="#05070D"/><circle cx="12" cy="12" r="7"/></svg></span><span class="nm">Earthquakes <small>24 h</small></span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show earthquakes" data-layer-switch="quake"></button></span></div>
+      <div class="sub" id="quake-filter" hidden role="group" aria-label="Minimum magnitude">
+        <span>Magnitude</span>
+        <div class="mini-seg"><button type="button" data-minmag="0" aria-pressed="true">All</button><button type="button" data-minmag="2.5" aria-pressed="false">≥ 2.5</button><button type="button" data-minmag="4.5" aria-pressed="false">≥ 4.5</button></div>
+      </div>
+      <div class="row off" data-layer="radio"><span class="ico" style="background:var(--c-radio)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05070D" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.5 5.5 0 000 8M16 8a5.5 5.5 0 010 8M5 5a9.5 9.5 0 000 14M19 5a9.5 9.5 0 010 14"/></svg></span><span class="nm">Radio stations</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show radio stations" data-layer-switch="radio"></button></span></div>
+      <div class="sub sub-list" id="nearby" hidden>
+        <span>Nearby stations</span>
+        <ul id="nearby-list"></ul>
+      </div>
+      <p class="note" id="live-note">Aircraft, orbits and stations are refreshed every 15 minutes, earthquakes every 5.</p>
     </section>
     <section class="sec" aria-labelledby="h-view">
       <h3 id="h-view">Earth</h3>
@@ -397,6 +448,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <li>Search finds any place with 5,000 inhabitants or more.</li>
       <li>“Surprise me” takes you to remarkable places on Earth.</li>
       <li>Day and night match the current time.</li>
+      <li>Click a dot on the globe for details. A click on a radio station plays it.</li>
     </ul>
   </div>
 
@@ -406,7 +458,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <div class="track"></div>
     <span class="chip-live"><span class="dot" style="width:6px;height:6px"></span>Live</span>
   </div>
-  <p class="attrib">Earth: NASA Blue Marble &amp; Black Marble · Places: GeoNames (CC BY 4.0) · Outlines: Natural Earth · Clouds: placeholder</p>
+  <p class="attrib">Earth: NASA Blue Marble &amp; Black Marble · Places: GeoNames (CC BY 4.0) · Outlines: Natural Earth · Clouds: placeholder<span id="attrib-live"></span></p>
 </div>
 
 <!-- Arrival layer picker -->
@@ -438,6 +490,23 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 </article>
 <div id="dots" aria-hidden="true" hidden></div>
 
+<aside id="insp" class="glass fade is-out" aria-labelledby="i-head" hidden>
+  <div class="w-top"><span id="i-cat"><span class="sw" id="i-sw"></span><span id="i-cat-t"></span></span><button type="button" class="x" aria-label="Close details" id="i-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <h2 id="i-head"></h2>
+  <dl id="i-dl"></dl>
+  <p class="i-hint" id="i-hint" hidden></p>
+  <div id="i-act"></div>
+  <span class="w-src" id="i-src"></span>
+</aside>
+
+<div id="player" class="glass fade is-out" role="region" aria-label="Radio player" hidden>
+  <button type="button" class="pl-btn" id="pl-toggle" aria-label="Pause"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" id="pl-ico"></svg></button>
+  <div class="pl-txt"><b id="pl-name"></b><span id="pl-sub"></span></div>
+  <input type="range" id="pl-vol" min="0" max="1" step="0.05" value="0.8" aria-label="Volume">
+  <button type="button" class="x" id="pl-close" aria-label="Stop and close player"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+</div>
+<div class="iss-label" id="iss-label" hidden>ISS</div>
+
 <div id="toast" class="glass fade is-out" role="status"></div>
 
 <dialog id="dlg" aria-labelledby="dlg-title">
@@ -459,11 +528,14 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       </ul>
       <h3>Software</h3>
       <ul>
-        <li>three.js (MIT), typefaces Inter and IBM Plex Mono (SIL Open Font License).</li>
+        <li>three.js (MIT), satellite.js (MIT), typefaces Inter and IBM Plex Mono (SIL Open Font License).</li>
       </ul>
-      <h3>Coming with the data layers</h3>
+      <h3>Live layers</h3>
       <ul>
-        <li>Aircraft: adsb.lol (ODbL) · Satellites: CelesTrak · Earthquakes: USGS (public domain) · Radio: Radio Browser (public domain)</li>
+        <li>Aircraft: The OpenSky Network, snapshot every 15 minutes, positions moved on along course and speed in your browser.</li>
+        <li>Satellites and ISS: orbit data from CelesTrak (at most every 2 hours), positions computed live in your browser with satellite.js (MIT).</li>
+        <li>Earthquakes of the last 24 hours: USGS Earthquake Hazards Program, public domain, loaded directly every 5 minutes.</li>
+        <li>Radio stations: Radio Browser community database, public domain. Streams come straight from each station.</li>
       </ul>
     </div>
     <div data-pane="impressum" hidden>
@@ -473,6 +545,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <div data-pane="datenschutz" hidden>
       <h3>Placeholder</h3>
       <p>The privacy policy follows before launch. It will name every server your browser contacts, and GitHub Pages as the host.</p>
+      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you play a radio station, the stream comes directly from that station’s server. Both see your IP address, like any website you visit.</p>
       <p>Already true today: this site sets no cookies, counts no visits and only asks for your location when you click. What you type into search never leaves your browser.</p>
     </div>
   </div>
@@ -481,7 +554,8 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 <script type="importmap">
 { "imports": {
   "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.min.js",
-  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+  "satellite.js": "https://cdn.jsdelivr.net/npm/satellite.js@7.2.0/dist/index.js"
 } }
 </script>
 <script type="module">
@@ -777,6 +851,7 @@ if (renderer) {
     if (flight) stepFlight(performance.now()); else controls.update();
     applyFocus();
     placeMarker();
+    updateLayers();
     renderer.render(scene, camera);
   });
   addEventListener('resize', () => {
@@ -881,6 +956,8 @@ function goToPlace(p, opts = {}) {
   mode = 'explore';
   showOutline(null);
   setMarker(p.lat, p.lon);
+  here = { lat: p.lat, lon: p.lon, name: p.label || p.name };
+  if (L.radio.on && L.radio.loaded) showNearby();
   if (!opts.keepHash) try { history.replaceState(null, '', '#' + slug(p)); } catch {}
   $('#picker').classList.add('is-out');
   flyTo(p.lat, p.lon, innerWidth < 768 ? 2.0 : 1.75, () => { showUI(); showArrival(p); });
@@ -1008,8 +1085,8 @@ document.addEventListener('click', e => {
   hidePicker();
   const sb = $('#sidebar'); sb.classList.remove('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'true');
   const k = b.dataset.layerPick;
-  const names = { radio: 'Radio', air: 'Aircraft', sat: 'Satellites', quake: 'Earthquakes' };
-  toast(k === 'all' ? 'All layers are in the panel. Their live data arrives in stage D2.' : `${names[k]} gets live data in stage D2. This preview shows look and first steps.`, 4500);
+  const keys = k === 'all' ? ['air', 'sat', 'quake', 'radio'] : [k];
+  Promise.all(keys.map(x => L[x].on ? null : setLayer(x, true))).then(() => { if (keys.includes('radio') && L.radio.loaded) showNearby(); });
   const row = k !== 'all' && $(`.row[data-layer="${k}"]`);
   if (row) { row.style.background = 'rgba(255,255,255,0.08)'; setTimeout(() => row.style.background = '', 2500); }
 });
@@ -1045,6 +1122,511 @@ function tick() {
   $$('.clock-short').forEach(el => el.textContent = `Live · ${g('hour')}:${g('minute')}`);
 }
 tick(); setInterval(tick, 20000);
+
+/* ---------- Live layers (D2) ---------- */
+// Snapshots come from the GitHub Action (data/live/*.json, refreshed every 15 min).
+// Earthquakes load straight from USGS, satellites are propagated live with satellite.js.
+const LIVE = 'data/live/';
+const R_EARTH_KM = 6371;
+const COLORS = { air: 0x64D2FF, sat: 0xBF5AF2, quake: 0xFF9F0A, radio: 0x30D158 };
+const LAYER_NAMES = { air: 'Aircraft', sat: 'Satellite', quake: 'Earthquake', radio: 'Radio station' };
+const L = {
+  air: { on: false, loaded: false, items: [], pos: null, obj: null },
+  sat: { on: false, loaded: false, items: [], pos: null, obj: null },
+  quake: { on: false, loaded: false, items: [], pos: null, obj: null, minMag: 0 },
+  radio: { on: false, loaded: false, items: [], pos: null, obj: null },
+};
+let liveMeta = null, selected = null, here = null;
+
+async function getJSON(url, ms = 15000) {
+  const res = await fetch(url, { signal: AbortSignal.timeout(ms), cache: 'no-cache' });
+  if (!res.ok) throw new Error(res.status);
+  return res.json();
+}
+async function loadMeta() {
+  try { liveMeta = await getJSON(LIVE + 'meta.json', 8000); } catch { liveMeta = null; }
+  return liveMeta;
+}
+const hhmm = t => new Date(t).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+const fmtAgo = t => { const m = Math.round((Date.now() - t) / 60000); return m < 1 ? 'just now' : m < 90 ? `${m} min ago` : `${Math.round(m / 60)} h ago`; };
+const fmtInt = n => n.toLocaleString('en-GB');
+
+// local tangent frame for course arrows: north and east unit vectors at lat/lon
+function northEast(lat, lon) {
+  const la = lat * DEG, lo = lon * DEG;
+  return {
+    n: new THREE.Vector3(-Math.sin(la) * Math.cos(lo), Math.cos(la), Math.sin(la) * Math.sin(lo)),
+    e: new THREE.Vector3(-Math.sin(lo), 0, -Math.cos(lo)),
+  };
+}
+
+// One point shader for all layers. kind: 0 = disc, 1 = aircraft glyph, 2 = quake ring
+function planeTexture() {
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const g = c.getContext('2d');
+  g.translate(32, 32); g.scale(2.4, 2.4); g.translate(-12, -12);
+  g.fillStyle = '#fff'; g.strokeStyle = 'rgba(5,7,13,0.9)'; g.lineWidth = 1.4; g.lineJoin = 'round';
+  const p = new Path2D('M21 15.5v-2L13.5 9V3.8a1.5 1.5 0 00-3 0V9L3 13.5v2l7.5-2.3V18L8.5 19.5V21l3.5-1 3.5 1v-1.5L13.5 18v-4.8z');
+  g.stroke(p); g.fill(p);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.NoColorSpace; return t;
+}
+function pointsMaterial(kind, color, opts = {}) {
+  return new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, depthTest: true,
+    uniforms: {
+      color: { value: new THREE.Color(color) }, px: { value: Math.min(devicePixelRatio, 2) },
+      aspect: { value: innerWidth / innerHeight }, time: { value: 0 }, glyph: { value: kind === 1 ? planeTexture() : null },
+      limb: { value: opts.limb ?? 1 }, zoom: { value: 1 }, pulse: { value: reduceMotion ? 0 : 1 }, sel: { value: -1 },
+    },
+    vertexShader: `
+      attribute float size; attribute vec3 dir; attribute float flag; attribute float idx;
+      uniform float px; uniform float aspect; uniform float time; uniform float limb; uniform float pulse; uniform float sel; uniform float zoom;
+      varying float vAng; varying float vAlpha; varying float vFlag; varying float vPulse; varying float vSel;
+      void main(){
+        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        gl_Position = projectionMatrix * mv;
+        vec3 n = normalize(position);
+        vec3 toCam = normalize(cameraPosition - position);
+        float facing = dot(n, toCam);
+        vAlpha = mix(1.0, smoothstep(-0.02, 0.18, facing), limb);
+        vFlag = flag; vSel = abs(idx - sel) < 0.5 ? 1.0 : 0.0;
+        float s = size;
+        ${kind === 1 ? `
+        vec4 c1 = projectionMatrix * modelViewMatrix * vec4(position + dir * 0.01, 1.0);
+        vec2 d = c1.xy / c1.w - gl_Position.xy / gl_Position.w; d.x *= aspect;
+        vAng = atan(d.x, d.y);` : 'vAng = 0.0;'}
+        vPulse = 0.0;
+        ${kind === 2 ? `if (flag > 0.5 && pulse > 0.5) { vPulse = fract(time * 0.012 + idx * 0.137); }` : ''}
+        if (vSel > 0.5) s *= 1.6;
+        gl_PointSize = s * zoom * px * (1.0 + vPulse * 1.4);
+      }`,
+    fragmentShader: `
+      uniform vec3 color; uniform sampler2D glyph;
+      varying float vAng; varying float vAlpha; varying float vFlag; varying float vPulse; varying float vSel;
+      void main(){
+        vec2 p = gl_PointCoord - 0.5; p.y = -p.y;
+        float a = 0.0; vec3 col = color;
+        ${kind === 1 ? `
+          float c = cos(vAng), s = sin(vAng);
+          vec2 q = vec2(p.x * c - p.y * s, p.x * s + p.y * c);
+          vec4 g = texture2D(glyph, q + 0.5);
+          a = g.a; col = mix(vec3(0.02, 0.03, 0.05), color, g.r);
+          if (vSel > 0.5) col = mix(col, vec3(1.0), 0.5 * g.r);`
+        : kind === 2 ? `
+          float r = length(p) * 2.0;
+          float core = 1.0 - smoothstep(0.42, 0.5, r / (1.0 + vPulse * 1.4));
+          float ring = (1.0 - smoothstep(0.04, 0.09, abs(r - 0.9))) * (vPulse > 0.0 ? (1.0 - vPulse) : (vFlag > 0.5 ? 0.9 : 0.0));
+          a = max(core * 0.85, ring);
+          col = mix(color, vec3(1.0), vSel * 0.4);`
+        : `
+          float r = length(p) * 2.0;
+          a = 1.0 - smoothstep(0.62, 0.9, r);
+          float edge = smoothstep(0.45, 0.7, r);
+          col = mix(color * (1.0 + vFlag * 0.5), vec3(0.02, 0.03, 0.05), edge * 0.55);
+          if (vFlag > 0.5) col = mix(col, vec3(1.0), 0.35 * (1.0 - edge));
+          if (vSel > 0.5) a = max(a, (1.0 - smoothstep(0.86, 0.98, r)) * step(0.72, r));`}
+        a *= vAlpha;
+        if (a < 0.02) discard;
+        gl_FragColor = vec4(col, a);
+      }`,
+  });
+}
+function makePoints(key, n, kind, opts) {
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3).setUsage(THREE.DynamicDrawUsage));
+  geo.setAttribute('dir', new THREE.BufferAttribute(new Float32Array(n * 3), 3).setUsage(THREE.DynamicDrawUsage));
+  geo.setAttribute('size', new THREE.BufferAttribute(new Float32Array(n), 1));
+  geo.setAttribute('flag', new THREE.BufferAttribute(new Float32Array(n), 1));
+  const idx = new Float32Array(n); for (let i = 0; i < n; i++) idx[i] = i;
+  geo.setAttribute('idx', new THREE.BufferAttribute(idx, 1));
+  if (L[key].obj) { scene.remove(L[key].obj); L[key].obj.geometry.dispose(); }
+  const pts = new THREE.Points(geo, pointsMaterial(kind, COLORS[key], opts));
+  pts.frustumCulled = false; pts.renderOrder = opts?.order ?? 2; pts.visible = L[key].on;
+  scene.add(pts); L[key].obj = pts; L[key].pos = geo.attributes.position.array;
+  return geo;
+}
+
+/* Aircraft: snapshot + dead reckoning along course and speed (F-04.2) */
+const AIR_MAX_EXTRAPOLATE = 20 * 60; // s; beyond that, positions stay put
+let airSnapTime = 0, airFetched = null, airLastStep = 0;
+async function loadAir() {
+  const j = await getJSON(LIVE + 'aircraft.json');
+  airSnapTime = (j.time ? j.time * 1000 : Date.parse(j.fetched));
+  airFetched = j.fetched;
+  const n = j.rows.length;
+  L.air.items = j.rows.map(r => {
+    const [icao, call, lat, lon, alt, hdg, spd, country] = r;
+    const p = vecFromLatLon(lat, lon), { n: N, e: E } = northEast(lat, lon);
+    const d = N.multiplyScalar(Math.cos(hdg * DEG)).add(E.multiplyScalar(Math.sin(hdg * DEG)));
+    return { icao, call, lat, lon, alt, hdg, spd, country, p0: p, d0: d };
+  });
+  const geo = makePoints('air', n, 1, { order: 3 });
+  const size = geo.attributes.size.array;
+  for (let i = 0; i < n; i++) size[i] = 13;
+  L.air.src = j.source; L.air.loaded = true;
+  stepAir(true);
+}
+const tmpP = new THREE.Vector3(), tmpD = new THREE.Vector3();
+function stepAir(force) {
+  const now = Date.now();
+  if (!force && now - airLastStep < 250) return;
+  airLastStep = now;
+  const dt = Math.min(AIR_MAX_EXTRAPOLATE, Math.max(0, (now - airSnapTime) / 1000));
+  const pos = L.air.pos, dir = L.air.obj.geometry.attributes.dir.array;
+  L.air.items.forEach((a, i) => {
+    const ang = (a.spd * dt) / (R_EARTH_KM * 1000);
+    const c = Math.cos(ang), s = Math.sin(ang);
+    tmpP.copy(a.p0).multiplyScalar(c).addScaledVector(a.d0, s);
+    tmpD.copy(a.d0).multiplyScalar(c).addScaledVector(a.p0, -s);
+    a.p = tmpP.clone();
+    const r = 1.003 + Math.min(13000, Math.max(0, a.alt)) / 13000 * 0.006;
+    pos[i * 3] = tmpP.x * r; pos[i * 3 + 1] = tmpP.y * r; pos[i * 3 + 2] = tmpP.z * r;
+    dir[i * 3] = tmpD.x; dir[i * 3 + 1] = tmpD.y; dir[i * 3 + 2] = tmpD.z;
+  });
+  const g = L.air.obj.geometry; g.attributes.position.needsUpdate = true; g.attributes.dir.needsUpdate = true;
+}
+
+/* Satellites: orbit data from CelesTrak snapshot, SGP4 in the browser (F-05.2) */
+let satLastStep = 0, issIdx = -1, issOrbit = null, issOrbitAt = 0;
+const ISS_ID = 25544;
+async function loadSat() {
+  const [j, sat] = await Promise.all([getJSON(LIVE + 'satellites.json'), import('satellite.js')]);
+  L.sat.lib = sat;
+  L.sat.items = j.items.map(o => { try { return { o, rec: sat.json2satrec(o), name: o.OBJECT_NAME, id: o.NORAD_CAT_ID, group: o.GROUP, epoch: Date.parse(o.EPOCH + 'Z') }; } catch { return null; } }).filter(Boolean);
+  issIdx = L.sat.items.findIndex(s => s.id === ISS_ID);
+  const geo = makePoints('sat', L.sat.items.length, 0, { limb: 0, order: 4 });
+  L.sat.items.forEach((s, i) => { geo.attributes.size.array[i] = s.id === ISS_ID ? 12 : 6; geo.attributes.flag.array[i] = s.id === ISS_ID ? 1 : 0; });
+  L.sat.src = j.source; L.sat.fetched = j.fetched; L.sat.loaded = true;
+  stepSat(true);
+}
+function satEcf(s, date) {
+  const sat = L.sat.lib;
+  const pv = sat.propagate(s.rec, date);
+  if (!pv || !pv.position || typeof pv.position === 'boolean' || !isFinite(pv.position.x)) return null;
+  const gmst = sat.gstime(date);
+  const ecf = sat.eciToEcf(pv.position, gmst);
+  const v = pv.velocity; const speed = v ? Math.hypot(v.x, v.y, v.z) : NaN;
+  const geo = sat.eciToGeodetic(pv.position, gmst);
+  return { x: ecf.x / R_EARTH_KM, y: ecf.z / R_EARTH_KM, z: -ecf.y / R_EARTH_KM, alt: geo.height, lat: sat.degreesLat(geo.latitude), lon: sat.degreesLong(geo.longitude), speed };
+}
+function stepSat(force) {
+  const now = Date.now();
+  if (!force && now - satLastStep < 500) return;
+  satLastStep = now;
+  const d = new Date(now), pos = L.sat.pos;
+  L.sat.items.forEach((s, i) => {
+    const e = satEcf(s, d);
+    s.cur = e;
+    if (!e) { pos[i * 3] = pos[i * 3 + 1] = pos[i * 3 + 2] = 0; return; }
+    pos[i * 3] = e.x; pos[i * 3 + 1] = e.y; pos[i * 3 + 2] = e.z;
+  });
+  L.sat.obj.geometry.attributes.position.needsUpdate = true;
+  if (selected?.key === 'sat' && L.sat.items[selected.i]?.id === ISS_ID && now - issOrbitAt > 20000) drawIssOrbit();
+}
+// ISS ground-relative path for ±1 revolution (F-05.3), shown while the ISS is selected
+function drawIssOrbit() {
+  if (issIdx < 0) return;
+  issOrbitAt = Date.now();
+  const s = L.sat.items[issIdx], periodMin = 1440 / s.o.MEAN_MOTION, pts = [];
+  for (let k = -120; k <= 120; k++) {
+    const e = satEcf(s, new Date(issOrbitAt + k / 120 * periodMin * 60000));
+    if (e) pts.push(new THREE.Vector3(e.x, e.y, e.z));
+  }
+  if (!issOrbit) {
+    issOrbit = new THREE.Line(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ color: COLORS.sat, transparent: true, opacity: 0.55, depthWrite: false }));
+    issOrbit.renderOrder = 1; scene.add(issOrbit);
+  }
+  issOrbit.geometry.setFromPoints(pts); issOrbit.visible = true;
+}
+function hideIssOrbit() { if (issOrbit) issOrbit.visible = false; issOrbitAt = 0; }
+const issLabel = $('#iss-label');
+function placeIssLabel() {
+  const s = L.sat.on && issIdx >= 0 && L.sat.items[issIdx]?.cur;
+  if (!s) { issLabel.hidden = true; return; }
+  tmpV.set(s.x, s.y, s.z);
+  // hidden when the Earth is in between
+  const cam = camera.position, dirV = tmpV.clone().sub(cam), len = dirV.length(); dirV.divideScalar(len);
+  const b = cam.dot(dirV), c = cam.lengthSq() - 1, disc = b * b - c;
+  const blocked = disc > 0 && (-b - Math.sqrt(disc)) > 0 && (-b - Math.sqrt(disc)) < len;
+  tmpV.project(camera);
+  issLabel.hidden = blocked || tmpV.z > 1;
+  issLabel.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth + 10}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight - 26}px)`;
+}
+
+/* Earthquakes: USGS directly, snapshot as fallback (F-06.1) */
+let quakeTimer = null;
+async function loadQuake() {
+  let rows, src = 'USGS Earthquake Hazards Program', viaSnap = false;
+  try {
+    const geo = await getJSON('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson', 8000);
+    rows = geo.features.map(f => [f.id, f.properties.mag, f.geometry.coordinates[1], f.geometry.coordinates[0], f.geometry.coordinates[2], f.properties.time, f.properties.place, f.properties.url]);
+  } catch {
+    const j = await getJSON(LIVE + 'quakes.json'); rows = j.rows; viaSnap = j.fetched;
+  }
+  L.quake.all = rows.map(([id, mag, lat, lon, depth, time, place, url]) => ({ id, mag: mag ?? 0, lat, lon, depth, time, place, url }));
+  L.quake.src = src; L.quake.viaSnap = viaSnap; L.quake.loaded = true; L.quake.at = Date.now();
+  applyQuakeFilter();
+  clearTimeout(quakeTimer); quakeTimer = setTimeout(() => L.quake.on && loadQuake().catch(() => {}), 5 * 60000);
+}
+function applyQuakeFilter() {
+  const items = L.quake.all.filter(q => q.mag >= L.quake.minMag).sort((a, b) => a.mag - b.mag);
+  L.quake.items = items;
+  const geo = makePoints('quake', items.length, 2, { order: 2 });
+  const hourAgo = Date.now() - 3600000;
+  items.forEach((q, i) => {
+    const p = vecFromLatLon(q.lat, q.lon, 1.0015);
+    geo.attributes.position.array.set([p.x, p.y, p.z], i * 3);
+    geo.attributes.size.array[i] = 5 + Math.max(0, q.mag) * 3.2;
+    geo.attributes.flag.array[i] = q.time > hourAgo ? 1 : 0;
+  });
+  if (selected?.key === 'quake') closeInspector();
+  updateCounts();
+}
+
+/* Radio stations: daily snapshot, play on click (F-07) */
+async function loadRadio() {
+  const j = await getJSON(LIVE + 'radio.json');
+  L.radio.items = j.rows.map(([id, name, lat, lon, cc, stream, homepage, codec, kbps, tags]) => ({ id, name, lat, lon, cc, stream, homepage, codec, kbps, tags }));
+  const geo = makePoints('radio', L.radio.items.length, 0, { order: 1 });
+  L.radio.items.forEach((s, i) => {
+    const p = vecFromLatLon(s.lat, s.lon, 1.001);
+    geo.attributes.position.array.set([p.x, p.y, p.z], i * 3);
+    geo.attributes.size.array[i] = 6.5;
+  });
+  L.radio.src = j.source; L.radio.fetched = j.fetched; L.radio.loaded = true;
+}
+function distKm(a, b, c, d) {
+  const p1 = a * DEG, p2 = c * DEG, dl = (d - b) * DEG;
+  return R_EARTH_KM * Math.acos(Math.min(1, Math.sin(p1) * Math.sin(p2) + Math.cos(p1) * Math.cos(p2) * Math.cos(dl)));
+}
+function nearestStations(lat, lon, n = 6, exceptId) {
+  return L.radio.items.filter(s => s.id !== exceptId).map(s => ({ s, d: distKm(lat, lon, s.lat, s.lon) })).sort((a, b) => a.d - b.d).slice(0, n);
+}
+function viewCenter() {
+  if (here) return here;
+  const d = camera.position.clone().normalize();
+  return { lat: Math.asin(d.y) / DEG, lon: Math.atan2(-d.z, d.x) / DEG };
+}
+function showNearby() {
+  const c = viewCenter();
+  const list = nearestStations(c.lat, c.lon);
+  $('#nearby-list').innerHTML = list.map(({ s, d }) => `<li><button type="button" data-station="${esc(s.id)}"><span class="sw" style="background:var(--c-radio)"></span><span class="n">${esc(s.name)}</span><span class="d mono">${d < 10 ? d.toFixed(1) : Math.round(d)} km</span></button></li>`).join('');
+  $('#nearby span').textContent = `Nearby stations${c.name ? ' · ' + c.name : ''}`;
+  $('#nearby').hidden = !list.length;
+}
+
+// Player: one audio element, streams load straight from the station (F-07.7), only after a click (F-07.8)
+const audio = new Audio();
+audio.preload = 'none'; audio.volume = 0.8;
+let playing = null, playTimer = null;
+const ICON_PLAY = '<path d="M7 4.5v15l13-7.5z"/>', ICON_PAUSE = '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>';
+function setPlayerIcon(isPlaying) { $('#pl-ico').innerHTML = isPlaying ? ICON_PAUSE : ICON_PLAY; $('#pl-toggle').setAttribute('aria-label', isPlaying ? 'Pause' : 'Play'); }
+function playStation(s) {
+  playing = s; document.body.classList.add('playing');
+  const pl = $('#player'); pl.hidden = false; requestAnimationFrame(() => pl.classList.remove('is-out'));
+  $('#pl-name').textContent = s.name;
+  $('#pl-sub').textContent = 'Connecting …';
+  $('#pl-toggle').classList.add('wait'); setPlayerIcon(true);
+  $$('#nearby-list button').forEach(b => b.setAttribute('aria-current', String(b.dataset.station === s.id)));
+  audio.src = s.stream;
+  clearTimeout(playTimer);
+  playTimer = setTimeout(() => stationFailed(s), 8000); // F-07.5
+  audio.play().catch(() => {});
+}
+function stationFailed(s) {
+  if (playing !== s) return;
+  clearTimeout(playTimer);
+  audio.pause(); audio.removeAttribute('src'); audio.load();
+  $('#pl-toggle').classList.remove('wait'); setPlayerIcon(false);
+  const alt = nearestStations(s.lat, s.lon, 1, s.id)[0];
+  $('#pl-sub').textContent = 'Not reachable right now';
+  toast(alt ? `Station not reachable right now. Try ${alt.s.name}, ${alt.d < 10 ? alt.d.toFixed(1) : Math.round(alt.d)} km away?` : 'Station not reachable right now.', 6000);
+  if (alt) { suggestAlt = alt.s; $('#pl-sub').innerHTML = `Not reachable · <button type="button" class="link-inline" id="pl-alt">Try ${esc(alt.s.name)}</button>`; }
+}
+let suggestAlt = null;
+audio.addEventListener('playing', () => {
+  if (!playing) return;
+  clearTimeout(playTimer);
+  $('#pl-toggle').classList.remove('wait'); setPlayerIcon(true);
+  $('#pl-sub').textContent = [countryName(playing.cc), playing.tags?.split(',')[0]].filter(Boolean).join(' · ');
+});
+audio.addEventListener('error', () => { if (playing && audio.getAttribute('src')) stationFailed(playing); });
+$('#pl-toggle').addEventListener('click', () => {
+  if (!playing) return;
+  if (audio.paused) playStation(playing); else { audio.pause(); clearTimeout(playTimer); setPlayerIcon(false); $('#pl-toggle').classList.remove('wait'); }
+});
+$('#pl-vol').addEventListener('input', e => { audio.volume = +e.target.value; });
+$('#pl-close').addEventListener('click', () => {
+  clearTimeout(playTimer); audio.pause(); audio.removeAttribute('src'); audio.load(); playing = null; document.body.classList.remove('playing');
+  const pl = $('#player'); pl.classList.add('is-out'); setTimeout(() => { if (!playing) pl.hidden = true; }, 450);
+  $$('#nearby-list button').forEach(b => b.setAttribute('aria-current', 'false'));
+});
+document.addEventListener('click', e => {
+  if (e.target.closest('#pl-alt') && suggestAlt) { playStation(suggestAlt); return; }
+  const b = e.target.closest('[data-station]'); if (!b) return;
+  const i = L.radio.items.findIndex(s => s.id === b.dataset.station); if (i < 0) return;
+  playStation(L.radio.items[i]); select('radio', i);
+});
+
+/* Switching layers */
+const loaders = { air: loadAir, sat: loadSat, quake: loadQuake, radio: loadRadio };
+async function setLayer(key, on) {
+  const st = L[key];
+  st.on = on;
+  $$(`[data-layer-switch="${key}"]`).forEach(el => el.setAttribute('aria-checked', String(on)));
+  $(`.row[data-layer="${key}"]`).classList.toggle('off', !on);
+  if (key === 'quake') $('#quake-filter').hidden = !on;
+  if (key === 'radio' && !on) $('#nearby').hidden = true;
+  if (key === 'sat' && !on) { hideIssOrbit(); issLabel.hidden = true; }
+  if (!on && selected?.key === key) closeInspector();
+  if (on && !st.loaded) {
+    $(`.row[data-layer="${key}"] .ct`).textContent = '…';
+    try { await (st.loading ||= loaders[key]()); }
+    catch (err) {
+      st.loading = null; st.on = false;
+      $$(`[data-layer-switch="${key}"]`).forEach(el => el.setAttribute('aria-checked', 'false'));
+      $(`.row[data-layer="${key}"]`).classList.add('off');
+      if (key === 'quake') $('#quake-filter').hidden = true;
+      toast(`${LAYER_NAMES[key] === 'Radio station' ? 'Radio stations' : LAYER_NAMES[key] + 's'} could not be loaded right now. Please try again later.`, 5000);
+      updateCounts(); return;
+    }
+  }
+  if (key === 'quake' && on && Date.now() - (L.quake.at || 0) > 5 * 60000) loadQuake().catch(() => {});
+  if (st.obj) st.obj.visible = st.on;
+  if (key === 'radio' && on) showNearby();
+  updateCounts(); updateLiveNote();
+}
+function updateCounts() {
+  for (const k of Object.keys(L)) {
+    const ct = $(`.row[data-layer="${k}"] .ct`);
+    if (!ct || (L[k].on && !L[k].loaded)) continue;
+    ct.textContent = L[k].loaded && L[k].on ? fmtInt(L[k].items.length) : '–';
+  }
+  const on = Object.keys(L).filter(k => L[k].on);
+  const src = { air: 'OpenSky', sat: 'CelesTrak', quake: 'USGS', radio: 'Radio Browser' };
+  $('#attrib-live').textContent = on.length ? ' · Live: ' + on.map(k => src[k]).join(', ') : '';
+}
+function updateLiveNote() {
+  const parts = [];
+  if (L.air.on && airSnapTime) parts.push(`Aircraft as of ${hhmm(airSnapTime)}, moved on along their course`);
+  if (L.quake.on && L.quake.at) parts.push(L.quake.viaSnap ? `Earthquakes from our copy of ${hhmm(Date.parse(L.quake.viaSnap))}` : `Earthquakes loaded ${hhmm(L.quake.at)}`);
+  $('#live-note').textContent = parts.length ? parts.join(' · ') + '.' : 'Aircraft, orbits and stations are refreshed every 15 minutes, earthquakes every 5.';
+}
+document.addEventListener('click', e => {
+  const sw = e.target.closest('[data-layer-switch]'); if (!sw) return;
+  setLayer(sw.dataset.layerSwitch, sw.getAttribute('aria-checked') !== 'true');
+});
+$$('[data-minmag]').forEach(b => b.addEventListener('click', () => {
+  $$('[data-minmag]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  L.quake.minMag = +b.dataset.minmag; if (L.quake.loaded) applyQuakeFilter();
+}));
+// fresh aircraft snapshot: check the small meta file every 2 minutes
+setInterval(async () => {
+  if (!L.air.on || !L.air.loaded || document.hidden) return;
+  const m = await loadMeta();
+  if (m?.sources?.aircraft?.fetched && m.sources.aircraft.fetched !== airFetched) {
+    const keep = selected?.key === 'air' ? L.air.items[selected.i]?.icao : null;
+    await loadAir().catch(() => {}); updateLiveNote();
+    if (keep) { const i = L.air.items.findIndex(a => a.icao === keep); if (i >= 0) select('air', i); else closeInspector(); }
+  }
+}, 120000);
+
+/* Picking and inspector */
+let downAt = null;
+canvas.addEventListener('pointerdown', e => { downAt = [e.clientX, e.clientY]; });
+canvas.addEventListener('pointerup', e => {
+  if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6) return;
+  const hit = pick(e.clientX, e.clientY);
+  if (hit) {
+    select(hit.key, hit.i);
+    if (hit.key === 'radio') playStation(L.radio.items[hit.i]);
+  } else if (selected) closeInspector();
+});
+const projV = new THREE.Vector3();
+function pick(x, y) {
+  const camDir = camera.position.clone().normalize();
+  let best = null, bestD = innerWidth < 768 ? 22 : 14;
+  for (const key of ['sat', 'air', 'quake', 'radio']) {
+    const st = L[key]; if (!st.on || !st.loaded || !st.pos) continue;
+    const pos = st.pos, n = st.items.length;
+    for (let i = 0; i < n; i++) {
+      projV.set(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]);
+      if (key === 'sat') {
+        if (projV.lengthSq() === 0) continue;
+        const dirV = projV.clone().sub(camera.position), len = dirV.length(); dirV.divideScalar(len);
+        const b = camera.position.dot(dirV), c = camera.position.lengthSq() - 1, disc = b * b - c;
+        if (disc > 0 && -b - Math.sqrt(disc) > 0 && -b - Math.sqrt(disc) < len) continue;
+      } else if (projV.clone().normalize().dot(camDir) < 0.25) continue;
+      projV.project(camera);
+      const sx = (projV.x * 0.5 + 0.5) * innerWidth, sy = (-projV.y * 0.5 + 0.5) * innerHeight;
+      const d = Math.hypot(sx - x, sy - y) - (key === 'quake' ? Math.max(0, st.items[i].mag) * 1.2 : 0);
+      if (d < bestD) { bestD = d; best = { key, i }; }
+    }
+  }
+  return best;
+}
+const fmtAlt = m => m == null ? '–' : `${fmtInt(Math.round(m))} m`;
+function row(k, v, cls = '') { return `<dt>${k}</dt><dd${cls ? ` class="${cls}"` : ''}>${v}</dd>`; }
+function select(key, i) {
+  const st = L[key], it = st.items[i]; if (!it) return;
+  selected = { key, i };
+  for (const k of Object.keys(L)) if (L[k].obj) L[k].obj.material.uniforms.sel.value = k === key ? i : -1;
+  if (!(key === 'sat' && it.id === ISS_ID)) hideIssOrbit();
+  const swc = { air: 'var(--c-air)', sat: 'var(--c-sat)', quake: 'var(--c-quake)', radio: 'var(--c-radio)' }[key];
+  $('#i-sw').style.background = swc;
+  $('#i-cat-t').textContent = LAYER_NAMES[key];
+  let head = '', dl = '', hint = '', act = '', src = '';
+  if (key === 'air') {
+    head = it.call || it.icao.toUpperCase();
+    dl = row('Call sign', esc(it.call || '–')) + row('ICAO hex', esc(it.icao)) + row('Altitude', fmtAlt(it.alt)) + row('Speed', it.spd ? `${Math.round(it.spd * 3.6)} km/h` : '–') + row('Course', `${Math.round(it.hdg)}°`) + row('Registered in', esc(it.country || '–'), 't') + row('Last report', `${hhmm(airSnapTime)} (${fmtAgo(airSnapTime)})`);
+    hint = Date.now() - airSnapTime > 60000 ? 'Position estimated from the last report along course and speed.' : '';
+    src = `Source: <a href="https://opensky-network.org" target="_blank" rel="noopener noreferrer">The OpenSky Network</a>`;
+  } else if (key === 'sat') {
+    const c = it.cur || {};
+    head = it.id === ISS_ID ? 'International Space Station' : it.name;
+    dl = row('NORAD ID', it.id) + row('Altitude', c.alt ? `${fmtInt(Math.round(c.alt))} km` : '–') + row('Speed', c.speed ? `${fmtInt(Math.round(c.speed * 3600))} km/h` : '–') + row('Inclination', `${(+it.o.INCLINATION).toFixed(1)}°`) + row('Orbit data', `${fmtAgo(it.epoch)}`);
+    hint = Date.now() - it.epoch > 24 * 3600000 ? `Orbit data from ${new Date(it.epoch).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}.` : '';
+    src = `Source: <a href="https://celestrak.org" target="_blank" rel="noopener noreferrer">CelesTrak</a> · computed with satellite.js`;
+    if (it.id === ISS_ID) drawIssOrbit();
+  } else if (key === 'quake') {
+    head = `M ${it.mag.toFixed(1)}${it.place ? ' · ' + esc(it.place) : ''}`;
+    const d = new Date(it.time);
+    dl = row('Magnitude', it.mag.toFixed(1)) + row('Depth', `${it.depth.toFixed(1)} km`) + row('Local time', d.toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })) + row('UTC', d.toLocaleString('en-GB', { timeZone: 'UTC', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })) + row('Position', fmtCoord(it.lat, it.lon));
+    act = `<a class="w-link" href="${esc(it.url)}" target="_blank" rel="noopener noreferrer"><span class="t">Details at USGS</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>`;
+    src = `Source: <a href="https://earthquake.usgs.gov" target="_blank" rel="noopener noreferrer">USGS</a>, public domain`;
+  } else if (key === 'radio') {
+    head = it.name;
+    const near = places ? nearestPlace(it.lat, it.lon) : null;
+    dl = row('Place', esc(near && distKm(it.lat, it.lon, near.lat, near.lon) < 30 ? near.name : fmtCoord(it.lat, it.lon)), 't') + row('Country', esc(countryName(it.cc)), 't') + row('Genre', esc(it.tags?.split(',').filter(Boolean).slice(0, 2).join(', ') || '–'), 't') + row('Stream', `${esc(it.codec || '–')}${it.kbps ? ' · ' + it.kbps + ' kbit/s' : ''}`);
+    act = it.homepage?.startsWith('http') ? `<a class="w-link" href="${esc(it.homepage)}" target="_blank" rel="noopener noreferrer"><span class="t">Station website</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>` : '';
+    src = `Source: <a href="https://www.radio-browser.info" target="_blank" rel="noopener noreferrer">Radio Browser</a>`;
+  }
+  $('#i-head').innerHTML = head; $('#i-dl').innerHTML = dl;
+  $('#i-hint').hidden = !hint; $('#i-hint').textContent = hint;
+  $('#i-act').innerHTML = act; $('#i-src').innerHTML = src;
+  $('#help').hidden = true; $('#help-btn').setAttribute('aria-expanded', 'false');
+  const box = $('#insp'); box.hidden = false; requestAnimationFrame(() => box.classList.remove('is-out'));
+  if (innerWidth < 768) { hidePicker(); $('#sidebar').classList.add('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'false'); }
+}
+function closeInspector() {
+  selected = null; hideIssOrbit();
+  for (const k of Object.keys(L)) if (L[k].obj) L[k].obj.material.uniforms.sel.value = -1;
+  const box = $('#insp'); box.classList.add('is-out'); setTimeout(() => { if (!selected) box.hidden = true; }, 450);
+}
+$('#i-close').addEventListener('click', closeInspector);
+// refresh the satellite inspector while it is open (altitude and speed change)
+setInterval(() => { if (selected?.key === 'sat' && !$('#insp').hidden) select('sat', selected.i); }, 2000);
+
+/* Per-frame work, called from the render loop */
+function updateLayers() {
+  if (L.air.on && L.air.loaded) stepAir();
+  if (L.sat.on && L.sat.loaded) stepSat();
+  // markers shrink when zoomed out so a full globe stays readable
+  const dist = camera.position.length(), zf = 1.9 / dist;
+  const ZOOM = { air: Math.min(1.2, Math.max(0.42, zf)), radio: Math.min(1.2, Math.max(0.4, zf)), quake: Math.min(1.15, Math.max(0.55, zf)), sat: 1 };
+  for (const k of Object.keys(L)) if (L[k].obj) { const u = L[k].obj.material.uniforms; u.time.value = uniforms.time.value; u.aspect.value = innerWidth / innerHeight; u.zoom.value = ZOOM[k]; }
+  placeIssLabel();
+}
 
 // warm the place index once the start screen stands (non-blocking, PRD F-01.5)
 (window.requestIdleCallback || (f => setTimeout(f, 1200)))(() => loadPlaces());
