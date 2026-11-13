@@ -1,6 +1,8 @@
 # World in a Nutshell – Product Requirements Document (PRD) für den Prototyp
 
-Version 0.6 · Stand: 13.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+Version 0.7 · Stand: 13.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+
+Änderungen in v0.7 (Uwe, 13.11.2026, 23:14): Neue Ebenen Gradnetz, Vulkane, Wirbelstürme und weitere Naturereignisse (F-13); Flugzeug- und Satelliten-Details erweitert (F-04.8, F-05.6). Geplant: Wetterkarten und Luftqualität (F-14), Schiffe, Kraftwerke, Seekabel (F-15). Fracht, Passagiere und Crew gibt es in keiner offenen Quelle und werden nicht angezeigt.
 
 Änderungen in v0.6 (Uwes Rückmeldungen vom 13.11.2026 abends): Orientierungs-Ebenen (Grenzen, Länder, Hauptstädte) und Routen-Schalter (F-09.7), Orts-Info schwebt über dem Ort mit Wetter, Ortszeit und Datum (F-09.8, F-09.9), Anzeige-Einstellungen und vier Farbschemata (F-09.10, F-09.11), dickere Linien.
 
@@ -164,6 +166,16 @@ Prüfmethoden: **M** = manueller Test nach Testskript, **A** = automatisierter T
 
 Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Daten ist ungeklärt; die Ebene kann nach einer Lizenzprüfung später als eigenes Modul ergänzt werden.
 
+### F-13 Natur und Gradnetz (v0.7)
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-13.1 | **Vulkane:** alle Holozän-Vulkane des Smithsonian Global Volcanism Program als Dreieck; Vulkane mit Ausbruch seit Vorjahr oder im wöchentlichen Aktivitätsbericht mit Ring. Klick zeigt Land, Typ, letzten Ausbruch, Gipfelhöhe und Links zum Smithsonian-Profil und zu Wikipedia. | M, A |
+| F-13.2 | **Wirbelstürme:** aktive tropische Stürme aus NASA EONET mit Symbol an der letzten Position und Zugbahn, eingefärbt nach Stärke (Saffir-Simpson). Klick zeigt Stärke, Wind in km/h und kn, Zugrichtung und -tempo, Stand und Link zur Warnung (JTWC/NHC). | M, A |
+| F-13.3 | **Weitere Naturereignisse** (Waldbrände, Meer- und Seeeis, Fluten, Staub, Dürre u. a.) aus NASA EONET, Farbe je Art, Legende mit Anzahl. Klick zeigt Art, Größe (z. B. acres und ha), erste und letzte Meldung, Link zur Quelle. | M, A |
+| F-13.4 | **Gradnetz** (Default aus): Breiten- und Längenkreise alle 15°, Gradangaben entlang der Bildmitte. | M |
+| F-13.5 | EONET stündlich, Vulkanliste wöchentlich, Aktivitätsbericht zweimal täglich über die Action; fällt eine Quelle aus, bleibt der letzte Stand. | A |
+
 ### F-09 Übergreifende Bedienung
 
 | AK | Kriterium | Prüfung |
@@ -174,6 +186,8 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | F-09.4 | Jede Ebene hat drei sichtbare Zustände: *lädt*, *aktiv (Stand: Uhrzeit)*, *Quelle nicht erreichbar*. Ein Ausfall einer Ebene beeinträchtigt keine andere. | A (Netzwerk-Mock) |
 | F-09.5 | Ebenen-Auswahl und Kameraposition werden in der URL gespiegelt (teilbar, ohne Cookies/Server). | A |
 | F-09.6 | Keine Ebene ist beim Start „laut“: Standardmäßig aktiv sind Tag/Nacht, Wolken und Erdbeben; Flugzeuge, Satelliten und Radio schaltet man selbst ein (schont Rate-Limits und Datenvolumen). | M |
+| F-04.8 | **Flugdetails** (v0.7): Klick auf ein Flugzeug zeigt Flugnummer, Airline, Start- und Zielflughafen (mit Linie auf dem Globus), Flugzeugtyp, Kennzeichen, Steig-/Sinkrate und Notfall-Squawk. Route und Typ kommen erst beim Klick von adsbdb.com (offen, ohne Schlüssel) und sind als „may be out of date“ gekennzeichnet. | M, R |
+| F-05.6 | **Satellitendetails** (v0.7): Betreiber, Startdatum und -ort (CelesTrak SATCAT), Bahntyp (LEO/MEO/GEO/HEO), Höhenbereich Perigäum–Apogäum, Umlaufzeit. | M |
 | F-09.7 | **Orientierung** (Uwe, 13.11.): Ländergrenzen mit Ländernamen und Hauptstädte als türkise Punkte mit Namen sind per Default an und je per Schalter ausblendbar. Überlappende Namen werden ausgeblendet, der Hauptstadtpunkt bleibt. Ein Schalter „Routes & directions“ (Default aus) zeigt Kurs voraus für Flugzeuge und die nächste Viertel-Umlaufbahn für Satelliten. | M |
 | F-09.8 | **Orts-Info schwebt über dem Ort** (Uwe, 13.11.): Ein Klick auf den Suchmarker oder eine Hauptstadt öffnet ein kleines Fenster mit Pfeil direkt über dem Ort (ohne Platz darüber: darunter). Es folgt dem Ort beim Drehen, verschwindet auf der Rückseite und schließt per ×, Esc oder Klick auf freien Globus. Inhalt: Name, Region und Land, aktuelles Wetter (Temperatur, Lage als Symbol und Text, Tages-Min/Max, Wind), lokale Uhrzeit und Datum mit Zeitzone, Koordinaten, Einwohner, Höhe über NN, Links zu Wikipedia, OpenStreetMap, Google Maps und Waze. | M, A |
 | F-09.9 | Wetter, Zeitzone und Höhe kommen aus **einer** Open-Meteo-Anfrage mit den Koordinaten des Ortes (nie des Besuchers), erst beim Klick, für 10 min im Browser gemerkt. Ohne Antwort zeigt das Fenster einen Hinweis, der Rest bleibt nutzbar. | R (Netzwerk-Log), A |
