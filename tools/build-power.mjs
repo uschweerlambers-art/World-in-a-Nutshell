@@ -26,16 +26,20 @@ function parseCSV(text) {
 const [head, ...data] = parseCSV(await readFile(src, 'utf8'));
 const col = Object.fromEntries(head.map((h, i) => [h, i]));
 const FUELS = ['Solar', 'Wind', 'Hydro', 'Gas', 'Coal', 'Oil', 'Nuclear', 'Biomass', 'Waste', 'Geothermal', 'Storage', 'Cogeneration', 'Petcoke', 'Wave and Tidal', 'Other'];
-const rows = [];
+const rows = [], countries = [];
 for (const r of data) {
   if (r.length < head.length - 5) continue;
   const lat = +r[col.latitude], lon = +r[col.longitude], mw = +r[col.capacity_mw];
   if (!Number.isFinite(lat) || !Number.isFinite(lon) || !(mw > 0)) continue;
   let f = FUELS.indexOf(r[col.primary_fuel]); if (f < 0) f = FUELS.length - 1;
   const year = Math.round(+r[col.commissioning_year]) || 0;
-  rows.push([r[col.name].trim(), +lat.toFixed(3), +lon.toFixed(3), mw >= 100 ? Math.round(mw) : +mw.toFixed(1), f, year, (r[col.owner] || '').trim(), r[col.country]]);
+  let c = countries.indexOf(r[col.country_long]); if (c < 0) c = countries.push(r[col.country_long]) - 1;
+  // latest reported (not estimated) yearly generation, if any
+  let gen = 0, genYear = 0;
+  for (let y = 2019; y >= 2013 && !genYear; y--) { const g = +r[col[`generation_gwh_${y}`]]; if (r[col[`generation_gwh_${y}`]] !== '' && Number.isFinite(g) && g > 0) { gen = g >= 100 ? Math.round(g) : +g.toFixed(1); genYear = y; } }
+  rows.push([r[col.name].trim(), +lat.toFixed(3), +lon.toFixed(3), mw >= 100 ? Math.round(mw) : +mw.toFixed(1), f, year, (r[col.owner] || '').trim(), c, gen, genYear]);
 }
 rows.sort((a, b) => a[3] - b[3]); // small first, so big plants are drawn on top
-const json = { source: 'Global Power Plant Database v1.3.0, World Resources Institute', sourceUrl: 'https://datasets.wri.org/dataset/globalpowerplantdatabase', license: 'CC BY 4.0', note: 'Last updated by WRI in 2021', fuels: FUELS, fields: ['name', 'lat', 'lon', 'capacityMW', 'fuel', 'commissioned', 'owner', 'country'], count: rows.length, rows };
+const json = { source: 'Global Power Plant Database v1.3.0, World Resources Institute', sourceUrl: 'https://datasets.wri.org/dataset/globalpowerplantdatabase', license: 'CC BY 4.0', note: 'Last updated by WRI in 2021', fuels: FUELS, countries, fields: ['name', 'lat', 'lon', 'capacityMW', 'fuel', 'commissioned', 'owner', 'countryIndex', 'generationGWh', 'generationYear'], count: rows.length, rows };
 await writeFile(out, JSON.stringify(json));
 console.log(`${rows.length} plants → ${out}`);

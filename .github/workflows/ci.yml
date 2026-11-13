@@ -41,6 +41,9 @@ jobs:
           node scripts/fetch-textures.mjs .cache/textures site/img/hi
           ls -la site/img/hi || true
           ls -la site/data/live
+      - name: Probe (temporary) dump cables and ships
+        run: |
+          for f in cables ships; do echo "=====$f"; gzip -9c site/data/live/$f.json | base64 -w 0; echo; echo "=====end"; done
       # The preview build lets reviewers download and open the site locally (N-7.4).
       - uses: actions/upload-artifact@v4
         with:
