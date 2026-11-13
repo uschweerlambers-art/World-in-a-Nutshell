@@ -29,7 +29,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Install build tools
@@ -69,6 +69,12 @@ jobs:
 
       - name: Weather maps (GFS wind and temperature, IMERG rain, aerosols)
         run: node scripts/fetch-weather.mjs .cache/live site/data/live
+
+      # Needs the free aisstream.io key as repo secret AISSTREAM_API_KEY; without it the step only logs a note
+      - name: Ships (aisstream.io, about one minute of live AIS)
+        env:
+          AISSTREAM_API_KEY: ${{ secrets.AISSTREAM_API_KEY }}
+        run: node scripts/fetch-ships.mjs .cache/live site/data/live
 
       - name: Save snapshots
         if: always()

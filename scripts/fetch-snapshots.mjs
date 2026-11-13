@@ -143,6 +143,63 @@ const SOURCES = {
       return { source: 'Smithsonian / USGS Weekly Volcanic Activity Report', sourceUrl: 'https://volcano.si.edu/reports_weekly.cfm', fields: ['volcanoNumber', 'name', 'title', 'link', 'date'], count: rows.length, rows };
     },
   },
+  cables: {
+    maxAge: 7 * 24 * 60 * MIN, // submarine cables change a few times a year; Overpass is a shared, free service
+    async fetch() {
+      // OpenStreetMap: telecom and power cables on the sea floor
+      const q = `[out:json][timeout:240];
+(
+  way["seamark:type"="cable_submarine"];
+  way["communication"~"^(line|cable)$"]["location"~"^(underwater|submarine)$"];
+  way["telecom"~"^(line|cable)$"]["location"~"^(underwater|submarine)$"];
+  way["power"="cable"]["location"~"^(underwater|submarine)$"];
+  way["power"="cable"]["submarine"="yes"];
+  way["communication"]["submarine"="yes"];
+  way["telecom"]["submarine"="yes"];
+);
+out tags geom qt;`;
+      const hosts = ['https://overpass-api.de/api/interpreter', 'https://overpass.kumi.systems/api/interpreter', 'https://maps.mail.ru/osm/tools/overpass/api/interpreter'];
+      let j, err;
+      for (const host of hosts) {
+        try {
+          const res = await fetch(host, { method: 'POST', headers: { 'User-Agent': UA, 'Content-Type': 'application/x-www-form-urlencoded' }, body: 'data=' + encodeURIComponent(q), signal: AbortSignal.timeout(280000) });
+          if (!res.ok) throw new Error(`${res.status} for ${new URL(host).host}`);
+          j = await res.json(); break;
+        } catch (e) { err = e; console.log(`  cables: ${e.message}`); }
+      }
+      if (!j) throw err;
+      // Douglas-Peucker in degrees, about 1.5 km
+      const simplify = (pts, tol = 0.015) => {
+        if (pts.length < 3) return pts;
+        const keep = new Uint8Array(pts.length); keep[0] = keep[pts.length - 1] = 1;
+        const stack = [[0, pts.length - 1]];
+        while (stack.length) {
+          const [a, b] = stack.pop(); const [x1, y1] = pts[a], [x2, y2] = pts[b];
+          const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1e-9;
+          let best = -1, bi = -1;
+          for (let i = a + 1; i < b; i++) { const d = Math.abs(dy * pts[i][0] - dx * pts[i][1] + x2 * y1 - y2 * x1) / len; if (d > best) { best = d; bi = i; } }
+          if (best > tol) { keep[bi] = 1; stack.push([a, bi], [bi, b]); }
+        }
+        return pts.filter((_, i) => keep[i]);
+      };
+      const rows = [];
+      let power = 0, telecom = 0, pts = 0;
+      for (const w of j.elements || []) {
+        if (w.type !== 'way' || !w.geometry?.length) continue;
+        const t = w.tags || {};
+        const cat = t['seamark:cable_submarine:category'] || '';
+        const isPower = t.power === 'cable' || /power/i.test(cat) || /power/i.test(t['seamark:cable_submarine:product'] || '');
+        const line = simplify(w.geometry.map((g) => [+g.lon.toFixed(3), +g.lat.toFixed(3)]));
+        if (line.length < 2) continue;
+        isPower ? power++ : telecom++; pts += line.length;
+        const name = t.name || t['seamark:name'] || t.ref || '';
+        rows.push([w.id, isPower ? 1 : 0, name, t.operator || '', t.voltage || '', line.flat()]);
+      }
+      if (rows.length < 50) throw new Error(`only ${rows.length} cables`);
+      console.log(`  cables: ${telecom} telecom, ${power} power ways, ${pts} points`);
+      return { source: 'OpenStreetMap contributors (Overpass API)', sourceUrl: 'https://www.openstreetmap.org/copyright', license: 'ODbL 1.0', fields: ['osmWay', 'kind(0 telecom,1 power)', 'name', 'operator', 'voltage', 'lonlat[]'], count: rows.length, rows };
+    },
+  },
 };
 
 async function get(url, timeout = 30000, accept = 'application/json') {
