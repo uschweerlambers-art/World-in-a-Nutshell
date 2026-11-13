@@ -37,6 +37,17 @@ jobs:
           node scripts/fetch-textures.mjs .cache/textures site/img/hi
           ls -la site/img/hi || true
           ls -la site/data/live
+      - name: Probe (temporary)
+        run: |
+          curl -s 'https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?SERVICE=WMS&REQUEST=GetCapabilities&VERSION=1.3.0' > /tmp/caps.xml
+          grep -o '<Name>[^<]*\(IMERG\|Precip\)[^<]*</Name>' /tmp/caps.xml | sort -u
+          python3 - <<'EOF'
+          import re
+          s=open('/tmp/caps.xml').read()
+          for m in re.finditer(r'<Layer[^>]*>\s*<Name>(IMERG[^<]*)</Name>(.*?)</Layer>', s, re.S):
+              d=re.search(r'<Dimension[^>]*>([^<]*)</Dimension>', m.group(2)); dd=re.search(r'<Dimension[^>]*', m.group(2))
+              print(m.group(1), (dd.group(0) if dd else ''), (d.group(1)[-200:] if d else 'no dim'))
+          EOF
       # The preview build lets reviewers download and open the site locally (N-7.4).
       - uses: actions/upload-artifact@v4
         with:

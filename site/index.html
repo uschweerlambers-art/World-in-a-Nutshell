@@ -238,6 +238,8 @@ button:disabled { cursor: default; }
 .gl-grid { font-family: var(--mono); font-size: calc(10px * var(--lbl)); color: rgba(255,255,255,0.62); text-shadow: 0 0 3px rgba(0,0,0,.95); }
 .apt-label { position: fixed; left: 0; top: 0; z-index: 2; pointer-events: none; font-family: var(--mono); font-size: calc(11px * var(--lbl)); font-weight: 600; color: #05070D; padding: 1px 6px; border-radius: 6px; background: color-mix(in srgb, var(--c-air) 92%, transparent); white-space: nowrap; }
 .sub.legend { flex-direction: row; flex-wrap: wrap; gap: 4px 12px; }
+.wx-bar { height: 8px; border-radius: 4px; margin-top: 2px; }
+.wx-scale { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
 .legend i { width: 9px; height: 9px; border-radius: 5px; flex-shrink: 0; box-shadow: 0 0 0 1px rgba(0,0,0,.4); }
 
@@ -508,6 +510,17 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <div class="row off" data-layer="event"><span class="ico" style="background:var(--c-event)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><path d="M12 2.5c.5 3.5 5.5 5.8 5.5 11a5.5 5.5 0 01-11 0c0-2.6 1.3-4.3 2.6-5.6.2 1.8 1 2.9 2 3.3-.6-3 .2-6.2.9-8.7z"/></svg></span><span class="nm">Fires, ice &amp; more</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show natural events: wildfires, ice, floods and more" data-layer-switch="event"></button></span></div>
       <div class="sub legend" id="event-sub" hidden></div>
     </section>
+    <section class="sec" aria-labelledby="h-weather">
+      <h3 id="h-weather">Weather</h3>
+      <div class="row"><span class="ico" style="background:#0A84FF"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 3s-5 5.6-5 9.5a5 5 0 0010 0C17 8.6 12 3 12 3z"/></svg></span><span class="nm">Rain <small>satellite</small></span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show rain from satellite data" data-toggle="rain"></button></span></div>
+      <div class="sub" id="wx-rain-sub" hidden></div>
+      <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 8h11a3 3 0 10-3-3M3 12h16a3 3 0 11-3 3M3 16h8"/></svg></span><span class="nm">Wind</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show animated wind" data-toggle="wind"></button></span></div>
+      <div class="sub" id="wx-wind-sub" hidden></div>
+      <div class="row"><span class="ico" style="background:linear-gradient(135deg,#3C46C8,#78D278,#F58228)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M10 14.5V5a2 2 0 014 0v9.5a4 4 0 11-4 0z"/></svg></span><span class="nm">Temperature</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show temperature map" data-toggle="temp"></button></span></div>
+      <div class="sub" id="wx-temp-sub" hidden></div>
+      <div class="row"><span class="ico" style="background:#B08850"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><circle cx="7" cy="8" r="2"/><circle cx="14" cy="6" r="1.6"/><circle cx="17" cy="12" r="2.2"/><circle cx="10" cy="14" r="2.4"/><circle cx="6" cy="18" r="1.5"/><circle cx="15" cy="18.5" r="1.7"/></svg></span><span class="nm">Haze, smoke &amp; dust</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show haze, smoke and dust (aerosols)" data-toggle="aerosol"></button></span></div>
+      <div class="sub" id="wx-aerosol-sub" hidden></div>
+    </section>
     <section class="sec" aria-labelledby="h-view">
       <h3 id="h-view">Earth</h3>
       <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 010 16z" fill="#F5F5F7"/></svg></span><span class="nm">Day and night</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show day and night" data-toggle="night"></button></span></div>
@@ -656,6 +669,8 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
         <li>Flight route, airline and aircraft type: adsbdb.com (open API), asked only when you click an aircraft. Routes come from a community database and can be out of date.</li>
         <li>Volcanoes: Smithsonian Institution, Global Volcanism Program, Volcanoes of the World (Holocene list) and the weekly volcanic activity report.</li>
         <li>Tropical storms, wildfires, sea and lake ice and other open natural events: NASA EONET, public domain (storm tracks from JTWC and NHC).</li>
+        <li>Wind and temperature: NOAA GFS weather model (1°, every 6 hours), public domain, via NOMADS. Rain: NASA GPM IMERG satellite precipitation via GIBS (about 5 hours behind). Haze, smoke and dust: NASA aerosol optical depth via GIBS (daily).</li>
+        <li>Air quality in the place details: Copernicus Atmosphere Monitoring Service (CAMS) via Open-Meteo, CC BY 4.0.</li>
         <li>Earthquakes of the last 24 hours: USGS Earthquake Hazards Program, public domain, loaded directly every 5 minutes.</li>
         <li>Radio stations: Radio Browser community database, public domain. Streams come straight from each station.</li>
       </ul>
@@ -667,7 +682,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <div data-pane="datenschutz" hidden>
       <h3>Placeholder</h3>
       <p>The privacy policy follows before launch. It will name every server your browser contacts, and GitHub Pages as the host.</p>
-      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you play a radio station, the stream comes directly from that station’s server. Both see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up weather, time zone and elevation. When you click an aircraft, its transponder code and call sign go to adsbdb.com to look up route and type.</p>
+      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you play a radio station, the stream comes directly from that station’s server. Both see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up weather, air quality, time zone and elevation. When you click an aircraft, its transponder code and call sign go to adsbdb.com to look up route and type.</p>
       <p>Already true today: this site sets no cookies, counts no visits and only asks for your location when you click. What you type into search never leaves your browser. Your display settings (sizes and colours) are kept in your own browser’s storage and are never sent anywhere.</p>
     </div>
   </div>
@@ -1241,6 +1256,7 @@ document.addEventListener('keydown', e => {
 function setToggle(key, on) {
   if (key === 'night') uniforms.nightOn.value = on ? 1 : 0;
   if (key === 'clouds') uniforms.cloudsOn.value = on ? 1 : 0;
+  if (key in WX) { setWeather(key, on); return; }
   if (key in ORIENT) {
     ORIENT[key] = on;
     if (key === 'borders' && borderLines) borderLines.visible = on;
@@ -2101,6 +2117,130 @@ function buildGrid() {
   for (const l of gridLabels) { l.w = l.el.offsetWidth; l.h = l.el.offsetHeight; }
 }
 
+/* ---------- Weather maps: rain, wind, temperature, aerosols (files from the Action) ---------- */
+const WX = { rain: false, wind: false, temp: false, aerosol: false };
+const WX_FILE = { rain: 'rain.png', temp: 'temp.jpg', aerosol: 'aerosol.png' };
+const WX_META_KEY = { rain: 'rain', wind: 'gfs', temp: 'gfs', aerosol: 'aerosol' };
+let wxMeta = null, wxMetaAt = 0;
+const wxOverlay = {};
+async function weatherMeta() {
+  if (!wxMeta || Date.now() - wxMetaAt > 10 * 60000) { wxMeta = await getJSON(LIVE + 'weather.json', 8000); wxMetaAt = Date.now(); }
+  return wxMeta;
+}
+async function setWeather(key, on) {
+  WX[key] = on;
+  const sw = $$(`[data-toggle="${key}"]`), sub = $(`#wx-${key}-sub`);
+  sw.forEach(el => el.setAttribute('aria-checked', String(on)));
+  if (!on) { if (wxOverlay[key]) wxOverlay[key].visible = false; if (key === 'wind' && windLines) windLines.visible = false; sub.hidden = true; return; }
+  try {
+    const m = (await weatherMeta())[WX_META_KEY[key]];
+    if (!m) throw new Error('missing');
+    if (key === 'wind') await loadWind(m); else await loadOverlay(key, m);
+    if (!WX[key]) return;
+    const asOf = new Date(m.valid).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+    sub.innerHTML = wxLegend(key, m) + `<span>${key === 'rain' ? 'Satellite estimate' : key === 'aerosol' ? 'Daily satellite map' : 'GFS model'}, ${key === 'aerosol' ? new Date(m.valid).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : asOf}</span>`;
+    sub.hidden = false;
+  } catch {
+    WX[key] = false; sw.forEach(el => el.setAttribute('aria-checked', 'false'));
+    toast(`${{ rain: 'Rain', wind: 'Wind', temp: 'Temperature', aerosol: 'Haze, smoke and dust' }[key]} is not available right now. Please try again later.`, 5000);
+  }
+}
+function wxLegend(key, m) {
+  if (key === 'temp') {
+    const st = m.tempStops || [], lo = st[0]?.[0] ?? -45, hi = st.at(-1)?.[0] ?? 50;
+    const g = st.map(([t, c]) => `rgb(${c.join(',')}) ${((t - lo) / (hi - lo) * 100).toFixed(0)}%`).join(',');
+    return `<div class="wx-bar" style="background:linear-gradient(90deg,${g})"></div><div class="wx-scale"><span>−40 °C</span><span>0</span><span>+20</span><span>+40 °C</span></div>`;
+  }
+  if (key === 'rain') return `<div class="wx-bar" style="background:linear-gradient(90deg,#4FA3FF,#2BE0A5,#F4E04D,#FF8C2B,#E8304A)"></div><div class="wx-scale"><span>light</span><span>heavy rain or snow</span></div>`;
+  if (key === 'aerosol') return `<div class="wx-bar" style="background:linear-gradient(90deg,#FFF5B0,#F4B24D,#C8642D,#7A2414)"></div><div class="wx-scale"><span>clear air</span><span>thick haze or smoke</span></div>`;
+  return `<div class="wx-bar" style="background:linear-gradient(90deg,#3A6EA5,#7FD3E6,#F2F2C0,#F4A259,#E8304A)"></div><div class="wx-scale"><span>calm</span><span>10 m/s</span><span>storm</span></div>`;
+}
+function loadOverlay(key, m) {
+  if (!renderer) return;
+  const ver = encodeURIComponent(m.fetched);
+  if (wxOverlay[key]?.userData.ver === ver) { wxOverlay[key].visible = true; return; }
+  return new Promise((ok, fail) => new THREE.TextureLoader().load(`${LIVE}${WX_FILE[key]}?v=${ver}`, t => {
+    t.colorSpace = THREE.NoColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    if (!wxOverlay[key]) {
+      const r = { rain: 1.011, temp: 1.0095, aerosol: 1.0098 }[key];
+      wxOverlay[key] = new THREE.Mesh(new THREE.SphereGeometry(r, 128, 96), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, opacity: { rain: 0.95, temp: 0.55, aerosol: 0.7 }[key] }));
+      wxOverlay[key].renderOrder = { temp: 0.5, aerosol: 0.6, rain: 0.7 }[key];
+      scene.add(wxOverlay[key]);
+    }
+    const o = wxOverlay[key]; o.material.map?.dispose(); o.material.map = t; o.material.needsUpdate = true; o.userData.ver = ver; o.visible = WX[key];
+    ok();
+  }, undefined, fail));
+}
+// wind: particles drift with the GFS 10 m wind, drawn as short glowing streaks
+let windData = null, windLines = null, windVer = '', windStep = 0;
+const WIND_N = innerWidth < 768 ? 2600 : 5200, WIND_TRAIL = 7, WIND_K = 0.011;
+const wp = { lat: new Float32Array(WIND_N), lon: new Float32Array(WIND_N), age: new Float32Array(WIND_N), max: new Float32Array(WIND_N) };
+async function loadWind(m) {
+  if (!renderer) return;
+  const ver = m.fetched;
+  if (windVer !== ver) {
+    const res = await fetch(`${LIVE}wind.bin?v=${encodeURIComponent(ver)}`, { signal: AbortSignal.timeout(15000) });
+    if (!res.ok) throw new Error(res.status);
+    const b = new Int8Array(await res.arrayBuffer()), n = 360 * 181;
+    if (b.length !== n * 2) throw new Error('bad wind file');
+    windData = { u: b.subarray(0, n), v: b.subarray(n) }; windVer = ver;
+  }
+  if (!windLines) {
+    windLines = fatLines('wind', 5, { vertexColors: true, additive: true });
+    setFatPositions(windLines, new Float32Array(WIND_N * 6), new Float32Array(WIND_N * 6));
+    scene.add(windLines);
+    for (let i = 0; i < WIND_N; i++) spawnWind(i, true);
+  }
+  windLines.visible = true;
+}
+function windAt(lat, lon) {
+  const y = Math.min(179.999, Math.max(0, 90 - lat)), x = ((lon + 180) % 360 + 360) % 360;
+  const y0 = Math.floor(y), x0 = Math.floor(x), fy = y - y0, fx = x - x0, x1 = (x0 + 1) % 360, y1 = y0 + 1;
+  const W = windData, i00 = y0 * 360 + x0, i01 = y0 * 360 + x1, i10 = y1 * 360 + x0, i11 = y1 * 360 + x1;
+  const bl = a => ((a[i00] * (1 - fx) + a[i01] * fx) * (1 - fy) + (a[i10] * (1 - fx) + a[i11] * fx) * fy) * 0.5;
+  return [bl(W.u), bl(W.v)];
+}
+function spawnWind(i, initial) {
+  // new particles start on the side of the Earth that faces the camera
+  const c = camera.position.clone().normalize();
+  let lat = 0, lon = 0;
+  for (let k = 0; k < 12; k++) {
+    const z = Math.random() * 2 - 1, t = Math.random() * Math.PI * 2, r = Math.sqrt(1 - z * z);
+    const x = r * Math.cos(t), y = z, zz = r * Math.sin(t);
+    lat = Math.asin(y) / DEG; lon = Math.atan2(-zz, x) / DEG;
+    if (x * c.x + y * c.y + zz * c.z > 0.15) break;
+  }
+  wp.lat[i] = lat; wp.lon[i] = lon; wp.max[i] = 60 + Math.random() * 90; wp.age[i] = initial ? Math.random() * wp.max[i] : 0;
+}
+const WIND_RAMP = [[0, [0.23, 0.43, 0.65]], [4, [0.5, 0.83, 0.9]], [9, [0.95, 0.95, 0.75]], [15, [0.96, 0.64, 0.35]], [24, [0.91, 0.19, 0.29]]];
+function windColour(sp) {
+  for (let k = 1; k < WIND_RAMP.length; k++) if (sp <= WIND_RAMP[k][0]) { const [a, ca] = WIND_RAMP[k - 1], [b, cb] = WIND_RAMP[k], f = (sp - a) / (b - a); return [ca[0] + (cb[0] - ca[0]) * f, ca[1] + (cb[1] - ca[1]) * f, ca[2] + (cb[2] - ca[2]) * f]; }
+  return WIND_RAMP.at(-1)[1];
+}
+function stepWind() {
+  if (!windData || !windLines?.visible) return;
+  const now = performance.now();
+  if (now - windStep < (reduceMotion ? 2000 : 33)) return;
+  windStep = now;
+  const pos = windLines.userData.buf, col = windLines.geometry.attributes.instanceColorStart.data.array, R = 1.0105;
+  const xyz = (lat, lon, o) => { const la = lat * DEG, lo = lon * DEG, c = Math.cos(la); pos[o] = R * c * Math.cos(lo); pos[o + 1] = R * Math.sin(la); pos[o + 2] = -R * c * Math.sin(lo); };
+  for (let i = 0; i < WIND_N; i++) {
+    let lat = wp.lat[i], lon = wp.lon[i];
+    const [u, v] = windAt(lat, lon), sp = Math.hypot(u, v), cl = Math.max(0.15, Math.cos(lat * DEG));
+    const dLat = v * WIND_K, dLon = u * WIND_K / cl;
+    if (!reduceMotion) { lat += dLat; lon += dLon; wp.age[i]++; }
+    if (wp.age[i] > wp.max[i] || lat > 85 || lat < -85 || sp < 0.4) { spawnWind(i); lat = wp.lat[i]; lon = wp.lon[i]; }
+    wp.lat[i] = lat; wp.lon[i] = ((lon + 540) % 360) - 180;
+    xyz(lat - dLat * WIND_TRAIL, lon - dLon * WIND_TRAIL, i * 6); xyz(lat, lon, i * 6 + 3);
+    // fade in and out over the particle's life (additive blending: darker = more transparent)
+    const t = wp.age[i] / wp.max[i], fade = Math.min(1, t * 6, (1 - t) * 4) * 0.9, c = windColour(sp);
+    col[i * 6] = c[0] * fade * 0.35; col[i * 6 + 1] = c[1] * fade * 0.35; col[i * 6 + 2] = c[2] * fade * 0.35;
+    col[i * 6 + 3] = c[0] * fade; col[i * 6 + 4] = c[1] * fade; col[i * 6 + 5] = c[2] * fade;
+  }
+  windLines.geometry.attributes.instanceStart.data.needsUpdate = true;
+  windLines.geometry.attributes.instanceColorStart.data.needsUpdate = true;
+}
+
 /* Per-frame work, called from the render loop */
 function updateLayers() {
   if (L.air.on && L.air.loaded) stepAir();
@@ -2117,6 +2257,7 @@ function updateLayers() {
   }
   placeIssLabel();
   placeRouteLabels();
+  if (WX.wind) stepWind();
   if (stormTracks) stormTracks.visible = L.storm.on && L.storm.loaded;
   placePop();
   updateOrientation();
@@ -2286,19 +2427,27 @@ function showPlaceInfo(p) {
   $('#pp-sub').textContent = [p.region, countryName(p.cc)].filter(Boolean).join(' · ');
   $('#pp-wx').innerHTML = '<span>Loading weather …</span>';
   const pop1 = p.popK ? (p.popK >= 1000 ? `${(p.popK / 1000).toFixed(p.popK >= 10000 ? 1 : 2)} million` : `≈ ${fmtInt(p.popK * 1000)}`) : '–';
-  $('#pp-dl').innerHTML = row('Local time', '…').replace('<dd>', '<dd id="pp-time">') + row('Date', '…').replace('<dd>', '<dd id="pp-date">') + row('Coordinates', fmtCoord(p.lat, p.lon)) + row('Population', pop1) + row('Elevation', '…').replace('<dd>', '<dd id="pp-elev">');
+  $('#pp-dl').innerHTML = row('Local time', '…').replace('<dd>', '<dd id="pp-time">') + row('Date', '…').replace('<dd>', '<dd id="pp-date">') + row('Air quality', '…').replace('<dd>', '<dd id="pp-aq" class="t">') + row('Coordinates', fmtCoord(p.lat, p.lon)) + row('Population', pop1) + row('Elevation', '…').replace('<dd>', '<dd id="pp-elev">');
   const ll = `${p.lat.toFixed(5)},${p.lon.toFixed(5)}`;
   const link = (href, text) => `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></a>`;
   $('#pp-links').innerHTML = link(`https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(p.name)}&go=Go`, 'Wikipedia')
     + link(`https://www.openstreetmap.org/?mlat=${p.lat}&mlon=${p.lon}#map=12/${p.lat}/${p.lon}`, 'OSM').replace('<a ', '<a title="OpenStreetMap" ')
     + link(`https://www.google.com/maps/search/?api=1&query=${ll}`, 'Google Maps')
     + link(`https://www.waze.com/live-map/directions?to=ll.${encodeURIComponent(ll)}`, 'Waze');
-  $('#pp-src').innerHTML = 'Sources: <a href="https://www.geonames.org" target="_blank" rel="noopener noreferrer">GeoNames</a> · <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a> weather, both CC BY 4.0';
+  $('#pp-src').innerHTML = 'Sources: <a href="https://www.geonames.org" target="_blank" rel="noopener noreferrer">GeoNames</a> · <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a> weather and CAMS air quality, CC BY 4.0';
   closePopovers();
   pop.hidden = false; popW = pop.offsetWidth; popH = pop.offsetHeight; placePop();
   requestAnimationFrame(() => pop.classList.remove('is-out'));
   panForPop();
   if (innerWidth < 768) { hidePicker(); $('#sidebar').classList.add('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'false'); }
+  // air quality (CAMS) of the place, second small request
+  getJSON(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${p.lat.toFixed(3)}&longitude=${p.lon.toFixed(3)}&current=european_aqi,pm2_5,pm10`, 8000).then(j => {
+    if (shownPlace !== p) return;
+    const c = j.current || {}, q = c.european_aqi;
+    if (!Number.isFinite(q)) { $('#pp-aq').textContent = '–'; return; }
+    const band = q <= 20 ? ['Good', '#30D158'] : q <= 40 ? ['Fair', '#A6E22E'] : q <= 60 ? ['Moderate', '#FFD60A'] : q <= 80 ? ['Poor', '#FF9F0A'] : q <= 100 ? ['Very poor', '#FF453A'] : ['Extremely poor', '#BF5AF2'];
+    $('#pp-aq').innerHTML = `<span style="color:${band[1]}">●</span> ${band[0]} <span class="mono">(${Math.round(q)})</span>${Number.isFinite(c.pm2_5) ? `<small style="display:block;color:var(--text-3)">PM2.5 ${Math.round(c.pm2_5)} · PM10 ${Math.round(c.pm10)} µg/m³</small>` : ''}`;
+  }).catch(() => { if (shownPlace === p) $('#pp-aq').textContent = '–'; });
   // weather, time zone and elevation of the place (not of the visitor): one request, only on this click
   placeWeather(p).then(j => {
     if (shownPlace !== p) return;
@@ -2385,11 +2534,12 @@ function lineStyle(role) {
     route: { color: COLORS.air, opacity: 0.95, width: 2.2 * m },
     storm: { color: '#FFFFFF', opacity: 0.95, width: 2.4 * m },
     grid: { color: '#FFFFFF', opacity: SET.scheme === 'contrast' ? 0.4 : 0.22, width: 1 * m },
+    wind: { color: '#FFFFFF', opacity: 1, width: 1.6 * m },
   }[role];
 }
 function styleFat(f) { const st = lineStyle(f.role); f.mat.color.set(st.color); f.mat.opacity = st.opacity; f.mat.linewidth = st.width; }
 function fatLines(role, order, opts = {}) {
-  const mat = new LineMaterial({ transparent: true, depthWrite: false, worldUnits: false, vertexColors: !!opts.vertexColors });
+  const mat = new LineMaterial({ transparent: true, depthWrite: false, worldUnits: false, vertexColors: !!opts.vertexColors, blending: opts.additive ? THREE.AdditiveBlending : THREE.NormalBlending });
   mat.resolution.set(innerWidth, innerHeight);
   const f = { role, mat }; FAT.add(f); styleFat(f);
   const o = new LineSegments2(new LineSegmentsGeometry(), mat);
