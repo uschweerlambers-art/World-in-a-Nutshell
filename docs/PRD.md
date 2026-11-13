@@ -176,6 +176,17 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | F-13.4 | **Gradnetz** (Default aus): Breiten- und Längenkreise alle 15°, Gradangaben entlang der Bildmitte. | M |
 | F-13.5 | EONET stündlich, Vulkanliste wöchentlich, Aktivitätsbericht zweimal täglich über die Action; fällt eine Quelle aus, bleibt der letzte Stand. | A |
 
+### F-14 Wetterkarten und Luftqualität (v0.7)
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-14.1 | **Regen:** NASA GPM IMERG (Satellit, halbstündlich, ca. 5–6 h Verzug) als transparente Farbschicht über den Wolken, Legende leicht–stark, Zeitstempel. | M |
+| F-14.2 | **Wind:** animierte Partikel nach dem 10-m-Wind des US-Modells GFS (1°, alle 6 h), Farbe nach Tempo, Legende. Bei „Bewegung reduzieren“ nur Standbild, alle 2 s neu. | M, A |
+| F-14.3 | **Temperatur:** 2-m-Temperatur aus GFS als halbtransparente Farbkarte mit Skala −40 bis +40 °C. | M |
+| F-14.4 | **Dunst, Rauch, Staub:** tägliche Aerosol-Karte (NASA GIBS, optische Dicke), nur wolkenfreie Gebiete. | M |
+| F-14.5 | **Luftqualität in der Orts-Info:** Europäischer Luftqualitätsindex mit Einstufung und PM2.5/PM10 (Copernicus CAMS über Open-Meteo), nur beim Klick, nur Koordinaten des Ortes. | M, R |
+| F-14.6 | Alle Wetterdateien baut die Action (GFS höchstens alle 3 h, Regen stündlich, Aerosole alle 6 h); fehlt eine Datei, meldet die Seite „not available right now“ und der Rest läuft weiter. | A |
+
 ### F-09 Übergreifende Bedienung
 
 | AK | Kriterium | Prüfung |
