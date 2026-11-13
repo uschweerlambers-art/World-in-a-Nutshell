@@ -1984,7 +1984,7 @@ async function loadVolcano() {
     geo.attributes.flag.array[i] = hot ? 1 : 0;
   });
   const n = items.filter(v => v.week || v.recent).length;
-  $('#volcano-sub').innerHTML = `<span>${fmtInt(items.length)} volcanoes active in the last 12,000 years. ${n ? `${n} ringed: erupting since ${year - 1}${w ? ' or in this week’s activity report' : ''}.` : ''}</span>`;
+  $('#volcano-sub').innerHTML = `<span>${fmtInt(items.length)} volcanoes active in the last 12,000 years. ${n ? `${n} ringed: erupting since ${year - 1}${w ? ' or in the latest weekly activity report' : ''}.` : ''}</span>`;
   L.volcano.loaded = true;
 }
 async function loadStorm() {

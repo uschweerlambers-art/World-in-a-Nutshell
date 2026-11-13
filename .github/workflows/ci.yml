@@ -35,10 +35,6 @@ jobs:
           node scripts/fetch-textures.mjs .cache/textures site/img/hi
           ls -la site/img/hi || true
           ls -la site/data/live
-      - name: Probe (temporary)
-        run: |
-          for f in volcanoWeek volcanoes events; do echo "== $f"; node -e "const j=require('./site/data/live/$f.json');console.log(j.count, JSON.stringify(j.rows.slice(0,4)).slice(0,1500))" || true; done
-          node -e "const m=require('./site/data/live/meta.json');console.log(JSON.stringify(m.sources.volcanoWeek))"
       # The preview build lets reviewers download and open the site locally (N-7.4).
       - uses: actions/upload-artifact@v4
         with:
