@@ -69,7 +69,7 @@ jobs:
           echo "== $G"; curl -sIL -m 30 "$G" | grep -iE "^HTTP|content-length|content-type" || true
           sudo apt-get -qq update >/dev/null && sudo apt-get -qq install -y gdal-bin python3-gdal >/dev/null && echo gdal ok
           curl -sL -m 600 -o /tmp/pop.zip "$G" && ls -la /tmp/pop.zip && unzip -o -q /tmp/pop.zip -d /tmp/pop && ls -la /tmp/pop
-          python3 tools/build-population.py /tmp/pop/*.tif /tmp/population.png
+          rm -f /tmp/pop/*.ovr /tmp/pop.zip; python3 tools/build-population.py /tmp/pop/GHS_POP_E2025_GLOBE_R2023A_4326_30ss_V1_0.tif /tmp/population.png
           echo "BEGIN-POPULATION-PNG"; base64 -w 100 /tmp/population.png; echo "END-POPULATION-PNG"
       # The preview build lets reviewers download and open the site locally (N-7.4).
       - uses: actions/upload-artifact@v4
