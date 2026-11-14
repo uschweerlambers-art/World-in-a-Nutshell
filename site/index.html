@@ -211,6 +211,9 @@ button:disabled { cursor: default; }
 .seg button:disabled { color: var(--text-4); }
 .round { width: 44px; height: 44px; border-radius: 22px; display: grid; place-items: center; background: var(--glass-soft); backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4); border: 1px solid var(--edge); padding: 0; }
 .round[aria-pressed="false"] { color: var(--text-4); }
+.round.m-view { display: none; }
+.m-view .ico-globe, body.flat .m-view .ico-map { display: none; }
+body.flat .m-view .ico-globe { display: block; }
 .round.i { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 18px; font-weight: 700; }
 
 .timeline { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(var(--sb) + 24px); width: min(612px, calc(100vw - 2 * 16px - 2 * 312px)); height: 56px; box-sizing: border-box; padding: 0 10px 0 8px; display: flex; align-items: center; gap: 14px; border-radius: 28px; background: var(--glass-soft); backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4); border: 1px solid var(--edge); }
@@ -408,6 +411,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   #arrival { top: 54%; }
   #arrival .name { font-size: 32px; }
   .toolbar .seg, .timeline, .toolbar .tn { display: none; }
+  .toolbar .round.m-view { display: grid; }
   .toolbar { flex-direction: column; gap: 0; border-radius: 22px; background: var(--glass-soft); backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4); border: 1px solid var(--edge); overflow: hidden; top: calc(var(--st) + 42px); }
   .toolbar .round { background: transparent; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; border-radius: 0; }
   .toolbar .round + .round { border-top: 1px solid rgba(255,255,255,0.14); }
@@ -443,7 +447,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 @media (max-width: 1100px) and (min-width: 768px) { .timeline { display: none; } .attrib { left: calc(50% + 156px); width: calc(100vw - 360px); } }
 </style>
 
-<canvas id="globe" aria-label="Interactive 3D globe. Drag to rotate, scroll or pinch to zoom." role="img"></canvas>
+<canvas id="globe" aria-label="Interactive 3D globe or flat world map. Drag to rotate or move, scroll or pinch to zoom." role="img"></canvas>
 <div id="geo-labels" aria-hidden="false"></div>
 <div id="nogl" hidden><p>Your browser can’t use WebGL right now, and the globe needs it. Try a current browser or turn on hardware acceleration.</p></div>
 
@@ -619,9 +623,10 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 
   <div class="toolbar">
     <div class="seg" role="group" aria-label="View">
-      <button type="button" aria-pressed="true">Globe</button>
-      <button type="button" aria-pressed="false" disabled title="Map view follows after the MVP">Map</button>
+      <button type="button" aria-pressed="true" data-view="globe">Globe</button>
+      <button type="button" aria-pressed="false" data-view="flat">Map</button>
     </div>
+    <button type="button" class="round m-view" aria-label="Show as flat map" data-view-toggle><svg class="ico-map" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 6.5l6-2.5 6 2.5 6-2.5v13.5l-6 2.5-6-2.5-6 2.5z"/><path d="M9 4v13.5M15 6.5V20"/></svg><svg class="ico-globe" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c-3 3.3-3 13.7 0 17M12 3.5c3 3.3 3 13.7 0 17"/></svg></button>
     <button type="button" class="round tn" aria-label="Day and night" aria-pressed="true" data-toggle="night"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 010 16z" fill="currentColor"/></svg></button>
     <button type="button" class="round" aria-label="Centre on my location" data-act="locate"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 3L3 10.5l7.5 3 3 7.5z"/></svg></button>
     <button type="button" class="round" aria-label="Display settings" aria-expanded="false" aria-controls="settings" id="set-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/></svg></button>
@@ -641,6 +646,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <h3>How to use the globe</h3>
     <ul>
       <li>Drag to turn the Earth, scroll or use two fingers to zoom.</li>
+      <li>“Map” unrolls the globe into a flat world map with the same layers. Drag to move it, scroll or pinch to zoom.</li>
       <li>Search finds any place with 5,000 inhabitants or more.</li>
       <li>“Surprise me” takes you to remarkable places on Earth.</li>
       <li>Day and night match the current time.</li>
@@ -862,6 +868,93 @@ const uniforms = {
   cloudMap: { value: null }, cloudReal: { value: 0 }
 };
 
+/* ---------- Globe and flat map in one scene (F-18) ---------- */
+// All data keeps its position on (or above) the sphere. The shaders bend it onto the map:
+// uFlat 0 = globe, 1 = flat equirectangular map centred on longitude uLon0. In between, the sphere
+// unrolls (its radius grows towards infinity), so globe and map turn into each other in one motion.
+// The map always has its centre at uLon0, so panning east or west never reaches an edge.
+const MORPH = { uFlat: { value: 0 }, uLon0: { value: 0 } };
+uniforms.uFlat = MORPH.uFlat; uniforms.uLon0 = MORPH.uLon0;
+const MORPH_GLSL = `
+  uniform float uFlat; uniform float uLon0;
+  vec3 wianPlace(float d, float lat, float h) {
+    float k = 1.0 - uFlat, hc = mix(h, h / (1.0 + h * 30.0), uFlat);
+    vec3 P;
+    if (k < 0.002) P = vec3(d, lat, hc);
+    else {
+      float R = 1.0 / k, a = d * k, b = lat * k, rr = R + hc, cb = cos(b), sa = sin(a * 0.5), sb = sin(b * 0.5);
+      P = vec3(rr * cb * sin(a), rr * sin(b), -2.0 * rr * (cb * sa * sa + sb * sb) + hc);
+    }
+    float c0 = cos(uLon0), s0 = sin(uLon0);
+    return vec3(c0 * (P.z + 1.0) - s0 * P.x, P.y, -s0 * (P.z + 1.0) - c0 * P.x);
+  }
+  float wianDelta(vec3 p) { return mod(atan(-p.z, p.x) - uLon0 + 3.14159265, 6.28318531) - 3.14159265; }
+  vec3 wianMorph(vec3 p) {
+    if (uFlat <= 0.0) return p;
+    float r = length(p);
+    return wianPlace(wianDelta(p), asin(clamp(p.y / r, -1.0, 1.0)), r - 1.0);
+  }
+`;
+// meshes that cover the whole Earth (surface, clouds, weather, conflicts) are a lon/lat grid centred on uLon0
+const MAP_VERT = MORPH_GLSL + `
+  varying vec2 vUv; varying vec3 vN; varying vec3 vPos;
+  void main(){
+    float lon = uLon0 + position.x, lat = position.y;
+    vN = vec3(cos(lat) * cos(lon), sin(lat), -cos(lat) * sin(lon));
+    vPos = uFlat <= 0.0 ? vN * (1.0 + position.z) : wianPlace(position.x, lat, position.z);
+    vUv = vec2(lon / 6.28318531 + 0.5, lat / 3.14159265 + 0.5);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(vPos, 1.0);
+  }`;
+function mapGrid(h, wSeg = 128, hSeg = 96) {
+  const pos = [], idx = [];
+  for (let j = 0; j <= hSeg; j++) for (let i = 0; i <= wSeg; i++) pos.push(-Math.PI + 2 * Math.PI * i / wSeg, -Math.PI / 2 + Math.PI * j / hSeg, h);
+  for (let j = 0; j < hSeg; j++) for (let i = 0; i < wSeg; i++) { const a = j * (wSeg + 1) + i, c = a + wSeg + 1; idx.push(a, a + 1, c + 1, a, c + 1, c); }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx);
+  return g;
+}
+function mapMesh(h, mat, wSeg, hSeg) { const m = new THREE.Mesh(mapGrid(h, wSeg, hSeg), mat); m.frustumCulled = false; return m; }
+// textures are sampled across the date line, so they repeat sideways
+function wrapTex(t) { t.wrapS = THREE.RepeatWrapping; return t; } // always before the first upload
+// plain three.js line materials follow the morph too
+function morphBasic(mat) {
+  mat.onBeforeCompile = sh => {
+    sh.uniforms.uFlat = MORPH.uFlat; sh.uniforms.uLon0 = MORPH.uLon0;
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\n' + MORPH_GLSL).replace('#include <begin_vertex>', 'vec3 transformed = wianMorph(position);');
+  };
+  mat.customProgramCacheKey = () => 'wian-morph';
+  return mat;
+}
+// fat lines: both ends follow the morph; a segment that crosses the map edge is dropped
+function morphLineShader(vs) {
+  const out = vs.replace('void main() {', MORPH_GLSL + '\n\t\tvoid main() {')
+    .replace('vec4 start = modelViewMatrix * vec4( instanceStart, 1.0 );', 'float wCut = uFlat > 0.0 && abs(wianDelta(instanceStart) - wianDelta(instanceEnd)) > 3.14159265 ? 1.0 : 0.0;\n\t\t\tvec4 start = modelViewMatrix * vec4( wianMorph(instanceStart), 1.0 );')
+    .replace('vec4 end = modelViewMatrix * vec4( instanceEnd, 1.0 );', 'vec4 end = modelViewMatrix * vec4( wianMorph(instanceEnd), 1.0 );')
+    .replace('#include <logdepthbuf_vertex>', 'if (wCut > 0.5) gl_Position = vec4(0.0, 0.0, 2.0, 1.0);\n\t\t\t#include <logdepthbuf_vertex>');
+  return out;
+}
+
+// the same placement in JavaScript, for labels, popups and clicks
+const VIEW = { mode: 'globe', t: 0, lon0: 0, lat: 0, h: 1.5, anim: null, vx: 0, vy: 0, moved: 0 };
+const TAU = Math.PI * 2;
+const wrapPi = a => a - TAU * Math.floor((a + Math.PI) / TAU);
+function placeJS(d, lat, h, out) {
+  const t = VIEW.t, k = 1 - t, hc = h + (h / (1 + h * 30) - h) * t;
+  let x, y, z;
+  if (k < 0.002) { x = d; y = lat; z = hc; }
+  else {
+    const R = 1 / k, a = d * k, b = lat * k, rr = R + hc, cb = Math.cos(b), sa = Math.sin(a / 2), sb = Math.sin(b / 2);
+    x = rr * cb * Math.sin(a); y = rr * Math.sin(b); z = -2 * rr * (cb * sa * sa + sb * sb) + hc;
+  }
+  const c0 = Math.cos(VIEW.lon0), s0 = Math.sin(VIEW.lon0);
+  return out.set(c0 * (z + 1) - s0 * x, y, -s0 * (z + 1) - c0 * x);
+}
+function morphJS(v, out) {
+  if (VIEW.t <= 0) return out.copy(v);
+  const r = v.length();
+  return placeJS(wrapPi(Math.atan2(-v.z, v.x) - VIEW.lon0), Math.asin(Math.max(-1, Math.min(1, v.y / r))), r - 1, out);
+}
+
 if (renderer) {
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.setSize(innerWidth, innerHeight, false);
@@ -875,12 +968,10 @@ if (renderer) {
   controls.autoRotate = !reduceMotion; controls.autoRotateSpeed = 0.25;
 
   // Earth
-  const earthGeo = new THREE.SphereGeometry(1, 128, 96);
   const earthMat = new THREE.ShaderMaterial({
     uniforms,
-    vertexShader: `varying vec2 vUv; varying vec3 vN; varying vec3 vPos;
-      void main(){ vUv = uv; vN = normalize(position); vPos = position; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
-    fragmentShader: `uniform sampler2D dayMap; uniform sampler2D nightMap; uniform sampler2D specMap; uniform vec3 sunDir; uniform float nightOn;
+    vertexShader: MAP_VERT,
+    fragmentShader: `uniform sampler2D dayMap; uniform sampler2D nightMap; uniform sampler2D specMap; uniform vec3 sunDir; uniform float nightOn; uniform float uFlat;
       varying vec2 vUv; varying vec3 vN; varying vec3 vPos;
       void main(){
         vec3 n = normalize(vN);
@@ -894,16 +985,16 @@ if (renderer) {
         vec3 v = normalize(cameraPosition - vPos);
         float spec = texture2D(specMap, vUv).r;
         vec3 h = normalize(sunDir + v);
-        float s = pow(max(dot(n, h), 0.0), 38.0) * spec * 0.55 * dayAmt * nightOn;
+        float s = pow(max(dot(n, h), 0.0), 38.0) * spec * 0.55 * dayAmt * nightOn * (1.0 - uFlat);
         vec3 col = mix(night + day * 0.035, dayCol, dayAmt) + vec3(1.0, 0.93, 0.8) * s;
         float tw = (1.0 - abs(smoothstep(-0.11, 0.16, d) * 2.0 - 1.0)) * nightOn;
         col += vec3(0.30, 0.10, 0.03) * tw * 0.22;
-        float rim = pow(1.0 - max(dot(n, v), 0.0), 3.0);
+        float rim = pow(1.0 - max(dot(n, v), 0.0), 3.0) * (1.0 - uFlat);
         col += vec3(0.32, 0.58, 1.0) * rim * 0.38 * (0.25 + 0.75 * dayAmt);
         gl_FragColor = vec4(col, 1.0);
       }`
   });
-  scene.add(new THREE.Mesh(earthGeo, earthMat));
+  scene.add(mapMesh(0, earthMat));
 
   // Clouds (procedural placeholder until NASA GIBS daily imagery is wired in)
   const noise = `
@@ -930,9 +1021,9 @@ if (renderer) {
     }`;
   const cloudMat = new THREE.ShaderMaterial({
     uniforms, transparent: true, depthWrite: false,
-    vertexShader: `varying vec3 vN; varying vec3 vPos; varying vec2 vUv; void main(){ vN = normalize(position); vPos = position; vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+    vertexShader: MAP_VERT,
     fragmentShader: noise + `
-      uniform vec3 sunDir; uniform float nightOn; uniform float time; uniform float cloudsOn; uniform sampler2D cloudMap; uniform float cloudReal;
+      uniform vec3 sunDir; uniform float nightOn; uniform float time; uniform float cloudsOn; uniform sampler2D cloudMap; uniform float cloudReal; uniform float uFlat;
       varying vec3 vN; varying vec3 vPos; varying vec2 vUv;
       void main(){
         vec3 n = normalize(vN);
@@ -948,20 +1039,20 @@ if (renderer) {
         float d = dot(n, sunDir);
         float lit = mix(0.95, smoothstep(-0.18, 0.25, d) * 0.95 + 0.04, nightOn);
         vec3 v = normalize(cameraPosition - vPos);
-        float edge = smoothstep(0.0, 0.25, dot(n, v));
+        float edge = mix(smoothstep(0.0, 0.25, dot(n, v)), 1.0, uFlat);
         gl_FragColor = vec4(vec3(lit), c * 0.78 * edge * cloudsOn);
       }`
   });
-  const clouds = new THREE.Mesh(new THREE.SphereGeometry(1.008, 96, 72), cloudMat);
+  const clouds = mapMesh(0.008, cloudMat, 96, 72);
   scene.add(clouds);
 
   // Atmosphere glow
   const atmo = new THREE.Mesh(new THREE.SphereGeometry(1.09, 64, 48), new THREE.ShaderMaterial({
-    side: THREE.BackSide, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
+    side: THREE.BackSide, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, uniforms: { uFlat: MORPH.uFlat },
     vertexShader: `varying vec3 vNv; void main(){ vNv = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
-    fragmentShader: `varying vec3 vNv; void main(){ float i = pow(max(0.72 - dot(vNv, vec3(0.0,0.0,1.0)), 0.0), 3.2); gl_FragColor = vec4(0.30, 0.56, 1.0, 1.0) * i * 1.6; }`
+    fragmentShader: `uniform float uFlat; varying vec3 vNv; void main(){ float i = pow(max(0.72 - dot(vNv, vec3(0.0,0.0,1.0)), 0.0), 3.2); float f = 1.0 - uFlat; gl_FragColor = vec4(0.30, 0.56, 1.0, 1.0) * i * 1.6 * f * f; }`
   }));
-  scene.add(atmo);
+  scene.add(atmo); VIEW.atmo = atmo;
 
   // Stars
   const starGeo = new THREE.BufferGeometry();
@@ -986,7 +1077,7 @@ manager.onProgress = (url, loaded, total) => {
 };
 manager.onError = () => { $('#loadtext').textContent = 'Some Earth textures could not be loaded'; };
 const loader = new THREE.TextureLoader(manager);
-const tex = (url) => { const t = loader.load(url); t.colorSpace = THREE.NoColorSpace; t.anisotropy = renderer ? Math.min(8, renderer.capabilities.getMaxAnisotropy()) : 1; return t; };
+const tex = (url) => { const t = wrapTex(loader.load(url)); t.colorSpace = THREE.NoColorSpace; t.anisotropy = renderer ? Math.min(8, renderer.capabilities.getMaxAnisotropy()) : 1; return t; };
 if (renderer) {
   uniforms.dayMap.value = tex('img/earth-day-1k.jpg');
   uniforms.nightMap.value = tex('img/earth-night-1k.jpg');
@@ -995,8 +1086,8 @@ if (renderer) {
     manager.onLoad = null;
     // progressive: swap to 4k once the light version is up
     const hi = new THREE.TextureLoader();
-    hi.load('img/earth-blue-marble.jpg', t => { if (uniforms.dayMap.value?.image?.width >= 8192) return; setTimeout(loadHiResEarth, 300); t.colorSpace = THREE.NoColorSpace; t.anisotropy = uniforms.dayMap.value.anisotropy; uniforms.dayMap.value = t; });
-    hi.load('img/earth-night.jpg', t => { if (uniforms.nightMap.value?.image?.width >= 8192) return; t.colorSpace = THREE.NoColorSpace; t.anisotropy = uniforms.nightMap.value.anisotropy; uniforms.nightMap.value = t; });
+    hi.load('img/earth-blue-marble.jpg', t => { if (uniforms.dayMap.value?.image?.width >= 8192) return; setTimeout(loadHiResEarth, 300); wrapTex(t); t.colorSpace = THREE.NoColorSpace; t.anisotropy = uniforms.dayMap.value.anisotropy; uniforms.dayMap.value = t; });
+    hi.load('img/earth-night.jpg', t => { if (uniforms.nightMap.value?.image?.width >= 8192) return; wrapTex(t); t.colorSpace = THREE.NoColorSpace; t.anisotropy = uniforms.nightMap.value.anisotropy; uniforms.nightMap.value = t; });
   };
 }
 
@@ -1005,7 +1096,7 @@ if (renderer) (async () => {
   try {
     const meta = await (await fetch('data/live/clouds.json', { cache: 'no-cache' })).json();
     new THREE.TextureLoader().load(`data/live/clouds.jpg?${encodeURIComponent(meta.fetched)}`, t => {
-      t.colorSpace = THREE.NoColorSpace; t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+      wrapTex(t); t.colorSpace = THREE.NoColorSpace; t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
       uniforms.cloudMap.value = t; uniforms.cloudReal.value = 1;
       const d = new Date(meta.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
       $('#attrib-clouds').textContent = `NASA GIBS, ${d}`;
@@ -1031,10 +1122,9 @@ function buildOutline(id, color) {
       const steps = Math.max(1, Math.ceil(Math.hypot(lo2 - lo1, la2 - la1) / 1.5));
       for (let s = 0; s < steps; s++) { const t = s / steps; pts.push(vecFromLatLon(la1 + (la2 - la1) * t, lo1 + (lo2 - lo1) * t, 1.004)); }
     }
-    const geo = new THREE.BufferGeometry().setFromPoints(pts);
-    g.add(new THREE.LineLoop(geo, new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.95 })));
-    const glow = new THREE.LineLoop(geo, new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.35 }));
-    glow.scale.setScalar(1.002); g.add(glow);
+    const line = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts), morphBasic(new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.95 })));
+    const glow = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts.map(p => p.clone().multiplyScalar(1.002))), morphBasic(new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.35 })));
+    line.frustumCulled = glow.frustumCulled = false; g.add(line, glow);
   }
   g.visible = false; scene.add(g); outlines[id] = g; return g;
 }
@@ -1058,6 +1148,8 @@ let flight = null;
 function camState() { const d = camera.position.length(); return { dir: camera.position.clone().normalize(), dist: d }; }
 function flyTo(lat, lon, dist = 1.8, done) {
   if (!renderer) { done?.(); return; }
+  finishViewAnim();
+  if (VIEW.mode === 'flat') { flyFlat(lat * DEG, lon * DEG, dist - 1, done); return; }
   const from = camState();
   const toDir = vecFromLatLon(lat, lon).normalize();
   const angle = from.dir.angleTo(toDir);
@@ -1078,6 +1170,12 @@ const ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 function stepFlight(now) {
   if (!flight) return;
   const t = Math.min(1, (now - flight.t0) / flight.dur), e = ease(t);
+  if (flight.flat) {
+    const f = flight;
+    VIEW.lon0 = f.lon0 + f.dLon * e; VIEW.lat = f.lat0 + (f.lat1 - f.lat0) * e; VIEW.h = f.h0 + (f.h1 - f.h0) * e + f.bump * Math.sin(Math.PI * e);
+    if (t >= 1) { flight = null; clampFlat(); f.done?.(); }
+    return;
+  }
   const dir = slerpDir(flight.from.dir, flight.toDir, flight.angle, e);
   const dist = flight.from.dist + (flight.toDist - flight.from.dist) * e + flight.bump * Math.sin(Math.PI * e);
   camera.position.copy(dir.multiplyScalar(dist));
@@ -1092,12 +1190,175 @@ function setMarker(lat, lon) { markerAt = lat == null ? null : vecFromLatLon(lat
 const tmpV = new THREE.Vector3();
 function placeMarker() {
   if (!markerAt) return;
-  const facing = markerAt.clone().normalize().dot(camera.position.clone().normalize());
-  if (facing < 0.2) { markerEl.style.opacity = 0; return; }
-  tmpV.copy(markerAt).project(camera);
-  markerEl.style.opacity = Math.min(1, (facing - 0.2) * 4);
-  markerEl.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight}px)`;
+  const p = screenPos(markerAt, 0.2);
+  if (!p) { markerEl.style.opacity = 0; return; }
+  markerEl.style.opacity = Math.min(1, (p.f - 0.2) * 4);
+  markerEl.style.transform = `translate(${p.x}px, ${p.y}px)`;
 }
+
+/* ---------- Screen positions in both views ---------- */
+const projT = new THREE.Vector3();
+// pixel position of a point on or above the sphere; null on the far side, off the map or while the view changes
+function screenPos(v, minFacing = 0.2) {
+  if (VIEW.t > 0 && VIEW.t < 1) return null;
+  let f = 1;
+  if (VIEW.t === 0) {
+    f = v.dot(camera.position) / (v.length() * camera.position.length());
+    if (f < minFacing) return null;
+    projT.copy(v).project(camera);
+  } else {
+    morphJS(v, projT).project(camera);
+    if (projT.z > 1 || Math.abs(projT.x) > 1.3 || Math.abs(projT.y) > 1.3) return null;
+  }
+  return { x: (projT.x * 0.5 + 0.5) * innerWidth, y: (-projT.y * 0.5 + 0.5) * innerHeight, f };
+}
+// true when the Earth hides a point above the surface (globe only; on the map nothing is behind the Earth)
+const behV = new THREE.Vector3();
+function behindEarth(v) {
+  if (VIEW.t > 0) return VIEW.t < 1;
+  const cam = camera.position, dirV = behV.copy(v).sub(cam), len = dirV.length(); dirV.divideScalar(len);
+  const b = cam.dot(dirV), c = cam.lengthSq() - 1, disc = b * b - c;
+  return disc > 0 && -b - Math.sqrt(disc) > 0 && -b - Math.sqrt(disc) < len;
+}
+// how far away the viewer is, as distance from the Earth's centre (the map uses the same scale)
+const camDist = () => VIEW.mode === 'flat' || VIEW.t > 0 ? 1 + VIEW.h : camera.position.length();
+function viewCenterLL() {
+  if (VIEW.mode === 'flat' || VIEW.t > 0) return { lat: VIEW.lat / DEG, lon: wrapPi(VIEW.lon0) / DEG };
+  const d = camera.position.clone().normalize();
+  return { lat: Math.asin(d.y) / DEG, lon: Math.atan2(-d.z, d.x) / DEG };
+}
+
+/* ---------- Flat map: camera, navigation and the change between globe and map ---------- */
+const FLAT_H_MIN = 0.035;
+const tanHalfFov = () => Math.tan(camera.fov * DEG / 2);
+// zoomed out at most until the whole width of the world fits the screen
+const flatHMax = () => Math.min(6, Math.PI / (tanHalfFov() * camera.aspect));
+function clampFlat() {
+  VIEW.h = Math.min(flatHMax(), Math.max(FLAT_H_MIN, VIEW.h));
+  const half = VIEW.h * tanHalfFov(), lim = Math.max(0, Math.PI / 2 - half);
+  VIEW.lat = Math.min(lim, Math.max(-lim, VIEW.lat));
+  VIEW.lon0 = wrapPi(VIEW.lon0);
+}
+const tmpC = new THREE.Vector3();
+// the camera hangs above the map centre, along the surface normal of the (partly) unrolled sphere
+function flatCamera() {
+  const k = 1 - VIEW.t, b = VIEW.lat * (k < 0.002 ? 0 : k), c0 = Math.cos(VIEW.lon0), s0 = Math.sin(VIEW.lon0);
+  const dirW = (x, y, z, out) => out.set(c0 * z - s0 * x, y, -s0 * z - c0 * x);
+  placeJS(0, VIEW.lat, 0, tmpC);
+  camera.position.copy(tmpC).addScaledVector(dirW(0, Math.sin(b), Math.cos(b), tmpV), VIEW.h);
+  dirW(0, Math.cos(b), -Math.sin(b), camera.up);
+  camera.lookAt(tmpC);
+}
+function flyFlat(lat, lon, h, done) {
+  const h1 = Math.min(flatHMax(), Math.max(FLAT_H_MIN, h));
+  const lim = Math.max(0, Math.PI / 2 - h1 * tanHalfFov()), lat1 = Math.min(lim, Math.max(-lim, lat));
+  const dLon = wrapPi(lon - VIEW.lon0), ang = Math.hypot(dLon, lat1 - VIEW.lat);
+  VIEW.vx = VIEW.vy = 0;
+  if (reduceMotion) { VIEW.lon0 += dLon; VIEW.lat = lat1; VIEW.h = h1; clampFlat(); done?.(); return; }
+  flight = { flat: true, lon0: VIEW.lon0, dLon, lat0: VIEW.lat, lat1, h0: VIEW.h, h1, bump: Math.min(1.2, ang * 0.35), t0: performance.now(), dur: Math.min(2600, Math.max(900, 900 + ang * 500)), done };
+}
+function setView(mode) {
+  if (!renderer || mode === VIEW.mode) return;
+  closePopovers();
+  // a running flight jumps to its end first, so whatever waits for it (arrival, wonder card) still happens
+  if (flight) stepFlight(flight.t0 + flight.dur + 1);
+  if (mode === 'flat') {
+    // start from what the globe shows now
+    controls.enabled = false; controls.autoRotate = false;
+    const d = camera.position.clone().normalize();
+    VIEW.lon0 = Math.atan2(-d.z, d.x); VIEW.lat = Math.asin(d.y); VIEW.h = camera.position.length() - 1;
+  }
+  VIEW.mode = mode; VIEW.vx = VIEW.vy = 0;
+  document.body.classList.toggle('flat', mode === 'flat');
+  $$('[data-view]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.view === mode)));
+  $$('[data-view-toggle]').forEach(b => b.setAttribute('aria-label', mode === 'flat' ? 'Show as globe' : 'Show as flat map'));
+  // target framing: the map may go closer than the globe, the globe keeps its own limits
+  const h0 = VIEW.h, lat0 = VIEW.lat;
+  let h1 = h0, lat1 = lat0;
+  if (mode === 'flat') { const keep = [VIEW.h, VIEW.lat]; clampFlat(); h1 = VIEW.h; lat1 = VIEW.lat; [VIEW.h, VIEW.lat] = keep; }
+  else h1 = Math.min(6, Math.max(0.25, h0));
+  VIEW.anim = { from: VIEW.t, to: mode === 'flat' ? 1 : 0, h0, h1, lat0, lat1, t0: performance.now(), dur: reduceMotion ? 0 : 1500 };
+  if (VIEW.atmo) VIEW.atmo.visible = true;
+}
+function stepView(now) {
+  const a = VIEW.anim, p = a.dur ? Math.min(1, (now - a.t0) / a.dur) : 1, e = ease(p);
+  VIEW.t = a.from + (a.to - a.from) * e;
+  VIEW.h = a.h0 + (a.h1 - a.h0) * e; VIEW.lat = a.lat0 + (a.lat1 - a.lat0) * e;
+  if (p >= 1) {
+    VIEW.t = a.to; VIEW.anim = null;
+    if (a.to === 0) {
+      // back to the globe: hand the camera to the orbit controls again
+      camera.up.set(0, 1, 0);
+      camera.position.copy(vecFromLatLon(VIEW.lat / DEG, VIEW.lon0 / DEG).multiplyScalar(1 + VIEW.h));
+      camera.lookAt(0, 0, 0); controls.enabled = true; controls.update();
+    } else if (VIEW.atmo) VIEW.atmo.visible = false;
+    MORPH.uFlat.value = VIEW.t;
+    layoutLabels(true);
+    return;
+  }
+  MORPH.uFlat.value = VIEW.t;
+  flatCamera();
+}
+function finishViewAnim() { if (VIEW.anim) { VIEW.anim.dur = 0; stepView(performance.now()); } }
+function frameView(now) {
+  if (VIEW.anim) { stepView(now); MORPH.uLon0.value = VIEW.lon0; return; }
+  if (VIEW.mode === 'flat') {
+    if (flight) stepFlight(now);
+    else if (!FP.size && (Math.abs(VIEW.vx) > 1e-6 || Math.abs(VIEW.vy) > 1e-6)) {
+      VIEW.lon0 += VIEW.vx; VIEW.lat += VIEW.vy; VIEW.vx *= 0.9; VIEW.vy *= 0.9; clampFlat();
+    }
+    MORPH.uLon0.value = VIEW.lon0;
+    flatCamera();
+  } else if (flight) stepFlight(now); else controls.update();
+}
+// map navigation: drag to move, wheel or pinch to zoom (the globe keeps its orbit controls)
+const FP = new Map();
+const unitsPerPx = () => 2 * VIEW.h * tanHalfFov() / innerHeight;
+function zoomFlatAt(x, y, f) {
+  const upp = unitsPerPx(), mx = (x + focus.x - innerWidth / 2) * upp, my = (innerHeight / 2 - y - focus.y) * upp;
+  const h1 = Math.min(flatHMax(), Math.max(FLAT_H_MIN, VIEW.h * f)), k = h1 / VIEW.h;
+  VIEW.lon0 += mx * (1 - k); VIEW.lat += my * (1 - k); VIEW.h = h1; clampFlat();
+}
+const flatInput = () => VIEW.mode === 'flat' && !VIEW.anim && !flight; // like the globe: no steering during a flight
+canvas.addEventListener('pointerdown', e => {
+  if (!flatInput()) return;
+  try { canvas.setPointerCapture(e.pointerId); } catch {}
+  FP.set(e.pointerId, [e.clientX, e.clientY]); VIEW.vx = VIEW.vy = 0;
+});
+canvas.addEventListener('pointermove', e => {
+  if (!flatInput() || !FP.has(e.pointerId)) return;
+  const prev = FP.get(e.pointerId), upp = unitsPerPx();
+  if (FP.size === 1) {
+    const dx = (e.clientX - prev[0]) * upp, dy = (e.clientY - prev[1]) * upp;
+    VIEW.lon0 -= dx; VIEW.lat += dy;
+    if (!reduceMotion) { VIEW.vx = -dx; VIEW.vy = dy; }
+    VIEW.moved = performance.now();
+  } else if (FP.size === 2) {
+    const other = [...FP.entries()].find(([id]) => id !== e.pointerId)[1];
+    const d0 = Math.hypot(prev[0] - other[0], prev[1] - other[1]), d1 = Math.hypot(e.clientX - other[0], e.clientY - other[1]);
+    const mx0 = (prev[0] + other[0]) / 2, my0 = (prev[1] + other[1]) / 2, mx1 = (e.clientX + other[0]) / 2, my1 = (e.clientY + other[1]) / 2;
+    VIEW.lon0 -= (mx1 - mx0) * upp; VIEW.lat += (my1 - my0) * upp;
+    if (d0 > 0 && d1 > 0) zoomFlatAt(mx1, my1, d0 / d1);
+    VIEW.vx = VIEW.vy = 0;
+  }
+  FP.set(e.pointerId, [e.clientX, e.clientY]);
+  clampFlat();
+});
+const flatUp = e => {
+  if (!FP.delete(e.pointerId)) return;
+  if (FP.size || performance.now() - VIEW.moved > 80) VIEW.vx = VIEW.vy = 0;
+};
+canvas.addEventListener('pointerup', flatUp);
+canvas.addEventListener('pointercancel', flatUp);
+canvas.addEventListener('wheel', e => {
+  if (!flatInput()) return;
+  e.preventDefault();
+  zoomFlatAt(e.clientX, e.clientY, Math.exp(Math.max(-1, Math.min(1, e.deltaY * (e.deltaMode ? 0.05 : 0.0016)))));
+}, { passive: false });
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-view], [data-view-toggle]'); if (!b) return;
+  setView(b.dataset.view || (VIEW.mode === 'flat' ? 'globe' : 'flat'));
+});
 
 /* ---------- Render loop ---------- */
 function updateSun() {
@@ -1113,7 +1374,7 @@ if (renderer) {
   renderer.setAnimationLoop(now => {
     if (document.hidden) return;
     if (!reduceMotion) uniforms.time.value += clock.getDelta() * 60; else clock.getDelta();
-    if (flight) stepFlight(performance.now()); else controls.update();
+    frameView(performance.now());
     applyFocus();
     placeMarker();
     updateLayers();
@@ -1121,6 +1382,7 @@ if (renderer) {
   });
   addEventListener('resize', () => {
     camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+    if (VIEW.mode === 'flat' && !VIEW.anim) clampFlat();
     renderer.setSize(innerWidth, innerHeight, false);
     for (const f of FAT) f.mat.resolution.set(innerWidth, innerHeight);
   });
@@ -1576,22 +1838,23 @@ function pointsMaterial(kind, color, opts = {}) {
       color: { value: new THREE.Color(color) }, px: { value: Math.min(devicePixelRatio, 2) },
       aspect: { value: innerWidth / innerHeight }, time: { value: 0 }, glyph: { value: kind === 1 ? opts.glyph || planeTexture() : kind === 3 ? opts.glyph : null }, useCol: { value: opts.useCol ? 1 : 0 },
       limb: { value: opts.limb ?? 1 }, zoom: { value: 1 }, pulse: { value: reduceMotion ? 0 : 1 }, sel: { value: -1 }, ui: { value: symF() },
+      uFlat: MORPH.uFlat, uLon0: MORPH.uLon0,
     },
-    vertexShader: `
+    vertexShader: MORPH_GLSL + `
       attribute float size; attribute vec3 dir; attribute float flag; attribute float idx; attribute vec3 col; varying vec3 vCol;
       uniform float px; uniform float aspect; uniform float time; uniform float limb; uniform float pulse; uniform float sel; uniform float zoom; uniform float ui;
       varying float vAng; varying float vAlpha; varying float vFlag; varying float vPulse; varying float vSel;
       void main(){
-        vec4 mv = modelViewMatrix * vec4(position, 1.0);
+        vec4 mv = modelViewMatrix * vec4(wianMorph(position), 1.0);
         gl_Position = projectionMatrix * mv;
         vec3 n = normalize(position);
         vec3 toCam = normalize(cameraPosition - position);
         float facing = dot(n, toCam);
-        vAlpha = mix(1.0, smoothstep(-0.02, 0.18, facing), limb);
+        vAlpha = mix(1.0, smoothstep(-0.02, 0.18, facing), limb * (1.0 - uFlat));
         vFlag = flag; vSel = abs(idx - sel) < 0.5 ? 1.0 : 0.0; vCol = col;
         float s = size;
         ${kind === 1 ? `
-        vec4 c1 = projectionMatrix * modelViewMatrix * vec4(position + dir * 0.01, 1.0);
+        vec4 c1 = projectionMatrix * modelViewMatrix * vec4(wianMorph(position + dir * 0.01), 1.0);
         vec2 d = c1.xy / c1.w - gl_Position.xy / gl_Position.w; d.x *= aspect;
         vAng = atan(d.x, d.y);` : 'vAng = 0.0;'}
         vPulse = 0.0;
@@ -1752,11 +2015,8 @@ function placeIssLabel() {
   const s = L.sat.on && issIdx >= 0 && L.sat.items[issIdx]?.cur;
   if (!s) { issLabel.hidden = true; return; }
   tmpV.set(s.x, s.y, s.z);
-  // hidden when the Earth is in between
-  const cam = camera.position, dirV = tmpV.clone().sub(cam), len = dirV.length(); dirV.divideScalar(len);
-  const b = cam.dot(dirV), c = cam.lengthSq() - 1, disc = b * b - c;
-  const blocked = disc > 0 && (-b - Math.sqrt(disc)) > 0 && (-b - Math.sqrt(disc)) < len;
-  tmpV.project(camera);
+  const blocked = behindEarth(tmpV); // hidden when the Earth is in between
+  morphJS(tmpV, tmpV).project(camera);
   issLabel.hidden = blocked || tmpV.z > 1;
   issLabel.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth + 10}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight - 26}px)`;
 }
@@ -1834,7 +2094,7 @@ function buildRadioClusters() {
   }
 }
 function radioLevel() {
-  const d = camera.position.length();
+  const d = camDist();
   return RADIO_LEVELS.find(lv => d >= lv.from) || null;
 }
 function distKm(a, b, c, d) {
@@ -1846,8 +2106,7 @@ function nearestStations(lat, lon, n = 6, exceptId) {
 }
 function viewCenter() {
   if (here) return here;
-  const d = camera.position.clone().normalize();
-  return { lat: Math.asin(d.y) / DEG, lon: Math.atan2(-d.z, d.x) / DEG };
+  return viewCenterLL();
 }
 function showNearby() {
   const c = viewCenter();
@@ -1994,7 +2253,7 @@ canvas.addEventListener('pointerup', e => {
   const hit = pick(e.clientX, e.clientY);
   if (hit?.group) {
     // zoom into a group of stations
-    const v = hit.group.v.clone().normalize(), d = camera.position.length();
+    const v = hit.group.v.clone().normalize(), d = camDist();
     flyTo(Math.asin(v.y) / DEG, Math.atan2(-v.z, v.x) / DEG, Math.max(1.6, d * 0.55));
     return;
   }
@@ -2005,7 +2264,8 @@ canvas.addEventListener('pointerup', e => {
 });
 const projV = new THREE.Vector3();
 function pick(x, y) {
-  const camDir = camera.position.clone().normalize();
+  if (VIEW.t > 0 && VIEW.t < 1) return null;
+  const camDir = camera.position.clone().normalize(), flat = VIEW.t === 1;
   let best = null, bestD = innerWidth < 768 ? 22 : 14;
   for (const key of ['sat', 'air', 'ship', 'storm', 'volcano', 'event', 'quake', 'power', 'radio']) {
     const st = L[key]; if (!st.on || !st.loaded || !st.pos) continue;
@@ -2014,12 +2274,11 @@ function pick(x, y) {
     for (let i = 0; i < n; i++) {
       projV.set(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]);
       if (key === 'sat') {
-        if (projV.lengthSq() === 0) continue;
-        const dirV = projV.clone().sub(camera.position), len = dirV.length(); dirV.divideScalar(len);
-        const b = camera.position.dot(dirV), c = camera.position.lengthSq() - 1, disc = b * b - c;
-        if (disc > 0 && -b - Math.sqrt(disc) > 0 && -b - Math.sqrt(disc) < len) continue;
-      } else if (projV.clone().normalize().dot(camDir) < 0.25) continue;
+        if (projV.lengthSq() === 0 || behindEarth(projV)) continue;
+      } else if (!flat && projV.clone().normalize().dot(camDir) < 0.25) continue;
+      if (flat) morphJS(projV, projV);
       projV.project(camera);
+      if (flat && projV.z > 1) continue;
       const sx = (projV.x * 0.5 + 0.5) * innerWidth, sy = (-projV.y * 0.5 + 0.5) * innerHeight;
       const d = Math.hypot(sx - x, sy - y) - (key === 'quake' ? Math.max(0, st.items[i].mag) * 1.2 : key === 'power' ? Math.min(8, Math.sqrt(st.items[i].mw) * 0.15) : lv ? Math.min(12, lv.groups[i].m.length) : 0);
       if (d < bestD) { bestD = d; best = lv ? (lv.groups[i].m.length > 1 ? { key, group: lv.groups[i] } : { key, i: lv.groups[i].m[0] }) : { key, i }; }
@@ -2370,12 +2629,15 @@ async function loadCable() {
 }
 // a click near a cable: nearest segment on screen
 function pickCable(x, y) {
-  const seg = L.cable.seg, n = seg.length / 6, cd = camera.position.clone().normalize(), a = new THREE.Vector3(), b = new THREE.Vector3();
+  const seg = L.cable.seg, n = seg.length / 6, cd = camera.position.clone().normalize(), a = new THREE.Vector3(), b = new THREE.Vector3(), flat = VIEW.t === 1;
   let best = -1, bestD = innerWidth < 768 ? 14 : 8;
   for (let s = 0; s < n; s++) {
     const o = s * 6;
-    if (seg[o] * cd.x + seg[o + 1] * cd.y + seg[o + 2] * cd.z < 0.25) continue;
-    a.set(seg[o], seg[o + 1], seg[o + 2]).project(camera); b.set(seg[o + 3], seg[o + 4], seg[o + 5]).project(camera);
+    if (!flat && seg[o] * cd.x + seg[o + 1] * cd.y + seg[o + 2] * cd.z < 0.25) continue;
+    a.set(seg[o], seg[o + 1], seg[o + 2]); b.set(seg[o + 3], seg[o + 4], seg[o + 5]);
+    if (flat) { morphJS(a, a); morphJS(b, b); }
+    a.project(camera); b.project(camera);
+    if (flat && Math.abs(b.x - a.x) > 1) continue; // piece across the map edge
     const ax = (a.x * 0.5 + 0.5) * innerWidth, ay = (-a.y * 0.5 + 0.5) * innerHeight, dx = (b.x - a.x) * 0.5 * innerWidth, dy = -(b.y - a.y) * 0.5 * innerHeight;
     const l2 = dx * dx + dy * dy, t = l2 ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / l2)) : 0;
     const d = Math.hypot(ax + t * dx - x, ay + t * dy - y);
@@ -2419,13 +2681,13 @@ async function loadConflict() {
     img.data[i * 4] = Math.round(255 * Math.min(1, 0.35 + Math.log10(sum[i] / CONFLICT_MIN) / 2.5)); img.data[i * 4 + 3] = 255;
   }
   g.putImageData(img, 0, 0);
-  const tex = new THREE.CanvasTexture(cv);
+  const tex = wrapTex(new THREE.CanvasTexture(cv));
   tex.colorSpace = THREE.NoColorSpace; tex.minFilter = tex.magFilter = THREE.LinearFilter; tex.generateMipmaps = false;
   // red diagonal hatching in screen space, so the stripes keep their width at every zoom level
   const mat = new THREE.ShaderMaterial({
     transparent: true, depthWrite: false,
-    uniforms: { map: { value: tex }, px: { value: Math.min(devicePixelRatio, 2) }, color: { value: new THREE.Vector3(1, 0.23, 0.19) } },
-    vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+    uniforms: { map: { value: tex }, px: { value: Math.min(devicePixelRatio, 2) }, color: { value: new THREE.Vector3(1, 0.23, 0.19) }, uFlat: MORPH.uFlat, uLon0: MORPH.uLon0 },
+    vertexShader: MAP_VERT,
     fragmentShader: `uniform sampler2D map; uniform float px; uniform vec3 color; varying vec2 vUv;
       void main(){
         float m = texture2D(map, vUv).r; if (m < 0.1) discard;
@@ -2436,7 +2698,7 @@ async function loadConflict() {
       }`,
   });
   if (L.conflict.mesh) { scene.remove(L.conflict.mesh); L.conflict.mesh.material.uniforms.map.value.dispose(); }
-  const mesh = new THREE.Mesh(new THREE.SphereGeometry(1.0102, 160, 120), mat);
+  const mesh = mapMesh(0.0102, mat, 160, 120);
   mesh.renderOrder = 0.8; mesh.visible = L.conflict.on; scene.add(mesh);
   const all = j.countries.map(([name, d, events, mask, last, conflicts], idx) => ({ idx, name, deaths: d, events, mask, last, conflicts }));
   const items = all.filter(c => c.deaths >= CONFLICT_MIN).sort((a, b) => b.deaths - a.deaths);
@@ -2449,6 +2711,16 @@ async function loadConflict() {
 // lat/lon under a screen point, or null off the globe
 function latLonAt(x, y) {
   const v = new THREE.Vector3(x / innerWidth * 2 - 1, -y / innerHeight * 2 + 1, 0.5).unproject(camera).sub(camera.position).normalize();
+  if (VIEW.t > 0) {
+    if (VIEW.t < 1) return null;
+    // the map plane touches the sphere at (lat 0, lon0) and faces outwards
+    const ez = new THREE.Vector3(Math.cos(VIEW.lon0), 0, -Math.sin(VIEW.lon0)), ex = new THREE.Vector3(-Math.sin(VIEW.lon0), 0, -Math.cos(VIEW.lon0));
+    const den = v.dot(ez); if (Math.abs(den) < 1e-9) return null;
+    const t = (1 - camera.position.dot(ez)) / den; if (t < 0) return null;
+    const p = camera.position.clone().addScaledVector(v, t), d = p.dot(ex);
+    if (Math.abs(p.y) > Math.PI / 2 || Math.abs(d) > Math.PI) return null;
+    return { lat: p.y / DEG, lon: wrapPi(VIEW.lon0 + d) / DEG };
+  }
   const o = camera.position, b = o.dot(v), disc = b * b - (o.lengthSq() - 1);
   if (disc < 0) return null;
   const t = -b - Math.sqrt(disc); if (t < 0) return null;
@@ -2522,12 +2794,12 @@ function showRoute(o, d) {
 }
 function hideRoute() { if (routeLine) routeLine.visible = false; aptFrom.hidden = aptTo.hidden = true; aptFrom.v = aptTo.v = null; }
 function placeRouteLabels() {
-  const cam = camera.position.clone().normalize();
   for (const el of [aptFrom, aptTo]) {
     if (!el.v) continue;
-    if (el.v.clone().normalize().dot(cam) < 0.1) { el.hidden = true; continue; }
-    tmpV.copy(el.v).project(camera); el.hidden = false;
-    el.style.transform = `translate(${(tmpV.x * 0.5 + 0.5) * innerWidth - el.offsetWidth / 2}px, ${(-tmpV.y * 0.5 + 0.5) * innerHeight - 24}px)`;
+    const p = screenPos(el.v, 0.1);
+    if (!p) { el.hidden = true; continue; }
+    el.hidden = false;
+    el.style.transform = `translate(${p.x - el.offsetWidth / 2}px, ${p.y - 24}px)`;
   }
 }
 
@@ -2599,14 +2871,19 @@ function loadOverlay(key, m) {
   const ver = encodeURIComponent(m.fetched);
   if (wxOverlay[key]?.userData.ver === ver) { wxOverlay[key].visible = true; return; }
   return new Promise((ok, fail) => new THREE.TextureLoader().load(`${LIVE}${WX_FILE[key]}?v=${ver}`, t => {
-    t.colorSpace = THREE.NoColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    wrapTex(t); t.colorSpace = THREE.NoColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy();
     if (!wxOverlay[key]) {
-      const r = { rain: 1.011, temp: 1.0095, aerosol: 1.0098 }[key];
-      wxOverlay[key] = new THREE.Mesh(new THREE.SphereGeometry(r, 128, 96), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, opacity: { rain: 0.95, temp: 0.55, aerosol: 0.7 }[key] }));
+      const h = { rain: 0.011, temp: 0.0095, aerosol: 0.0098 }[key];
+      wxOverlay[key] = mapMesh(h, new THREE.ShaderMaterial({
+        transparent: true, depthWrite: false,
+        uniforms: { map: { value: null }, opacity: { value: { rain: 0.95, temp: 0.55, aerosol: 0.7 }[key] }, uFlat: MORPH.uFlat, uLon0: MORPH.uLon0 },
+        vertexShader: MAP_VERT,
+        fragmentShader: 'uniform sampler2D map; uniform float opacity; varying vec2 vUv; void main(){ vec4 c = texture2D(map, vUv); gl_FragColor = vec4(c.rgb, c.a * opacity); }',
+      }));
       wxOverlay[key].renderOrder = { temp: 0.5, aerosol: 0.6, rain: 0.7 }[key];
       scene.add(wxOverlay[key]);
     }
-    const o = wxOverlay[key]; o.material.map?.dispose(); o.material.map = t; o.material.needsUpdate = true; o.userData.ver = ver; o.visible = WX[key];
+    const o = wxOverlay[key], u = o.material.uniforms; u.map.value?.dispose(); u.map.value = t; o.userData.ver = ver; o.visible = WX[key];
     ok();
   }, undefined, fail));
 }
@@ -2643,6 +2920,13 @@ function spawnWind(i, initial) {
   // new particles start on the side of the Earth that faces the camera
   const c = camera.position.clone().normalize();
   let lat = 0, lon = 0;
+  if (VIEW.mode === 'flat') {
+    // on the map: inside the part of the world that is on screen
+    const hh = VIEW.h * tanHalfFov(), hw = Math.min(Math.PI, hh * camera.aspect);
+    lat = Math.max(-84, Math.min(84, (VIEW.lat + (Math.random() * 2 - 1) * hh) / DEG)); lon = wrapPi(VIEW.lon0 + (Math.random() * 2 - 1) * hw) / DEG;
+    wp.lat[i] = lat; wp.lon[i] = lon; wp.max[i] = 60 + Math.random() * 90; wp.age[i] = initial ? Math.random() * wp.max[i] : 0;
+    return;
+  }
   for (let k = 0; k < 12; k++) {
     const z = Math.random() * 2 - 1, t = Math.random() * Math.PI * 2, r = Math.sqrt(1 - z * z);
     const x = r * Math.cos(t), y = z, zz = r * Math.sin(t);
@@ -2686,7 +2970,7 @@ function updateLayers() {
   if (L.sat.on && L.sat.loaded) stepSat();
   if (L.ship.on && L.ship.loaded) stepShip();
   // markers shrink when zoomed out so a full globe stays readable
-  const dist = camera.position.length(), zf = 1.9 / dist;
+  const dist = camDist(), zf = 1.9 / dist;
   const ZOOM = { air: Math.min(1.2, Math.max(0.42, zf)), radio: Math.min(1.2, Math.max(0.4, zf)), quake: Math.min(1.15, Math.max(0.55, zf)), sat: 1,
     volcano: Math.min(1.15, Math.max(0.5, zf)), storm: Math.min(1.2, Math.max(0.75, zf)), event: Math.min(1.15, Math.max(0.5, zf)),
     ship: Math.min(1.2, Math.max(0.4, zf)), power: Math.min(1.15, Math.max(0.45, zf)) };
@@ -2708,6 +2992,8 @@ function updateLayers() {
 const ORIENT = { borders: true, capitals: true, routes: false, grid: false };
 let borderLines = null, countryLabels = [], capitalLabels = [], geoLoaded = false;
 const labelBox = $('#geo-labels');
+// zooming with the wheel also works over a capital's name
+labelBox.addEventListener('wheel', e => { e.preventDefault(); canvas.dispatchEvent(new WheelEvent('wheel', e)); }, { passive: false });
 async function loadGeo() {
   if (geoLoaded || !renderer) return;
   geoLoaded = true;
@@ -2761,10 +3047,10 @@ const lv = new THREE.Vector3();
 function layoutLabels(force) {
   if (!countryLabels.length) return;
   const now = performance.now();
-  const moved = lastCam.distanceToSquared(camera.position) > 1e-7;
+  const moved = lastCam.distanceToSquared(camera.position) > 1e-9;
   if (!force && (now - lastLayout < 90 || (!moved && now - lastLayout < 600))) return;
   lastLayout = now; lastCam.copy(camera.position);
-  const camDir = camera.position.clone().normalize(), dist = camera.position.length();
+  const dist = camDist(), center = viewCenterLL();
   const boxes = [];
   const fits = (x, y, w, h) => { for (const b of boxes) if (x < b[2] && x + w > b[0] && y < b[3] && y + h > b[1]) return false; return true; };
   const place = (l, show, x, y, alpha) => {
@@ -2773,10 +3059,8 @@ function layoutLabels(force) {
     l.el.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`; l.shown = true;
   };
   const project = l => {
-    const facing = lv.copy(l.v).normalize().dot(camDir);
-    if (facing < 0.18) return null;
-    lv.copy(l.v).project(camera);
-    return { x: (lv.x * 0.5 + 0.5) * innerWidth, y: (-lv.y * 0.5 + 0.5) * innerHeight, a: Math.min(1, (facing - 0.18) * 5) };
+    const p = screenPos(l.v, 0.18);
+    return p && { x: p.x, y: p.y, a: Math.min(1, (p.f - 0.18) * 5) };
   };
   // capitals: the dot always shows, the name only where it has room
   for (const l of ORIENT.capitals ? capitalLabels : []) {
@@ -2803,7 +3087,7 @@ function layoutLabels(force) {
   if (!ORIENT.borders) countryLabels.forEach(l => place(l, false));
   // graticule: latitudes along the meridian nearest the view centre, longitudes along the nearest parallel
   if (ORIENT.grid && gridLabels.length) {
-    const cLat = Math.asin(camDir.y) / DEG, cLon = Math.atan2(-camDir.z, camDir.x) / DEG;
+    const cLat = center.lat, cLon = center.lon;
     const mLon = Math.round((cLon - 7.5) / 15) * 15 + 7.5, mLat = Math.max(-67.5, Math.min(67.5, Math.round((cLat - 7.5) / 15) * 15 + 7.5));
     for (const l of gridLabels) {
       l.v = vecFromLatLon(l.kind === 'lat' ? l.val : mLat, l.kind === 'lat' ? mLon : l.val, 1.001);
@@ -2916,12 +3200,10 @@ $('#pp-close').addEventListener('click', closePlacePop);
 // keep the popup over its place: above it, or below when there is no room; hidden on the far side
 function placePop() {
   if (!popAt || pop.hidden) return;
-  const facing = tmpV.copy(popAt).normalize().dot(camera.position.clone().normalize());
-  const away = facing < 0.15;
-  pop.style.visibility = away ? 'hidden' : '';
-  if (away) return;
-  tmpV.copy(popAt).project(camera);
-  const x = (tmpV.x * 0.5 + 0.5) * innerWidth, y = (-tmpV.y * 0.5 + 0.5) * innerHeight;
+  const sp = screenPos(popAt, 0.15);
+  pop.style.visibility = sp ? '' : 'hidden';
+  if (!sp) return;
+  const { x, y } = sp;
   const sc = innerWidth >= 768 ? SET.win / 100 : 1, w = popW * sc, h = popH * sc, gap = 16 + 4 * symF();
   const below = y - h - gap < 8;
   const top = Math.min(Math.max(8, below ? y + gap : y - h - gap), innerHeight - h - 8);
@@ -2938,11 +3220,18 @@ function placePop() {
 function panForPop() {
   if (!renderer || flight || !popAt) return;
   const sc = innerWidth >= 768 ? SET.win / 100 : 1, gap = 16 + 4 * symF();
-  tmpV.copy(popAt).project(camera);
-  const y = (-tmpV.y * 0.5 + 0.5) * innerHeight;
+  const sp = screenPos(popAt, -1); if (!sp) return;
+  const y = sp.y;
   const topSafe = innerWidth >= 768 ? 72 : 110, bottomSafe = innerWidth >= 768 ? 150 : 140;
   const dy = Math.min(popH * sc + gap + topSafe - y, innerHeight - bottomSafe - y);
   if (dy < 16) return;
+  if (VIEW.mode === 'flat') {
+    // on the map: move the view up a little, so the place moves down
+    const lat1 = VIEW.lat + dy * unitsPerPx();
+    if (reduceMotion) { VIEW.lat = lat1; clampFlat(); return; }
+    flight = { flat: true, lon0: VIEW.lon0, dLon: 0, lat0: VIEW.lat, lat1, h0: VIEW.h, h1: VIEW.h, bump: 0, t0: performance.now(), dur: 700, done: () => clampFlat() };
+    return;
+  }
   const d = camera.position.length();
   const pxPerUnit = innerHeight / (2 * (d - 1) * Math.tan(camera.fov * DEG / 2));
   const ang = Math.min(0.5, dy / pxPerUnit);
@@ -2957,9 +3246,8 @@ function panForPop() {
 // a click on the place marker opens the place info
 function hitMarker(x, y) {
   if (!markerAt || !currentPlace || markerEl.hidden) return false;
-  if (markerAt.clone().normalize().dot(camera.position.clone().normalize()) < 0.2) return false;
-  lv.copy(markerAt).project(camera);
-  return Math.hypot((lv.x * 0.5 + 0.5) * innerWidth - x, (-lv.y * 0.5 + 0.5) * innerHeight - y) < 22 * Math.max(1, symF());
+  const p = screenPos(markerAt, 0.2);
+  return !!p && Math.hypot(p.x - x, p.y - y) < 22 * Math.max(1, symF());
 }
 
 /* ---------- Thick lines (borders, routes, ISS orbit) ---------- */
@@ -2983,6 +3271,7 @@ function lineStyle(role) {
 function styleFat(f) { const st = lineStyle(f.role); f.mat.color.set(st.color); f.mat.opacity = st.opacity; f.mat.linewidth = st.width; }
 function fatLines(role, order, opts = {}) {
   const mat = new LineMaterial({ transparent: true, depthWrite: false, worldUnits: false, vertexColors: !!opts.vertexColors, blending: opts.additive ? THREE.AdditiveBlending : THREE.NormalBlending });
+  mat.uniforms.uFlat = MORPH.uFlat; mat.uniforms.uLon0 = MORPH.uLon0; mat.vertexShader = morphLineShader(mat.vertexShader);
   mat.resolution.set(innerWidth, innerHeight);
   const f = { role, mat }; FAT.add(f); styleFat(f);
   const o = new LineSegments2(new LineSegmentsGeometry(), mat);
@@ -3049,14 +3338,14 @@ function loadHiResEarth() {
   const big = renderer.capabilities.maxTextureSize >= 8192 && Math.min(screen.width, screen.height) >= 700 && !navigator.connection?.saveData;
   if (!big) return;
   const l = new THREE.TextureLoader();
-  const apply = (key, t) => { t.colorSpace = THREE.NoColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy(); uniforms[key].value = t; };
+  const apply = (key, t) => { wrapTex(t); t.colorSpace = THREE.NoColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy(); uniforms[key].value = t; };
   l.load('img/hi/earth-day-8k.jpg', t => { apply('dayMap', t); l.load('img/hi/earth-night-8k.jpg', t2 => apply('nightMap', t2), undefined, () => {}); }, undefined, () => {});
 }
 
 applySettings();
 loadGeo();
 // test hook for local browser tests only (?debug)
-if (new URLSearchParams(location.search).has('debug')) window.__wian = { L, select, setLayer, setToggle, camera, flyTo, pick };
+if (new URLSearchParams(location.search).has('debug')) window.__wian = { L, select, setLayer, setToggle, camera, flyTo, pick, setView, VIEW, latLonAt, screenPos };
 
 // warm the place index once the start screen stands (non-blocking, PRD F-01.5)
 (window.requestIdleCallback || (f => setTimeout(f, 1200)))(() => loadPlaces());
