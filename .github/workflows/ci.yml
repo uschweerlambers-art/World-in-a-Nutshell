@@ -53,6 +53,29 @@ jobs:
             "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble/default/2016-01-01/GoogleMapsCompatible_Level8/5/10/16.png"; do
             echo "== $u"; curl -s -m 20 -o /tmp/tile -D - -H "Origin: https://uschweerlambers-art.github.io" "$u" | grep -iE "^HTTP|access-control|content-type|cache-control" || true; ls -la /tmp/tile || true
           done
+      # TEMPORARY probe for relief, labels, disasters and population (removed before merge)
+      - name: Probe new sources (temporary)
+        continue-on-error: true
+        run: |
+          O="Origin: https://uschweerlambers-art.github.io"
+          for u in \
+            "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/10/544/339.png" \
+            "https://elevation-tiles-prod.s3.amazonaws.com/terrarium/13/4354/2713.png" \
+            "https://tiles.openfreemap.org/planet" \
+            "https://emergency.copernicus.eu/mapping/activations-rapid/feed" \
+            "https://rapidmapping.emergency.copernicus.eu/backend/dashboard-api/public-activations/?limit=3" \
+            "https://rapidmapping.emergency.copernicus.eu/backend/dashboard-api/public-activations-info/?limit=3"; do
+            echo "== $u"; curl -sL -m 30 -o /tmp/p -D - -H "$O" "$u" | grep -iE "^HTTP|access-control-allow-origin|content-type|location" || true; ls -la /tmp/p; head -c 1500 /tmp/p | tr -c '[:print:]\n' '?'; echo
+          done
+          T=$(curl -s -m 30 https://tiles.openfreemap.org/planet | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const j=JSON.parse(s);console.log(j.tiles[0]);console.error(JSON.stringify({maxzoom:j.maxzoom,attribution:j.attribution,layers:(j.vector_layers||[]).map(l=>l.id+':'+Object.keys(l.fields||{}).slice(0,25).join(','))}))})")
+          echo "tile template $T"; u=$(echo "$T" | sed 's#{z}/{x}/{y}#12/2133/1347#')
+          echo "== $u"; curl -s -m 30 -o /tmp/p -D - -H "$O" "$u" | grep -iE "^HTTP|access-control-allow-origin|content-type|content-encoding" || true; ls -la /tmp/p
+          G="https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2025_GLOBE_R2023A_4326_30ss/V1-0/GHS_POP_E2025_GLOBE_R2023A_4326_30ss_V1_0.zip"
+          echo "== $G"; curl -sIL -m 30 "$G" | grep -iE "^HTTP|content-length|content-type" || true
+          sudo apt-get -qq update >/dev/null && sudo apt-get -qq install -y gdal-bin python3-gdal >/dev/null && echo gdal ok
+          curl -sL -m 600 -o /tmp/pop.zip "$G" && ls -la /tmp/pop.zip && unzip -o -q /tmp/pop.zip -d /tmp/pop && ls -la /tmp/pop
+          python3 tools/build-population.py /tmp/pop/*.tif /tmp/population.png
+          echo "BEGIN-POPULATION-PNG"; base64 -w 100 /tmp/population.png; echo "END-POPULATION-PNG"
       # The preview build lets reviewers download and open the site locally (N-7.4).
       - uses: actions/upload-artifact@v4
         with:
