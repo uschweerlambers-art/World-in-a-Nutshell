@@ -216,12 +216,6 @@ button:disabled { cursor: default; }
 body.flat .m-view .ico-globe { display: block; }
 .round.i { font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 18px; font-weight: 700; }
 
-.timeline { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(var(--sb) + 24px); width: min(612px, calc(100vw - 2 * 16px - 2 * 312px)); height: 56px; box-sizing: border-box; padding: 0 10px 0 8px; display: flex; align-items: center; gap: 14px; border-radius: 28px; background: var(--glass-soft); backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4); border: 1px solid var(--edge); }
-.timeline .play { width: 40px; height: 40px; border-radius: 20px; border: 0; background: rgba(255,255,255,0.10); color: var(--text-4); display: grid; place-items: center; flex-shrink: 0; padding: 0; }
-.timeline .track { flex: 1; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.18); position: relative; }
-.timeline .track::after { content: ""; position: absolute; right: -6px; top: -9px; width: 22px; height: 22px; border-radius: 11px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.4); }
-.timeline .lab { font-size: 12px; color: var(--text-3); flex-shrink: 0; }
-.chip-live { display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 14px; background: rgba(48,209,88,0.18); color: var(--c-radio); font-size: 13px; font-weight: 600; flex-shrink: 0; }
 .attrib { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 8px); width: min(760px, calc(100vw - 32px)); margin: 0; text-align: center; font-size: 11px; color: var(--text-4); text-shadow: 0 1px 6px rgba(0,0,0,.8); }
 .attrib a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
@@ -265,6 +259,10 @@ body.flat .m-view .ico-globe { display: block; }
 .btn-line { height: 48px; padding: 0 18px; border: 1px solid var(--edge-strong); border-radius: 24px; background: transparent; font-size: 15px; font-weight: 600; }
 .btn-line:hover { background: var(--hover); }
 .w-src { font-size: 12px; color: var(--text-4); line-height: 1.5; }
+/* wonder pictures: edge to edge at the top of the card, same carousel as the place of the day */
+#wonder .w-pics { margin: -28px -28px 0; aspect-ratio: 16 / 9; flex-shrink: 0; border-radius: 22px 22px 0 0; }
+.w-credit { display: block; }
+.w-credit a { color: var(--text-3); }
 .w-src a { color: var(--text-3); }
 #dots { position: fixed; left: 0; right: 0; bottom: calc(var(--sb) + 20px); display: flex; justify-content: center; gap: 8px; z-index: 7; pointer-events: none; }
 #dots span { width: 8px; height: 8px; border-radius: 4px; background: rgba(255,255,255,0.3); transition: width .3s; }
@@ -319,7 +317,7 @@ body.flat .m-view .ico-globe { display: block; }
 #i-act a.w-link { color: var(--link); min-height: 36px; }
 
 /* Radio player */
-#player { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--sb) + 92px); z-index: 7; width: min(440px, calc(100vw - 32px)); box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 14px 8px 8px; border-radius: 30px; }
+#player { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--sb) + 44px); z-index: 7; width: min(440px, calc(100vw - 32px)); box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 14px 8px 8px; border-radius: 30px; }
 #player.is-out { transform: translate(-50%, 8px); }
 .pl-btn { width: 44px; height: 44px; border-radius: 22px; border: 0; background: var(--c-radio); color: #05070D; display: grid; place-items: center; padding: 0; flex-shrink: 0; }
 .pl-btn.wait { background: color-mix(in srgb, var(--c-radio) 35%, transparent); }
@@ -411,7 +409,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   .m-only { display: inline-flex; }
   #arrival { top: 54%; }
   #arrival .name { font-size: 32px; }
-  .toolbar .seg, .timeline, .toolbar .tn { display: none; }
+  .toolbar .seg, .toolbar .tn { display: none; }
   .toolbar .round.m-view { display: grid; }
   .toolbar { flex-direction: column; gap: 0; border-radius: 22px; background: var(--glass-soft); backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4); border: 1px solid var(--edge); overflow: hidden; top: calc(var(--st) + 42px); }
   .toolbar .round { background: transparent; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; border-radius: 0; }
@@ -437,6 +435,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   #wonder { left: 8px; right: 8px; top: auto; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); transform: none; width: auto; max-height: 64vh; padding: 20px; gap: 14px; border-radius: 30px; }
   #wonder.is-out { transform: translateY(12px); }
   #wonder h2 { font-size: 23px; }
+  #wonder .w-pics { margin: -20px -20px 0; aspect-ratio: 16 / 7; border-radius: 30px 30px 0 0; }
   #dots { display: none !important; }
   #toast { top: calc(var(--st) + 100px); }
   #insp { left: 8px; right: 8px; width: auto; top: auto; bottom: calc(132px + env(safe-area-inset-bottom, 0px)); max-height: 46vh; border-radius: 26px; }
@@ -445,7 +444,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   body.playing #insp { bottom: calc(204px + env(safe-area-inset-bottom, 0px)); max-height: 40vh; }
 }
 @media (min-width: 768px) { .m-only { display: none; } }
-@media (max-width: 1100px) and (min-width: 768px) { .timeline { display: none; } .attrib { left: calc(50% + 156px); width: calc(100vw - 360px); } }
+@media (max-width: 1100px) and (min-width: 768px) { .attrib { left: calc(50% + 156px); width: calc(100vw - 360px); } }
 </style>
 
 <canvas id="globe" aria-label="Interactive 3D globe or flat world map. Drag to rotate or move, scroll or pinch to zoom." role="img"></canvas>
@@ -657,12 +656,6 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     </ul>
   </div>
 
-  <div class="timeline" role="group" aria-label="Timeline, arrives with the data layers" title="The timeline arrives with the data layers">
-    <button type="button" class="play" aria-label="Play timeline (coming soon)" disabled><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></button>
-    <span class="lab mono">−24 h</span>
-    <div class="track"></div>
-    <span class="chip-live"><span class="dot" style="width:6px;height:6px"></span>Live</span>
-  </div>
   <p class="attrib">Earth: NASA Blue Marble &amp; Black Marble · Places: GeoNames (CC BY 4.0) · Outlines: Natural Earth · Clouds: <span id="attrib-clouds">placeholder</span><span id="attrib-tiles" hidden> · Close-up: <a href="https://s2maps.eu" target="_blank" rel="noopener noreferrer">Sentinel-2 cloudless 2016</a> by EOX IT Services GmbH (CC BY 4.0, contains modified Copernicus Sentinel data 2016)</span><span id="attrib-live"></span></p>
 </div>
 
@@ -680,6 +673,11 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 
 <!-- Wonder card -->
 <article id="wonder" class="glass fade is-out" aria-labelledby="w-head" hidden>
+  <div class="pod-pics w-pics" id="w-pics" aria-roledescription="carousel" aria-label="Pictures of this wonder" hidden>
+    <button type="button" class="pod-nav prev" data-wp="-1" aria-label="Previous picture"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button type="button" class="pod-nav next" data-wp="1" aria-label="Next picture"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+    <div class="pod-dots" id="w-pdots" role="group" aria-label="Choose a picture"></div>
+  </div>
   <div class="w-top"><span id="w-cat">Wonders &amp; records</span><button type="button" class="x" aria-label="Close card" data-act="stay"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div><h2 id="w-head"></h2><p class="body" id="w-body"></p></div>
   <dl><div><dt>Place</dt><dd id="w-place"></dd></div><div><dt id="w-stat-l"></dt><dd class="mono" id="w-stat-v"></dd></div></dl>
@@ -691,7 +689,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <button type="button" class="btn-primary" data-act="next"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg>Next wonder</button>
     <button type="button" class="btn-line" data-act="stay">Stay here</button>
   </div>
-  <span class="w-src">Source: <a id="w-src" href="#" target="_blank" rel="noopener noreferrer"></a><span id="w-shape"></span></span>
+  <span class="w-src">Source: <a id="w-src" href="#" target="_blank" rel="noopener noreferrer"></a><span id="w-shape"></span><span class="w-credit" id="w-credit"></span></span>
 </article>
 <div id="dots" aria-hidden="true" hidden></div>
 
@@ -741,7 +739,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
         <li>Place search: GeoNames, places with 5,000 inhabitants or more, CC BY 4.0. Search runs entirely in your browser.</li>
         <li>Outline of Antarctica: Natural Earth 1:110m, public domain. Outline of the Sahara: simplified drawing, to be replaced by Natural Earth.</li>
         <li>Place of the day: pictures from Wikimedia Commons, with author and licence under each picture, copied to this site once a day. Short texts in our own words.</li>
-        <li>Wonders &amp; records: our own short texts, figures as given by the source on each card, links to English Wikipedia.</li>
+        <li>Wonders &amp; records: our own short texts, figures as given by the source on each card, links to English Wikipedia. Pictures from Wikimedia Commons, with author and licence under each picture, copied to this site by our GitHub Action.</li>
         <li>Country borders and names: Natural Earth 1:50m, public domain. Capitals: GeoNames, CC BY 4.0.</li>
         <li>Weather, local time and elevation in the place details: Open-Meteo (CC BY 4.0), asked only when you open a place.</li>
         <li>Sharper Earth on large screens: NASA GIBS Blue Marble Next Generation and VIIRS Black Marble.</li>
@@ -1660,6 +1658,42 @@ function goToPlace(p, opts = {}) {
 
 /* ---------- Wonders ---------- */
 let wonders = null, order = [], wIdx = -1, current = null;
+// pictures for the cards come from Wikimedia Commons, copied to this site by the Action (F-20)
+let wPicsData = null, wPicsShown = null, wPicIdx = 0;
+const wPicsLoad = () => wPicsData ||= fetch('data/live/wonders-pictures.json').then(r => r.ok ? r.json() : { items: [] }).catch(() => ({ items: [] }));
+async function wonderPics(w) {
+  const box = $('#w-pics'), dots = $('#w-pdots');
+  box.querySelectorAll('img').forEach(i => i.remove()); box.hidden = true; $('#w-credit').textContent = ''; wPicsShown = null;
+  const ims = (await wPicsLoad()).items?.find(x => x.id === w.id)?.images || [];
+  if (!ims.length || current?.id !== w.id) return;
+  ims.forEach((im, k) => {
+    const img = document.createElement('img');
+    img.className = 'pod-img'; img.decoding = 'async'; if (k) img.loading = 'lazy';
+    img.alt = `${w.place}, picture ${k + 1} of ${ims.length}`; img.src = 'data/live/' + im.src;
+    box.insertBefore(img, box.querySelector('.pod-nav'));
+  });
+  dots.innerHTML = ims.length > 1 ? ims.map((_, k) => `<button type="button" data-wpi="${k}" aria-label="Picture ${k + 1} of ${ims.length}"></button>`).join('') : '';
+  box.querySelectorAll('.pod-nav').forEach(b => { b.hidden = ims.length < 2; });
+  wPicsShown = ims; box.hidden = false; wonderPicShow(0);
+}
+function wonderPicShow(k) {
+  const imgs = $$('#w-pics img'), n = imgs.length;
+  if (!n || !wPicsShown) return;
+  wPicIdx = (k + n) % n;
+  imgs.forEach((im, j) => im.classList.toggle('on', j === wPicIdx));
+  $$('#w-pdots button').forEach((b, j) => b.setAttribute('aria-current', String(j === wPicIdx)));
+  const im = wPicsShown[wPicIdx], ext = (h, t) => `<a href="${esc(h)}" target="_blank" rel="noopener noreferrer">${t}</a>`;
+  $('#w-credit').innerHTML = `Photo: ${ext(im.page, esc(im.author))} · ${im.licenseUrl ? ext(im.licenseUrl, esc(im.license)) : esc(im.license)} · Wikimedia Commons`;
+}
+$('#w-pics').addEventListener('click', e => {
+  const b = e.target.closest('[data-wp]'); if (b) { wonderPicShow(wPicIdx + +b.dataset.wp); return; }
+  const d = e.target.closest('[data-wpi]'); if (d) wonderPicShow(+d.dataset.wpi);
+});
+{ // swipe between pictures
+  let x0 = null;
+  $('#w-pics').addEventListener('pointerdown', e => { x0 = e.clientX; });
+  $('#w-pics').addEventListener('pointerup', e => { if (x0 !== null && Math.abs(e.clientX - x0) > 40) wonderPicShow(wPicIdx + (e.clientX < x0 ? 1 : -1)); x0 = null; });
+}
 async function loadWonders() {
   if (wonders) return wonders;
   try { wonders = (await (await fetch('data/wonders.json')).json()).items; } catch { wonders = []; }
@@ -1705,6 +1739,7 @@ function openWonder(w) {
     $('#w-wiki').setAttribute('aria-label', `Read more on Wikipedia: ${w.place} (opens in a new tab)`);
     $('#w-src').textContent = w.source; $('#w-src').href = w.sourceUrl;
     $('#w-shape').textContent = w.id === 'sahara' ? ' · outline simplified' : '';
+    wonderPics(w);
     card.hidden = false; requestAnimationFrame(() => card.classList.remove('is-out'));
     const dots = $('#dots'); dots.hidden = false;
     dots.innerHTML = order.map((id, i) => `<span class="${i === wIdx ? 'on' : ''}"></span>`).join('');

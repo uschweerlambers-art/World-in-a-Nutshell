@@ -73,6 +73,9 @@ jobs:
       - name: Place of the day (Wikimedia Commons pictures, today and tomorrow)
         run: node scripts/fetch-place-of-day.mjs .cache/live site/data/live
 
+      - name: Wonders & records pictures (Wikimedia Commons, renewed every 30 days)
+        run: node scripts/fetch-wonder-pictures.mjs .cache/live site/data/live
+
       # Needs the free aisstream.io key as repo secret AISSTREAM_API_KEY; without it the step only logs a note
       - name: Ships (aisstream.io, about one minute of live AIS)
         env:

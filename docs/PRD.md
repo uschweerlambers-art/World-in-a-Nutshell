@@ -1,6 +1,8 @@
 # World in a Nutshell – Product Requirements Document (PRD) für den Prototyp
 
-Version 0.10 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+Version 0.11 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+
+Änderungen in v0.11 (Uwe, 14.11.2026): Die Zeitleiste unten ist entfernt, solange sie keine Funktion hat (F-11 zurückgestellt). Die Karten „Wonders & records“ zeigen Bilder von Wikimedia Commons (F-20).
 
 Änderungen in v0.10 (Uwe, 14.11.2026): Feinere Steuerung beim Heranzoomen und scharfe Nahansicht (F-19). Drehen und Zoomen werden nahe am Boden feiner; beim Heranzoomen laden Satellitenbild-Kacheln nur für den sichtbaren Ausschnitt nach (bis etwa 10 m pro Pixel), und man kann bis auf etwa 40 km Höhe heran.
 
@@ -63,7 +65,7 @@ Kernszenario: *Ich öffne die Seite, gebe „Bielefeld“ ein (die Oberfläche i
 | F-08 | UFO-Archiv als Heatmap | **Entfällt im Prototyp** (Uwe, 13.11.2026) |
 | F-09 | Ebenen-Steuerung, Inspector, Quellen-/Lizenzanzeige (übergreifende UI) | Muss |
 | F-10 | Rechtliche Seiten: Impressum, Datenschutz, Lizenzen | Muss |
-| F-11 | −24-h-Zeitleiste (aus Styleframe Main) | Kann (nur Erdbeben im Prototyp) |
+| F-11 | −24-h-Zeitleiste (aus Styleframe Main) | Zurückgestellt (v0.11): Bedienelement entfernt, bis es eine Funktion hat |
 | F-12 | Umschalter Globus/Karte (aus Styleframe Main) | Umgesetzt in v0.9, siehe F-18 |
 
 ### 3.2 Nicht im Prototyp
@@ -238,6 +240,14 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | F-19.3 | **Nachladen nach Detailstufe (LOD):** Unter etwa 5.700 km Höhe laden Kacheln von *Sentinel-2 cloudless 2016* (EOX IT Services GmbH, CC BY 4.0, enthält veränderte Copernicus-Sentinel-Daten 2016, Web-Mercator-Stufen 6 bis 14, bis etwa 10 m pro Pixel). Es laden nur Kacheln, die auf dem Bildschirm zu sehen sind, jeweils so fein, wie ihr Abstand zur Kamera es braucht; bis eine Kachel da ist, füllt ihre gröbere Vorgängerin aus, sonst die 8k-Erde. Neue Kacheln blenden weich ein. Höchstens 6 Anfragen gleichzeitig, etwa 260 Kacheln bleiben im Speicher. | M, A |
 | F-19.4 | Die Kacheln liegen auf Globus und Karte, auch während des Wechsels, mit Tag und Nacht wie die übrige Erde (nachts bleiben die Stadtlichter der 8k-Nachtkarte). Nahe am Boden werden die groben Wolken durchsichtiger. | M |
 | F-19.5 | Solange Kacheln zu sehen sind, nennt die Quellenzeile „Close-up: Sentinel-2 cloudless 2016 by EOX IT Services GmbH (CC BY 4.0, contains modified Copernicus Sentinel data 2016)“ mit Link; „Sources & licences“ und „Privacy“ nennen EOX. Ist der Dienst nicht erreichbar, bleibt die 8k-Erde ohne Fehlermeldung. | R |
+
+### F-20 Bilder zu „Wonders & records“ (v0.11)
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-20.1 | Jede Wunder-Karte zeigt oben bis zu drei Bilder aus dem englischen Wikipedia-Artikel des Ortes, nur Dateien auf Wikimedia Commons mit freier Lizenz (keine Karten, Flaggen, Logos, Diagramme). Wechsel per Pfeil, Punkt oder Wischen, ohne automatischen Wechsel. | M |
+| F-20.2 | Unter der Quelle der Karte stehen Urheber und Lizenz des gezeigten Bildes, mit Link zur Datei und zur Lizenz. | R |
+| F-20.3 | Die GitHub Action lädt die Bilder, verkleinert sie auf 840 × 472 px und legt sie auf unsere eigene Seite; die Browser der Besucher fragen Wikimedia nicht an. Erneuert wird alle 30 Tage oder wenn sich die Liste ändert. Ohne Bilder bleibt die Karte wie bisher. | R, A |
 
 ### F-09 Übergreifende Bedienung
 
@@ -444,7 +454,7 @@ Entschieden am 13.11.2026:
 Noch offen (spätestens vor M2):
 
 1. **Impressum/Datenschutz:** Texte liefert Uwe; der Prototyp stellt Platzhalter und die Liste der Drittserver bereit. GitHub (USA) ist Hoster und wird in der Datenschutzerklärung genannt.
-2. **Kann-Feature F-11** (Zeitleiste): im Prototyp als Bedienelement sichtbar, Funktion erst später. Der Umschalter Globus/Karte (F-12) ist seit v0.9 umgesetzt (F-18).
+2. **Kann-Feature F-11** (Zeitleiste): seit v0.11 ausgeblendet, kommt erst zurück, wenn sie etwas abspielen kann. Der Umschalter Globus/Karte (F-12) ist seit v0.9 umgesetzt (F-18).
 
 ## 11. Risiken
 
