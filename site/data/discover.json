@@ -1373,6 +1373,1610 @@
      "more": "Start at T-Centralen, with its blue vines on the rock walls."
     }
    ]
+  },
+  {
+   "id": "moscow",
+   "name": "Moscow",
+   "cc": "RU",
+   "lat": 55.752,
+   "lon": 37.616,
+   "r": 30,
+   "tips": [
+    {
+     "id": "moscow-1",
+     "kind": "sight",
+     "title": "Saint Basil’s Cathedral",
+     "wiki": "Saint Basil's Cathedral",
+     "lat": 55.7525,
+     "lon": 37.6231,
+     "text": "The church with the colourful onion domes at the end of Red Square, built in the 1550s for Ivan the Terrible.",
+     "more": "Inside it is not one big hall but a maze of small chapels, each under its own dome."
+    },
+    {
+     "id": "moscow-2",
+     "kind": "person",
+     "title": "Tretyakov Gallery",
+     "wiki": "Tretyakov Gallery",
+     "lat": 55.7414,
+     "lon": 37.6208,
+     "text": "The merchant Pavel Tretyakov collected Russian paintings all his life and gave them to the city in 1892.",
+     "more": "His collection is still the heart of the largest museum of Russian art.",
+     "person": "Pavel Tretyakov"
+    },
+    {
+     "id": "moscow-3",
+     "kind": "surprise",
+     "title": "Komsomolskaya metro station",
+     "wiki": "Komsomolskaya (Koltsevaya line)",
+     "lat": 55.7757,
+     "lon": 37.6545,
+     "text": "A metro station like a palace hall, with chandeliers and mosaics on a yellow vaulted ceiling.",
+     "more": "It lies under three railway stations, so millions pass through without looking up."
+    }
+   ]
+  },
+  {
+   "id": "saint-petersburg",
+   "name": "Saint Petersburg",
+   "cc": "RU",
+   "lat": 59.939,
+   "lon": 30.314,
+   "r": 30,
+   "tips": [
+    {
+     "id": "saint-petersburg-1",
+     "kind": "sight",
+     "title": "Hermitage Museum",
+     "wiki": "Hermitage Museum",
+     "lat": 59.9398,
+     "lon": 30.3146,
+     "text": "One of the largest art museums in the world, partly housed in the tsars’ green and white Winter Palace.",
+     "more": "Cats have lived in its cellars for centuries to keep the mice away."
+    },
+    {
+     "id": "saint-petersburg-2",
+     "kind": "person",
+     "title": "Peter and Paul Fortress",
+     "wiki": "Peter and Paul Fortress",
+     "lat": 59.95,
+     "lon": 30.3166,
+     "text": "Peter the Great founded the city here in 1703, with a fortress on a small island in the Neva.",
+     "more": "He and most of the later tsars are buried in its cathedral with the golden spire.",
+     "person": "Peter the Great"
+    },
+    {
+     "id": "saint-petersburg-3",
+     "kind": "surprise",
+     "title": "Peterhof",
+     "wiki": "Peterhof Palace",
+     "lat": 59.8853,
+     "lon": 29.9086,
+     "text": "A palace on the Gulf of Finland with more than a hundred fountains that run without a single pump.",
+     "more": "The water comes downhill from springs, carried by channels laid out in the 18th century."
+    }
+   ]
+  },
+  {
+   "id": "kazan",
+   "name": "Kazan",
+   "cc": "RU",
+   "lat": 55.789,
+   "lon": 49.122,
+   "r": 20,
+   "tips": [
+    {
+     "id": "kazan-1",
+     "kind": "sight",
+     "title": "Kazan Kremlin",
+     "wiki": "Kazan Kremlin",
+     "lat": 55.799,
+     "lon": 49.106,
+     "text": "A white fortress above the Volga where a mosque and an Orthodox cathedral stand side by side.",
+     "more": "The blue-domed Qolşärif Mosque was rebuilt inside its walls and opened in 2005."
+    }
+   ]
+  },
+  {
+   "id": "novosibirsk",
+   "name": "Novosibirsk",
+   "cc": "RU",
+   "lat": 55.041,
+   "lon": 82.935,
+   "r": 30,
+   "tips": [
+    {
+     "id": "novosibirsk-1",
+     "kind": "sight",
+     "title": "Novosibirsk Opera and Ballet Theatre",
+     "wiki": "Novosibirsk Opera and Ballet Theatre",
+     "lat": 55.0306,
+     "lon": 82.9244,
+     "text": "The largest theatre building in Russia, under a huge silver dome in the middle of Siberia.",
+     "more": "It was finished in 1945, and the city likes to call it the Siberian Colosseum."
+    },
+    {
+     "id": "novosibirsk-2",
+     "kind": "surprise",
+     "title": "Akademgorodok",
+     "wiki": "Akademgorodok",
+     "lat": 54.8443,
+     "lon": 83.103,
+     "text": "A town of science institutes in the birch forest, built in the 1950s for thousands of researchers.",
+     "more": "Its beach on the Ob Reservoir is known locally as the Ob Sea."
+    }
+   ]
+  },
+  {
+   "id": "irkutsk",
+   "name": "Irkutsk",
+   "cc": "RU",
+   "lat": 52.298,
+   "lon": 104.296,
+   "r": 80,
+   "tips": [
+    {
+     "id": "irkutsk-1",
+     "kind": "surprise",
+     "title": "Listvyanka on Lake Baikal",
+     "wiki": "Listvyanka",
+     "lat": 51.8536,
+     "lon": 104.8697,
+     "text": "A village on the shore of Lake Baikal, the deepest and oldest lake on Earth.",
+     "more": "In winter the ice gets thick enough for cars and you can look through it into the clear water."
+    },
+    {
+     "id": "irkutsk-2",
+     "kind": "sight",
+     "title": "Circum-Baikal Railway",
+     "wiki": "Circum-Baikal Railway",
+     "lat": 51.87,
+     "lon": 104.82,
+     "text": "An old railway line along the cliffs of Lake Baikal, with dozens of tunnels, bridges and galleries.",
+     "more": "Once part of the Trans-Siberian, it now carries slow excursion trains."
+    }
+   ]
+  },
+  {
+   "id": "vladivostok",
+   "name": "Vladivostok",
+   "cc": "RU",
+   "lat": 43.106,
+   "lon": 131.874,
+   "r": 25,
+   "tips": [
+    {
+     "id": "vladivostok-1",
+     "kind": "sight",
+     "title": "Vladivostok railway station",
+     "wiki": "Vladivostok railway station",
+     "lat": 43.1112,
+     "lon": 131.8818,
+     "text": "The end of the Trans-Siberian Railway, 9,288 km from Moscow.",
+     "more": "A stone marker on the platform shows the distance."
+    },
+    {
+     "id": "vladivostok-2",
+     "kind": "surprise",
+     "title": "Russky Bridge",
+     "wiki": "Russky Bridge",
+     "lat": 43.0806,
+     "lon": 131.937,
+     "text": "When it opened in 2012, this bridge to Russky Island had the longest cable-stayed span in the world.",
+     "more": "Its two towers are taller than 320 metres."
+    }
+   ]
+  },
+  {
+   "id": "shanghai",
+   "name": "Shanghai",
+   "cc": "CN",
+   "lat": 31.222,
+   "lon": 121.458,
+   "r": 30,
+   "tips": [
+    {
+     "id": "shanghai-1",
+     "kind": "sight",
+     "title": "The Bund",
+     "wiki": "The Bund",
+     "lat": 31.24,
+     "lon": 121.49,
+     "text": "A riverside promenade lined with banks and trading houses from the early 20th century.",
+     "more": "Across the Huangpu River the skyscrapers of Pudong light up at night."
+    },
+    {
+     "id": "shanghai-2",
+     "kind": "sight",
+     "title": "Yu Garden",
+     "wiki": "Yu Garden",
+     "lat": 31.2272,
+     "lon": 121.4921,
+     "text": "A classical Chinese garden from the 16th century, with rock piles, ponds and pavilions.",
+     "more": "The tea house on a zigzag bridge nearby is one of the oldest in the city."
+    },
+    {
+     "id": "shanghai-3",
+     "kind": "surprise",
+     "title": "Shanghai Maglev",
+     "wiki": "Shanghai maglev train",
+     "lat": 31.2035,
+     "lon": 121.5865,
+     "text": "A magnetic levitation train that floats to the airport at up to 300 km/h.",
+     "more": "The 30 km ride takes about eight minutes."
+    }
+   ]
+  },
+  {
+   "id": "xian",
+   "name": "Xi’an",
+   "cc": "CN",
+   "lat": 34.258,
+   "lon": 108.929,
+   "r": 50,
+   "tips": [
+    {
+     "id": "xian-1",
+     "kind": "surprise",
+     "title": "Terracotta Army",
+     "wiki": "Terracotta Army",
+     "lat": 34.3841,
+     "lon": 109.2785,
+     "text": "Thousands of life-size clay soldiers, buried with China’s first emperor more than 2,200 years ago.",
+     "more": "Farmers digging a well found the first pieces in 1974."
+    },
+    {
+     "id": "xian-2",
+     "kind": "person",
+     "title": "Giant Wild Goose Pagoda",
+     "wiki": "Giant Wild Goose Pagoda",
+     "lat": 34.2196,
+     "lon": 108.9594,
+     "text": "Built in 652 to keep the Buddhist scriptures the monk Xuanzang brought back from India.",
+     "more": "His long journey later inspired the novel Journey to the West.",
+     "person": "Xuanzang"
+    },
+    {
+     "id": "xian-3",
+     "kind": "sight",
+     "title": "City Wall of Xi’an",
+     "wiki": "Fortifications of Xi'an",
+     "lat": 34.261,
+     "lon": 108.947,
+     "text": "One of the best preserved city walls in China, about 14 km around.",
+     "more": "You can rent a bicycle and ride all the way round on top of it."
+    }
+   ]
+  },
+  {
+   "id": "chengdu",
+   "name": "Chengdu",
+   "cc": "CN",
+   "lat": 30.667,
+   "lon": 104.067,
+   "r": 60,
+   "tips": [
+    {
+     "id": "chengdu-1",
+     "kind": "sight",
+     "title": "Giant Panda Base",
+     "wiki": "Chengdu Research Base of Giant Panda Breeding",
+     "lat": 30.733,
+     "lon": 104.146,
+     "text": "A breeding centre where you can watch giant pandas eat bamboo, best in the early morning.",
+     "more": "Many of the pandas born here have gone to zoos around the world."
+    },
+    {
+     "id": "chengdu-2",
+     "kind": "person",
+     "title": "Du Fu Thatched Cottage",
+     "wiki": "Du Fu Thatched Cottage",
+     "lat": 30.66,
+     "lon": 104.03,
+     "text": "The poet Du Fu lived here in a simple hut around 760 and wrote hundreds of poems.",
+     "more": "Today a park with bamboo groves and halls stands on the spot.",
+     "person": "Du Fu"
+    },
+    {
+     "id": "chengdu-3",
+     "kind": "surprise",
+     "title": "Dujiangyan",
+     "wiki": "Dujiangyan",
+     "lat": 31.002,
+     "lon": 103.607,
+     "text": "An irrigation system built in the 3rd century BC that still waters the Chengdu plain today.",
+     "more": "It splits the Min River without a dam."
+    }
+   ]
+  },
+  {
+   "id": "guilin",
+   "name": "Guilin",
+   "cc": "CN",
+   "lat": 25.282,
+   "lon": 110.286,
+   "r": 25,
+   "tips": [
+    {
+     "id": "guilin-1",
+     "kind": "sight",
+     "title": "Elephant Trunk Hill",
+     "wiki": "Elephant Trunk Hill",
+     "lat": 25.269,
+     "lon": 110.297,
+     "text": "A limestone hill on the Li River that looks like an elephant drinking from the water.",
+     "more": "It has become the symbol of the city."
+    },
+    {
+     "id": "guilin-2",
+     "kind": "surprise",
+     "title": "Reed Flute Cave",
+     "wiki": "Reed Flute Cave",
+     "lat": 25.31,
+     "lon": 110.265,
+     "text": "A cave full of stalactites and stone curtains, lit in bright colours.",
+     "more": "It is named after the reeds outside, which were used to make flutes."
+    }
+   ]
+  },
+  {
+   "id": "hong-kong",
+   "name": "Hong Kong",
+   "cc": "HK",
+   "lat": 22.278,
+   "lon": 114.175,
+   "r": 30,
+   "tips": [
+    {
+     "id": "hong-kong-1",
+     "kind": "sight",
+     "title": "Victoria Peak",
+     "wiki": "Victoria Peak",
+     "lat": 22.2759,
+     "lon": 114.1455,
+     "text": "The highest hill on Hong Kong Island, with a view over the skyscrapers and the harbour.",
+     "more": "The Peak Tram has climbed the steep slope since 1888."
+    },
+    {
+     "id": "hong-kong-2",
+     "kind": "sight",
+     "title": "Star Ferry",
+     "wiki": "Star Ferry",
+     "lat": 22.2937,
+     "lon": 114.1688,
+     "text": "Green and white ferries have crossed Victoria Harbour between Kowloon and the island for over a century.",
+     "more": "The crossing takes only a few minutes and costs very little."
+    },
+    {
+     "id": "hong-kong-3",
+     "kind": "surprise",
+     "title": "Tian Tan Buddha",
+     "wiki": "Tian Tan Buddha",
+     "lat": 22.254,
+     "lon": 113.905,
+     "text": "A giant bronze Buddha on a hilltop on Lantau Island, reached by 268 steps.",
+     "more": "A long cable car ride leads up from the town below."
+    }
+   ]
+  },
+  {
+   "id": "harbin",
+   "name": "Harbin",
+   "cc": "CN",
+   "lat": 45.75,
+   "lon": 126.65,
+   "r": 25,
+   "tips": [
+    {
+     "id": "harbin-1",
+     "kind": "sight",
+     "title": "Saint Sophia Cathedral",
+     "wiki": "Saint Sophia Cathedral, Harbin",
+     "lat": 45.769,
+     "lon": 126.624,
+     "text": "A Russian Orthodox church with a green dome, a reminder of the Russians who built the railway here.",
+     "more": "Today it is a museum of the city’s history."
+    },
+    {
+     "id": "harbin-2",
+     "kind": "surprise",
+     "title": "Harbin Ice and Snow World",
+     "wiki": "Harbin Ice and Snow World",
+     "lat": 45.78,
+     "lon": 126.57,
+     "text": "Each winter whole buildings are carved from blocks of river ice and lit from within.",
+     "more": "It is part of the Harbin Ice Festival, one of the largest in the world."
+    }
+   ]
+  },
+  {
+   "id": "lhasa",
+   "name": "Lhasa",
+   "cc": "CN",
+   "lat": 29.65,
+   "lon": 91.1,
+   "r": 20,
+   "tips": [
+    {
+     "id": "lhasa-1",
+     "kind": "sight",
+     "title": "Potala Palace",
+     "wiki": "Potala Palace",
+     "lat": 29.6578,
+     "lon": 91.1169,
+     "text": "The former winter palace of the Dalai Lamas, rising thirteen storeys up the Red Hill.",
+     "more": "It stands at about 3,700 metres above sea level."
+    },
+    {
+     "id": "lhasa-2",
+     "kind": "sight",
+     "title": "Jokhang",
+     "wiki": "Jokhang",
+     "lat": 29.6528,
+     "lon": 91.1325,
+     "text": "The most sacred temple in Tibetan Buddhism, circled clockwise by pilgrims all day long.",
+     "more": "Many pilgrims prostrate themselves full length on the stones in front of it."
+    }
+   ]
+  },
+  {
+   "id": "osaka",
+   "name": "Osaka",
+   "cc": "JP",
+   "lat": 34.694,
+   "lon": 135.502,
+   "r": 15,
+   "tips": [
+    {
+     "id": "osaka-1",
+     "kind": "sight",
+     "title": "Osaka Castle",
+     "wiki": "Osaka Castle",
+     "lat": 34.6873,
+     "lon": 135.5262,
+     "text": "A castle with a white and gold keep above high stone walls and wide moats.",
+     "more": "Around it lies a park with hundreds of cherry trees."
+    },
+    {
+     "id": "osaka-2",
+     "kind": "sight",
+     "title": "Dōtonbori",
+     "wiki": "Dōtonbori",
+     "lat": 34.6687,
+     "lon": 135.5013,
+     "text": "A canal street of neon signs and street food; Osaka calls itself the nation’s kitchen.",
+     "more": "Try takoyaki, small balls of batter with octopus inside."
+    },
+    {
+     "id": "osaka-3",
+     "kind": "surprise",
+     "title": "Shinsekai",
+     "wiki": "Shinsekai",
+     "lat": 34.6525,
+     "lon": 135.5063,
+     "text": "An old entertainment quarter around the Tsūtenkaku tower, with a lively retro feel.",
+     "more": "It is known for kushikatsu, skewers fried in breadcrumbs."
+    }
+   ]
+  },
+  {
+   "id": "nara-shi",
+   "name": "Nara-shi",
+   "cc": "JP",
+   "lat": 34.685,
+   "lon": 135.805,
+   "r": 12,
+   "tips": [
+    {
+     "id": "nara-shi-1",
+     "kind": "sight",
+     "title": "Tōdai-ji",
+     "wiki": "Tōdai-ji",
+     "lat": 34.689,
+     "lon": 135.8398,
+     "text": "A huge wooden temple hall that houses a bronze Buddha about 15 metres tall.",
+     "more": "The hall was rebuilt in 1709 and is still among the largest wooden buildings in the world."
+    },
+    {
+     "id": "nara-shi-2",
+     "kind": "surprise",
+     "title": "Nara Park",
+     "wiki": "Nara Park",
+     "lat": 34.6851,
+     "lon": 135.843,
+     "text": "Over a thousand tame deer roam the park freely and bow to visitors for crackers.",
+     "more": "In local tradition the deer are messengers of the gods."
+    }
+   ]
+  },
+  {
+   "id": "hiroshima",
+   "name": "Hiroshima",
+   "cc": "JP",
+   "lat": 34.4,
+   "lon": 132.45,
+   "r": 30,
+   "tips": [
+    {
+     "id": "hiroshima-1",
+     "kind": "sight",
+     "title": "Atomic Bomb Dome",
+     "wiki": "Hiroshima Peace Memorial",
+     "lat": 34.3955,
+     "lon": 132.4536,
+     "text": "The ruin of a hall that stood almost directly below the atomic bomb explosion of 6 August 1945.",
+     "more": "It was left as it was, as a memorial for peace."
+    },
+    {
+     "id": "hiroshima-2",
+     "kind": "person",
+     "title": "Children’s Peace Monument",
+     "wiki": "Children's Peace Monument",
+     "lat": 34.3934,
+     "lon": 132.4524,
+     "text": "A memorial to Sadako Sasaki, who folded paper cranes hoping to recover from leukaemia caused by the bomb.",
+     "more": "Children from all over the world still send strings of paper cranes here.",
+     "person": "Sadako Sasaki"
+    },
+    {
+     "id": "hiroshima-3",
+     "kind": "surprise",
+     "title": "Itsukushima Shrine",
+     "wiki": "Itsukushima Shrine",
+     "lat": 34.2959,
+     "lon": 132.3199,
+     "text": "A shrine whose red gate seems to float on the sea at high tide.",
+     "more": "At low tide you can walk across the sand to the gate."
+    }
+   ]
+  },
+  {
+   "id": "sapporo",
+   "name": "Sapporo",
+   "cc": "JP",
+   "lat": 43.067,
+   "lon": 141.35,
+   "r": 20,
+   "tips": [
+    {
+     "id": "sapporo-1",
+     "kind": "sight",
+     "title": "Odori Park",
+     "wiki": "Odori Park",
+     "lat": 43.0597,
+     "lon": 141.3478,
+     "text": "A long park through the city centre where the Sapporo Snow Festival shows giant snow sculptures each February.",
+     "more": "The TV tower at its eastern end gives a view along the whole park."
+    },
+    {
+     "id": "sapporo-2",
+     "kind": "sight",
+     "title": "Sapporo Clock Tower",
+     "wiki": "Sapporo Clock Tower",
+     "lat": 43.0625,
+     "lon": 141.3536,
+     "text": "A wooden building from 1878 with a clock that has kept time for well over a century.",
+     "more": "It was built for an agricultural college founded with help from the United States."
+    }
+   ]
+  },
+  {
+   "id": "naha",
+   "name": "Naha",
+   "cc": "JP",
+   "lat": 26.217,
+   "lon": 127.683,
+   "r": 20,
+   "tips": [
+    {
+     "id": "naha-1",
+     "kind": "sight",
+     "title": "Shuri Castle",
+     "wiki": "Shuri Castle",
+     "lat": 26.217,
+     "lon": 127.7195,
+     "text": "The red palace of the kings of Ryukyu, who ruled Okinawa as their own kingdom for centuries.",
+     "more": "A fire destroyed the main hall in 2019, and it is being rebuilt."
+    }
+   ]
+  },
+  {
+   "id": "bangkok",
+   "name": "Bangkok",
+   "cc": "TH",
+   "lat": 13.754,
+   "lon": 100.501,
+   "r": 30,
+   "tips": [
+    {
+     "id": "bangkok-1",
+     "kind": "sight",
+     "title": "Wat Arun",
+     "wiki": "Wat Arun",
+     "lat": 13.7437,
+     "lon": 100.4888,
+     "text": "The Temple of Dawn, its tall spire covered with pieces of porcelain, on the bank of the Chao Phraya.",
+     "more": "It looks best at sunset, seen from the other side of the river."
+    },
+    {
+     "id": "bangkok-2",
+     "kind": "sight",
+     "title": "Grand Palace",
+     "wiki": "Grand Palace",
+     "lat": 13.75,
+     "lon": 100.4913,
+     "text": "The royal palace with the Temple of the Emerald Buddha, the most sacred temple in Thailand.",
+     "more": "Visitors need to cover shoulders and knees."
+    },
+    {
+     "id": "bangkok-3",
+     "kind": "surprise",
+     "title": "Chatuchak Weekend Market",
+     "wiki": "Chatuchak Weekend Market",
+     "lat": 13.7999,
+     "lon": 100.55,
+     "text": "One of the largest markets in the world, with thousands of stalls open at weekends.",
+     "more": "Everything from plants to vintage clothes and street food."
+    }
+   ]
+  },
+  {
+   "id": "hanoi",
+   "name": "Hanoi",
+   "cc": "VN",
+   "lat": 21.024,
+   "lon": 105.841,
+   "r": 25,
+   "tips": [
+    {
+     "id": "hanoi-1",
+     "kind": "sight",
+     "title": "Hoàn Kiếm Lake",
+     "wiki": "Hoàn Kiếm Lake",
+     "lat": 21.0288,
+     "lon": 105.8525,
+     "text": "A lake in the old town with a red bridge to a small temple on an island.",
+     "more": "Legend says a turtle took back a magic sword from a king here."
+    },
+    {
+     "id": "hanoi-2",
+     "kind": "sight",
+     "title": "Temple of Literature",
+     "wiki": "Temple of Literature, Hanoi",
+     "lat": 21.0293,
+     "lon": 105.8355,
+     "text": "Vietnam’s first university, founded in 1076 and dedicated to Confucius.",
+     "more": "Stone tablets on the backs of turtles list the names of its best graduates."
+    }
+   ]
+  },
+  {
+   "id": "jakarta",
+   "name": "Jakarta",
+   "cc": "ID",
+   "lat": -6.215,
+   "lon": 106.845,
+   "r": 25,
+   "tips": [
+    {
+     "id": "jakarta-1",
+     "kind": "sight",
+     "title": "National Monument",
+     "wiki": "National Monument (Indonesia)",
+     "lat": -6.1754,
+     "lon": 106.8272,
+     "text": "A tall obelisk with a flame covered in gold leaf, the symbol of Indonesia’s independence.",
+     "more": "A lift takes you up to a viewing platform."
+    },
+    {
+     "id": "jakarta-2",
+     "kind": "sight",
+     "title": "Kota Tua",
+     "wiki": "Kota Tua Jakarta",
+     "lat": -6.1352,
+     "lon": 106.8133,
+     "text": "The old town of Batavia, the Dutch colonial port, around a square with the former city hall.",
+     "more": "Colourful bicycles can be rented on the square."
+    }
+   ]
+  },
+  {
+   "id": "yogyakarta",
+   "name": "Yogyakarta",
+   "cc": "ID",
+   "lat": -7.801,
+   "lon": 110.365,
+   "r": 50,
+   "tips": [
+    {
+     "id": "yogyakarta-1",
+     "kind": "surprise",
+     "title": "Borobudur",
+     "wiki": "Borobudur",
+     "lat": -7.6079,
+     "lon": 110.2038,
+     "text": "The largest Buddhist temple in the world, built in the 9th century as a stepped stone mountain.",
+     "more": "Over 2,600 relief panels tell stories as you climb."
+    },
+    {
+     "id": "yogyakarta-2",
+     "kind": "sight",
+     "title": "Prambanan",
+     "wiki": "Prambanan",
+     "lat": -7.752,
+     "lon": 110.4915,
+     "text": "A Hindu temple compound from the 9th century with tall, pointed stone towers.",
+     "more": "The Ramayana ballet is performed in front of it on many evenings."
+    }
+   ]
+  },
+  {
+   "id": "kuala-lumpur",
+   "name": "Kuala Lumpur",
+   "cc": "MY",
+   "lat": 3.141,
+   "lon": 101.687,
+   "r": 25,
+   "tips": [
+    {
+     "id": "kuala-lumpur-1",
+     "kind": "sight",
+     "title": "Petronas Towers",
+     "wiki": "Petronas Towers",
+     "lat": 3.1579,
+     "lon": 101.7116,
+     "text": "Twin skyscrapers joined by a skybridge, the tallest buildings in the world from 1998 to 2004.",
+     "more": "Their floor plan is based on an eight-pointed star from Islamic art."
+    },
+    {
+     "id": "kuala-lumpur-2",
+     "kind": "surprise",
+     "title": "Batu Caves",
+     "wiki": "Batu Caves",
+     "lat": 3.2379,
+     "lon": 101.684,
+     "text": "A Hindu temple inside a limestone cave, reached by 272 colourful steps.",
+     "more": "A golden statue more than 40 metres tall stands at the foot of the stairs."
+    }
+   ]
+  },
+  {
+   "id": "delhi",
+   "name": "Delhi",
+   "cc": "IN",
+   "lat": 28.652,
+   "lon": 77.231,
+   "r": 30,
+   "tips": [
+    {
+     "id": "delhi-1",
+     "kind": "sight",
+     "title": "Qutb Minar",
+     "wiki": "Qutb Minar",
+     "lat": 28.5245,
+     "lon": 77.1855,
+     "text": "A tower of red sandstone about 73 metres high, begun around 1200.",
+     "more": "Nearby stands an iron pillar that has hardly rusted in over 1,500 years."
+    },
+    {
+     "id": "delhi-2",
+     "kind": "sight",
+     "title": "Humayun’s Tomb",
+     "wiki": "Humayun's Tomb",
+     "lat": 28.5933,
+     "lon": 77.2507,
+     "text": "A garden tomb of the Mughal emperor Humayun that set the pattern for the Taj Mahal.",
+     "more": "It is surrounded by a garden divided into four parts by water channels."
+    },
+    {
+     "id": "delhi-3",
+     "kind": "person",
+     "title": "Raj Ghat",
+     "wiki": "Raj Ghat",
+     "lat": 28.6406,
+     "lon": 77.2495,
+     "text": "A black marble platform marks the place where Mahatma Gandhi was cremated in 1948.",
+     "more": "An eternal flame burns at one end.",
+     "person": "Mahatma Gandhi"
+    }
+   ]
+  },
+  {
+   "id": "agra",
+   "name": "Agra",
+   "cc": "IN",
+   "lat": 27.183,
+   "lon": 78.017,
+   "r": 20,
+   "tips": [
+    {
+     "id": "agra-1",
+     "kind": "person",
+     "title": "Taj Mahal",
+     "wiki": "Taj Mahal",
+     "lat": 27.1751,
+     "lon": 78.0421,
+     "text": "The white marble tomb that Emperor Shah Jahan built for his wife Mumtaz Mahal.",
+     "more": "The marble changes colour from pink in the morning to gold at sunset.",
+     "person": "Shah Jahan"
+    },
+    {
+     "id": "agra-2",
+     "kind": "sight",
+     "title": "Agra Fort",
+     "wiki": "Agra Fort",
+     "lat": 27.1795,
+     "lon": 78.0211,
+     "text": "A red sandstone fortress of the Mughal emperors on the Yamuna river.",
+     "more": "Shah Jahan spent his last years here, looking across at the Taj Mahal."
+    }
+   ]
+  },
+  {
+   "id": "kathmandu",
+   "name": "Kathmandu",
+   "cc": "NP",
+   "lat": 27.702,
+   "lon": 85.321,
+   "r": 15,
+   "tips": [
+    {
+     "id": "kathmandu-1",
+     "kind": "sight",
+     "title": "Boudhanath",
+     "wiki": "Boudhanath",
+     "lat": 27.7215,
+     "lon": 85.362,
+     "text": "One of the largest stupas in the world, with the Buddha’s eyes painted on its tower.",
+     "more": "Pilgrims walk around it clockwise and turn the prayer wheels."
+    },
+    {
+     "id": "kathmandu-2",
+     "kind": "surprise",
+     "title": "Swayambhunath",
+     "wiki": "Swayambhunath",
+     "lat": 27.7149,
+     "lon": 85.2904,
+     "text": "An old stupa on a hill above the city, known as the Monkey Temple.",
+     "more": "Hundreds of monkeys live on the hill."
+    }
+   ]
+  },
+  {
+   "id": "ulan-bator",
+   "name": "Ulan Bator",
+   "cc": "MN",
+   "lat": 47.908,
+   "lon": 106.883,
+   "r": 60,
+   "tips": [
+    {
+     "id": "ulan-bator-1",
+     "kind": "sight",
+     "title": "Gandan Monastery",
+     "wiki": "Gandantegchinlen Monastery",
+     "lat": 47.9214,
+     "lon": 106.8945,
+     "text": "Mongolia’s largest Buddhist monastery, with a statue of a bodhisattva about 26 metres tall.",
+     "more": "Morning prayers with chanting monks are open to visitors."
+    },
+    {
+     "id": "ulan-bator-2",
+     "kind": "surprise",
+     "title": "Genghis Khan Equestrian Statue",
+     "wiki": "Genghis Khan Equestrian Statue",
+     "lat": 47.8081,
+     "lon": 107.5296,
+     "text": "A steel statue of Genghis Khan on horseback, about 40 metres tall, in the open steppe.",
+     "more": "You can climb up to the horse’s head for the view."
+    }
+   ]
+  },
+  {
+   "id": "samarkand",
+   "name": "Samarkand",
+   "cc": "UZ",
+   "lat": 39.654,
+   "lon": 66.96,
+   "r": 15,
+   "tips": [
+    {
+     "id": "samarkand-1",
+     "kind": "sight",
+     "title": "Registan",
+     "wiki": "Registan",
+     "lat": 39.6547,
+     "lon": 66.9758,
+     "text": "A square framed by three madrasas covered in blue and turquoise tiles.",
+     "more": "It was the heart of the city on the Silk Road."
+    },
+    {
+     "id": "samarkand-2",
+     "kind": "person",
+     "title": "Gur-e-Amir",
+     "wiki": "Gur-e-Amir",
+     "lat": 39.6484,
+     "lon": 66.969,
+     "text": "The tomb of the conqueror Timur, under a ribbed turquoise dome.",
+     "more": "Its design influenced later Mughal tombs such as the Taj Mahal.",
+     "person": "Timur"
+    }
+   ]
+  },
+  {
+   "id": "almaty",
+   "name": "Almaty",
+   "cc": "KZ",
+   "lat": 43.257,
+   "lon": 76.929,
+   "r": 25,
+   "tips": [
+    {
+     "id": "almaty-1",
+     "kind": "surprise",
+     "title": "Medeu",
+     "wiki": "Medeu",
+     "lat": 43.1575,
+     "lon": 77.059,
+     "text": "A huge outdoor ice rink high up in a mountain valley above the city.",
+     "more": "Many speed skating world records were set on its ice."
+    }
+   ]
+  },
+  {
+   "id": "tehran",
+   "name": "Tehran",
+   "cc": "IR",
+   "lat": 35.694,
+   "lon": 51.422,
+   "r": 25,
+   "tips": [
+    {
+     "id": "tehran-1",
+     "kind": "sight",
+     "title": "Golestan Palace",
+     "wiki": "Golestan Palace",
+     "lat": 35.68,
+     "lon": 51.4202,
+     "text": "The palace of the Qajar shahs, with halls of mirror mosaics and tiled courtyards.",
+     "more": "It is the oldest historic monument in Tehran."
+    },
+    {
+     "id": "tehran-2",
+     "kind": "sight",
+     "title": "Azadi Tower",
+     "wiki": "Azadi Tower",
+     "lat": 35.6997,
+     "lon": 51.338,
+     "text": "A white marble gate tower built in 1971 at the western entrance to the city.",
+     "more": "Its shape mixes Persian architecture of many periods."
+    }
+   ]
+  },
+  {
+   "id": "amman",
+   "name": "Amman",
+   "cc": "JO",
+   "lat": 31.955,
+   "lon": 35.945,
+   "r": 20,
+   "tips": [
+    {
+     "id": "amman-1",
+     "kind": "sight",
+     "title": "Amman Citadel",
+     "wiki": "Amman Citadel",
+     "lat": 31.954,
+     "lon": 35.935,
+     "text": "A hill in the centre that has been settled for thousands of years, with a Roman temple and an Umayyad palace.",
+     "more": "From the top you see the Roman Theatre below."
+    },
+    {
+     "id": "amman-2",
+     "kind": "sight",
+     "title": "Roman Theatre",
+     "wiki": "Roman Theatre (Amman)",
+     "lat": 31.9515,
+     "lon": 35.9393,
+     "text": "A Roman theatre cut into the hillside, with seats for about 6,000 people.",
+     "more": "It is still used for concerts."
+    }
+   ]
+  },
+  {
+   "id": "marrakesh",
+   "name": "Marrakesh",
+   "cc": "MA",
+   "lat": 31.634,
+   "lon": -8,
+   "r": 20,
+   "tips": [
+    {
+     "id": "marrakesh-1",
+     "kind": "sight",
+     "title": "Jemaa el-Fnaa",
+     "wiki": "Jemaa el-Fnaa",
+     "lat": 31.6258,
+     "lon": -7.9891,
+     "text": "The main square of the old town, full of storytellers, musicians and food stalls in the evening.",
+     "more": "UNESCO lists its oral traditions as world heritage."
+    },
+    {
+     "id": "marrakesh-2",
+     "kind": "person",
+     "title": "Majorelle Garden",
+     "wiki": "Majorelle Garden",
+     "lat": 31.6417,
+     "lon": -8.0033,
+     "text": "A garden painted in bright blue, laid out by the painter Jacques Majorelle and later saved by Yves Saint Laurent.",
+     "more": "The fashion designer’s ashes were scattered here.",
+     "person": "Yves Saint Laurent"
+    }
+   ]
+  },
+  {
+   "id": "addis-ababa",
+   "name": "Addis Ababa",
+   "cc": "ET",
+   "lat": 9.025,
+   "lon": 38.747,
+   "r": 20,
+   "tips": [
+    {
+     "id": "addis-ababa-1",
+     "kind": "sight",
+     "title": "National Museum of Ethiopia",
+     "wiki": "National Museum of Ethiopia",
+     "lat": 9.0386,
+     "lon": 38.7614,
+     "text": "Home of Lucy, a 3.2 million-year-old skeleton of an early human ancestor found in Ethiopia.",
+     "more": "The original is kept safe; the hall shows a cast."
+    },
+    {
+     "id": "addis-ababa-2",
+     "kind": "person",
+     "title": "Holy Trinity Cathedral",
+     "wiki": "Holy Trinity Cathedral, Addis Ababa",
+     "lat": 9.03,
+     "lon": 38.766,
+     "text": "Emperor Haile Selassie and his wife are buried in this cathedral.",
+     "more": "Its stained glass windows show scenes from Ethiopian history.",
+     "person": "Haile Selassie"
+    }
+   ]
+  },
+  {
+   "id": "lagos",
+   "name": "Lagos",
+   "cc": "NG",
+   "lat": 6.454,
+   "lon": 3.395,
+   "r": 30,
+   "tips": [
+    {
+     "id": "lagos-1",
+     "kind": "surprise",
+     "title": "Lekki Conservation Centre",
+     "wiki": "Lekki Conservation Centre",
+     "lat": 6.4419,
+     "lon": 3.5354,
+     "text": "A nature reserve in the city with a long canopy walkway high above the treetops.",
+     "more": "Monkeys, crocodiles and many birds live in its wetland."
+    },
+    {
+     "id": "lagos-2",
+     "kind": "sight",
+     "title": "Third Mainland Bridge",
+     "wiki": "Third Mainland Bridge",
+     "lat": 6.5,
+     "lon": 3.4,
+     "text": "A bridge about 11.8 km long across the Lagos Lagoon, from the mainland to Lagos Island.",
+     "more": "Fishing villages on stilts can be seen from it."
+    }
+   ]
+  },
+  {
+   "id": "accra",
+   "name": "Accra",
+   "cc": "GH",
+   "lat": 5.556,
+   "lon": -0.197,
+   "r": 20,
+   "tips": [
+    {
+     "id": "accra-1",
+     "kind": "person",
+     "title": "Kwame Nkrumah Memorial Park",
+     "wiki": "Kwame Nkrumah Mausoleum",
+     "lat": 5.545,
+     "lon": -0.2005,
+     "text": "Kwame Nkrumah led Ghana to independence in 1957, the first colony south of the Sahara to become free.",
+     "more": "He is buried here, on the spot where he declared independence.",
+     "person": "Kwame Nkrumah"
+    }
+   ]
+  },
+  {
+   "id": "dakar",
+   "name": "Dakar",
+   "cc": "SN",
+   "lat": 14.694,
+   "lon": -17.444,
+   "r": 20,
+   "tips": [
+    {
+     "id": "dakar-1",
+     "kind": "sight",
+     "title": "African Renaissance Monument",
+     "wiki": "African Renaissance Monument",
+     "lat": 14.7222,
+     "lon": -17.495,
+     "text": "A bronze statue about 49 metres tall on a hill above the Atlantic.",
+     "more": "It was unveiled in 2010, 50 years after Senegal’s independence."
+    },
+    {
+     "id": "dakar-2",
+     "kind": "surprise",
+     "title": "Gorée",
+     "wiki": "Gorée",
+     "lat": 14.667,
+     "lon": -17.398,
+     "text": "A small island off Dakar, remembered as a place of the Atlantic slave trade.",
+     "more": "The House of Slaves with its Door of No Return is a memorial today."
+    }
+   ]
+  },
+  {
+   "id": "zanzibar",
+   "name": "Zanzibar",
+   "cc": "TZ",
+   "lat": -6.164,
+   "lon": 39.198,
+   "r": 20,
+   "tips": [
+    {
+     "id": "zanzibar-1",
+     "kind": "sight",
+     "title": "Stone Town",
+     "wiki": "Stone Town",
+     "lat": -6.1622,
+     "lon": 39.1921,
+     "text": "The old trading town of Zanzibar, a maze of lanes with carved wooden doors.",
+     "more": "Freddie Mercury was born here in 1946."
+    }
+   ]
+  },
+  {
+   "id": "toronto",
+   "name": "Toronto",
+   "cc": "CA",
+   "lat": 43.7,
+   "lon": -79.416,
+   "r": 25,
+   "tips": [
+    {
+     "id": "toronto-1",
+     "kind": "sight",
+     "title": "CN Tower",
+     "wiki": "CN Tower",
+     "lat": 43.6426,
+     "lon": -79.3871,
+     "text": "A tower 553 metres tall that was the world’s tallest free-standing structure for over 30 years.",
+     "more": "A glass floor lets you look straight down 342 metres."
+    }
+   ]
+  },
+  {
+   "id": "montreal",
+   "name": "Montréal",
+   "cc": "CA",
+   "lat": 45.509,
+   "lon": -73.588,
+   "r": 20,
+   "tips": [
+    {
+     "id": "montreal-1",
+     "kind": "sight",
+     "title": "Notre-Dame Basilica",
+     "wiki": "Notre-Dame Basilica (Montreal)",
+     "lat": 45.5045,
+     "lon": -73.5562,
+     "text": "A church with a deep blue vault full of golden stars.",
+     "more": "Céline Dion was married here in 1994."
+    }
+   ]
+  },
+  {
+   "id": "vancouver",
+   "name": "Vancouver",
+   "cc": "CA",
+   "lat": 49.25,
+   "lon": -123.119,
+   "r": 20,
+   "tips": [
+    {
+     "id": "vancouver-1",
+     "kind": "sight",
+     "title": "Stanley Park",
+     "wiki": "Stanley Park",
+     "lat": 49.3043,
+     "lon": -123.1443,
+     "text": "A forest park larger than New York’s Central Park, almost surrounded by the sea.",
+     "more": "A seawall path runs about 9 km around it."
+    },
+    {
+     "id": "vancouver-2",
+     "kind": "surprise",
+     "title": "Capilano Suspension Bridge",
+     "wiki": "Capilano Suspension Bridge",
+     "lat": 49.3429,
+     "lon": -123.1149,
+     "text": "A swaying footbridge 140 metres long, high above a river canyon in the rainforest.",
+     "more": "The first bridge across the canyon here was built of hemp rope in 1889."
+    }
+   ]
+  },
+  {
+   "id": "havana",
+   "name": "Havana",
+   "cc": "CU",
+   "lat": 23.133,
+   "lon": -82.383,
+   "r": 20,
+   "tips": [
+    {
+     "id": "havana-1",
+     "kind": "sight",
+     "title": "Malecón",
+     "wiki": "Malecón, Havana",
+     "lat": 23.1441,
+     "lon": -82.372,
+     "text": "A seafront promenade 8 km long where people meet in the evening; waves often spray over the wall.",
+     "more": "Old American cars cruise past the faded colourful facades."
+    },
+    {
+     "id": "havana-2",
+     "kind": "person",
+     "title": "El Floridita",
+     "wiki": "El Floridita",
+     "lat": 23.1374,
+     "lon": -82.3577,
+     "text": "A bar where Ernest Hemingway drank his daiquiris; a bronze statue of him leans on the counter.",
+     "more": "It calls itself the cradle of the daiquiri.",
+     "person": "Ernest Hemingway"
+    }
+   ]
+  },
+  {
+   "id": "bogota",
+   "name": "Bogotá",
+   "cc": "CO",
+   "lat": 4.61,
+   "lon": -74.082,
+   "r": 50,
+   "tips": [
+    {
+     "id": "bogota-1",
+     "kind": "sight",
+     "title": "Gold Museum",
+     "wiki": "Gold Museum, Bogotá",
+     "lat": 4.6018,
+     "lon": -74.072,
+     "text": "One of the largest collections of pre-Hispanic gold work in the world.",
+     "more": "Its most famous piece is a golden raft linked to the legend of El Dorado."
+    },
+    {
+     "id": "bogota-2",
+     "kind": "sight",
+     "title": "Monserrate",
+     "wiki": "Monserrate",
+     "lat": 4.6058,
+     "lon": -74.056,
+     "text": "A mountain above the city at over 3,100 metres, with a church on its summit.",
+     "more": "A funicular and a cable car lead to the top."
+    },
+    {
+     "id": "bogota-3",
+     "kind": "surprise",
+     "title": "Salt Cathedral of Zipaquirá",
+     "wiki": "Salt Cathedral of Zipaquirá",
+     "lat": 5.0193,
+     "lon": -74.0098,
+     "text": "A church carved out of a salt mine, about 180 metres underground.",
+     "more": "Its tunnels and halls are lit in changing colours."
+    }
+   ]
+  },
+  {
+   "id": "lima",
+   "name": "Lima",
+   "cc": "PE",
+   "lat": -12.043,
+   "lon": -77.028,
+   "r": 25,
+   "tips": [
+    {
+     "id": "lima-1",
+     "kind": "sight",
+     "title": "Huaca Pucllana",
+     "wiki": "Huaca Pucllana",
+     "lat": -12.1107,
+     "lon": -77.0336,
+     "text": "A large adobe pyramid from about 500 AD in the middle of the Miraflores district.",
+     "more": "It was built from millions of mud bricks set upright like books on a shelf."
+    },
+    {
+     "id": "lima-2",
+     "kind": "sight",
+     "title": "Larco Museum",
+     "wiki": "Larco Museum",
+     "lat": -12.0722,
+     "lon": -77.0706,
+     "text": "A museum of ancient Peruvian art in an 18th-century mansion.",
+     "more": "Its storerooms are open, with tens of thousands of ceramics on the shelves."
+    }
+   ]
+  },
+  {
+   "id": "cusco",
+   "name": "Cusco",
+   "cc": "PE",
+   "lat": -13.523,
+   "lon": -71.967,
+   "r": 20,
+   "tips": [
+    {
+     "id": "cusco-1",
+     "kind": "sight",
+     "title": "Sacsayhuamán",
+     "wiki": "Sacsayhuamán",
+     "lat": -13.5094,
+     "lon": -71.9819,
+     "text": "An Inca fortress above the city with huge stones that fit together without mortar.",
+     "more": "Some of the blocks weigh more than 100 tonnes."
+    },
+    {
+     "id": "cusco-2",
+     "kind": "sight",
+     "title": "Qorikancha",
+     "wiki": "Coricancha",
+     "lat": -13.5203,
+     "lon": -71.975,
+     "text": "The most important temple of the Inca, once covered with sheets of gold.",
+     "more": "The Spanish built a church on top of its walls."
+    }
+   ]
+  },
+  {
+   "id": "quito",
+   "name": "Quito",
+   "cc": "EC",
+   "lat": -0.23,
+   "lon": -78.525,
+   "r": 30,
+   "tips": [
+    {
+     "id": "quito-1",
+     "kind": "surprise",
+     "title": "Middle of the World",
+     "wiki": "Ciudad Mitad del Mundo",
+     "lat": -0.0022,
+     "lon": -78.4558,
+     "text": "A monument to the equator just north of the city.",
+     "more": "GPS shows that the true equator runs about 240 metres away."
+    },
+    {
+     "id": "quito-2",
+     "kind": "sight",
+     "title": "Basílica del Voto Nacional",
+     "wiki": "Basílica del Voto Nacional",
+     "lat": -0.2147,
+     "lon": -78.5072,
+     "text": "A neo-Gothic church whose gargoyles are Ecuadorian animals such as turtles and armadillos.",
+     "more": "You can climb its towers for a view over the old town."
+    }
+   ]
+  },
+  {
+   "id": "la-paz",
+   "name": "La Paz",
+   "cc": "BO",
+   "lat": -16.5,
+   "lon": -68.15,
+   "r": 20,
+   "tips": [
+    {
+     "id": "la-paz-1",
+     "kind": "sight",
+     "title": "Mi Teleférico",
+     "wiki": "Mi Teleférico",
+     "lat": -16.5,
+     "lon": -68.13,
+     "text": "A network of cable cars that is part of everyday transport in this city at about 3,600 metres.",
+     "more": "It is the longest urban cable car system in the world."
+    }
+   ]
+  },
+  {
+   "id": "santiago",
+   "name": "Santiago",
+   "cc": "CL",
+   "lat": -33.457,
+   "lon": -70.648,
+   "r": 25,
+   "tips": [
+    {
+     "id": "santiago-1",
+     "kind": "sight",
+     "title": "San Cristóbal Hill",
+     "wiki": "San Cristóbal Hill",
+     "lat": -33.4253,
+     "lon": -70.6331,
+     "text": "A hill in the city with a statue of the Virgin Mary and a view of the Andes.",
+     "more": "A funicular from 1925 runs up the hill."
+    },
+    {
+     "id": "santiago-2",
+     "kind": "person",
+     "title": "La Chascona",
+     "wiki": "La Chascona",
+     "lat": -33.431,
+     "lon": -70.6346,
+     "text": "The house the poet Pablo Neruda built for Matilde Urrutia, full of nooks and odd collections.",
+     "more": "It is named after her wild curly hair.",
+     "person": "Pablo Neruda"
+    }
+   ]
+  },
+  {
+   "id": "honolulu",
+   "name": "Honolulu",
+   "cc": "US",
+   "lat": 21.307,
+   "lon": -157.858,
+   "r": 30,
+   "tips": [
+    {
+     "id": "honolulu-1",
+     "kind": "sight",
+     "title": "Diamond Head",
+     "wiki": "Diamond Head",
+     "lat": 21.262,
+     "lon": -157.8056,
+     "text": "A volcanic crater behind Waikiki Beach; a trail leads up to its rim.",
+     "more": "Sailors once mistook calcite crystals on its slopes for diamonds."
+    },
+    {
+     "id": "honolulu-2",
+     "kind": "sight",
+     "title": "USS Arizona Memorial",
+     "wiki": "USS Arizona Memorial",
+     "lat": 21.3649,
+     "lon": -157.95,
+     "text": "A white memorial over the sunken battleship USS Arizona at Pearl Harbor.",
+     "more": "Drops of oil still rise from the wreck."
+    }
+   ]
+  },
+  {
+   "id": "auckland",
+   "name": "Auckland",
+   "cc": "NZ",
+   "lat": -36.849,
+   "lon": 174.763,
+   "r": 30,
+   "tips": [
+    {
+     "id": "auckland-1",
+     "kind": "sight",
+     "title": "Sky Tower",
+     "wiki": "Sky Tower (Auckland)",
+     "lat": -36.8485,
+     "lon": 174.7621,
+     "text": "A tower 328 metres tall with a view over the harbour and the volcanoes of the city.",
+     "more": "Brave visitors jump from it on a guide wire."
+    },
+    {
+     "id": "auckland-2",
+     "kind": "surprise",
+     "title": "Rangitoto Island",
+     "wiki": "Rangitoto Island",
+     "lat": -36.7867,
+     "lon": 174.8606,
+     "text": "The youngest volcano of Auckland rose from the sea only about 600 years ago.",
+     "more": "A ferry takes you over, and a trail leads through lava fields to the summit."
+    }
+   ]
+  },
+  {
+   "id": "reykjavik",
+   "name": "Reykjavík",
+   "cc": "IS",
+   "lat": 64.135,
+   "lon": -21.895,
+   "r": 50,
+   "tips": [
+    {
+     "id": "reykjavik-1",
+     "kind": "sight",
+     "title": "Hallgrímskirkja",
+     "wiki": "Hallgrímskirkja",
+     "lat": 64.1417,
+     "lon": -21.9266,
+     "text": "A church whose white tower looks like basalt columns.",
+     "more": "Its lift takes you up for a view over the colourful roofs."
+    },
+    {
+     "id": "reykjavik-2",
+     "kind": "surprise",
+     "title": "Blue Lagoon",
+     "wiki": "Blue Lagoon (geothermal spa)",
+     "lat": 63.8804,
+     "lon": -22.4495,
+     "text": "A warm, milky blue lagoon in a lava field, fed by water from a geothermal power station.",
+     "more": "The water is rich in silica, which gives it its colour."
+    }
+   ]
+  },
+  {
+   "id": "warsaw",
+   "name": "Warsaw",
+   "cc": "PL",
+   "lat": 52.23,
+   "lon": 21.012,
+   "r": 20,
+   "tips": [
+    {
+     "id": "warsaw-1",
+     "kind": "sight",
+     "title": "Old Town",
+     "wiki": "Warsaw Old Town",
+     "lat": 52.2497,
+     "lon": 21.0122,
+     "text": "The old town was almost completely destroyed in 1944 and rebuilt from old paintings and drawings.",
+     "more": "UNESCO lists the reconstruction itself as world heritage."
+    },
+    {
+     "id": "warsaw-2",
+     "kind": "person",
+     "title": "Maria Skłodowska-Curie Museum",
+     "wiki": "Maria Skłodowska-Curie Museum",
+     "lat": 52.2526,
+     "lon": 21.0094,
+     "text": "The house where Marie Curie was born in 1867; she won two Nobel Prizes.",
+     "more": "It shows her life and her research on radioactivity.",
+     "person": "Marie Curie"
+    }
+   ]
+  },
+  {
+   "id": "budapest",
+   "name": "Budapest",
+   "cc": "HU",
+   "lat": 47.498,
+   "lon": 19.04,
+   "r": 20,
+   "tips": [
+    {
+     "id": "budapest-1",
+     "kind": "sight",
+     "title": "Hungarian Parliament Building",
+     "wiki": "Hungarian Parliament Building",
+     "lat": 47.5071,
+     "lon": 19.0456,
+     "text": "A huge neo-Gothic parliament on the bank of the Danube.",
+     "more": "The Hungarian crown jewels are kept under its dome."
+    },
+    {
+     "id": "budapest-2",
+     "kind": "surprise",
+     "title": "Széchenyi thermal bath",
+     "wiki": "Széchenyi thermal bath",
+     "lat": 47.5186,
+     "lon": 19.0823,
+     "text": "One of the largest thermal baths in Europe, with warm outdoor pools even in winter.",
+     "more": "Men play chess in the steaming water."
+    }
+   ]
   }
  ]
 }

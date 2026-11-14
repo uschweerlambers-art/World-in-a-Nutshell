@@ -42,11 +42,22 @@ const SOURCES = {
       let lastErr;
       for (const h of hosts) {
         try {
-          const url = `https://${h}.api.radio-browser.info/json/stations/search?has_geo_info=true&hidebroken=true&order=clickcount&reverse=true&limit=6000`;
-          const list = await (await get(url)).json();
+          // all stations with a position, most listened first; then a fair share for every country and region,
+          // so small countries and remote areas get their local stations too, not only the global favourites
+          const url = `https://${h}.api.radio-browser.info/json/stations/search?has_geo_info=true&hidebroken=true&order=clickcount&reverse=true&limit=60000`;
+          const list = await (await get(url, 120000)).json();
           // only https streams: the site runs on https and browsers block mixed content
-          const rows = list
-            .filter((s) => s.url_resolved?.startsWith('https://') && Number.isFinite(s.geo_lat) && Number.isFinite(s.geo_long))
+          const ok = list.filter((s) => s.url_resolved?.startsWith('https://') && Number.isFinite(s.geo_lat) && Number.isFinite(s.geo_long) && s.name?.trim());
+          const MAX = 9000, PER_COUNTRY = 40, PER_CELL = 3; // a cell is 1° × 1°, about 100 km
+          const pick = new Set(), perCc = new Map(), perCell = new Map();
+          const bump = (m, k) => (m.set(k, (m.get(k) || 0) + 1), m.get(k));
+          for (const s of ok) if (bump(perCc, s.countrycode || '?') <= PER_COUNTRY) pick.add(s);
+          for (const s of ok) if (!pick.has(s) && bump(perCell, `${Math.floor(s.geo_lat)},${Math.floor(s.geo_long)}`) <= PER_CELL) pick.add(s);
+          for (const s of ok) { if (pick.size >= MAX) break; pick.add(s); }
+          const chosen = ok.filter((s) => pick.has(s)).slice(0, MAX + 2000);
+          const cc = new Map(); for (const s of chosen) bump(cc, s.countrycode || '?');
+          console.log(`  radio: ${list.length} listed, ${ok.length} usable, ${chosen.length} kept in ${cc.size} countries; ` + ['DE', 'US', 'RU', 'CN', 'JP', 'IN', 'BR', 'NG', 'ID', 'AU'].map((k) => `${k} ${cc.get(k) || 0}`).join(', '));
+          const rows = chosen
             .map((s) => [s.stationuuid, s.name.trim(), +s.geo_lat.toFixed(3), +s.geo_long.toFixed(3), s.countrycode, s.url_resolved, s.homepage || '', s.codec, s.bitrate, s.tags.split(',').slice(0, 3).join(',')]);
           if (!rows.length) throw new Error('no stations');
           return { source: 'Radio Browser', sourceUrl: 'https://www.radio-browser.info', license: 'Public Domain (database)', fields: ['id', 'name', 'lat', 'lon', 'cc', 'stream', 'homepage', 'codec', 'kbps', 'tags'], count: rows.length, rows };

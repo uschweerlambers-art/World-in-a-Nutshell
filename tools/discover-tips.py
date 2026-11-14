@@ -7,7 +7,7 @@
 # with a free licence, so it shows the place itself. Texts are our own words.
 # kind: sight (landmark or local speciality), person (a person's story tied to a place), surprise (unexpected, may lie outside the city)
 # The city anchor (lat/lon) comes from site/data/places.json, so the popup finds the tips by distance.
-import json, os
+import json, os, re, unicodedata
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 
@@ -419,6 +419,452 @@ tip('surprise', 'Metro art', 'Stockholm metro', 59.3313, 18.0596,
     'Over 90 of the 100 metro stations are decorated with art; some look like painted caves.',
     'Start at T-Centralen, with its blue vines on the rock walls.')
 
+# ---- Russia ----
+city('Moscow', 'RU', 30)
+tip('sight', 'Saint Basil’s Cathedral', "Saint Basil's Cathedral", 55.7525, 37.6231,
+    'The church with the colourful onion domes at the end of Red Square, built in the 1550s for Ivan the Terrible.',
+    'Inside it is not one big hall but a maze of small chapels, each under its own dome.')
+tip('person', 'Tretyakov Gallery', 'Tretyakov Gallery', 55.7414, 37.6208,
+    'The merchant Pavel Tretyakov collected Russian paintings all his life and gave them to the city in 1892.',
+    'His collection is still the heart of the largest museum of Russian art.',
+    person='Pavel Tretyakov')
+tip('surprise', 'Komsomolskaya metro station', 'Komsomolskaya (Koltsevaya line)', 55.7757, 37.6545,
+    'A metro station like a palace hall, with chandeliers and mosaics on a yellow vaulted ceiling.',
+    'It lies under three railway stations, so millions pass through without looking up.')
+
+city('Saint Petersburg', 'RU', 30)
+tip('sight', 'Hermitage Museum', 'Hermitage Museum', 59.9398, 30.3146,
+    'One of the largest art museums in the world, partly housed in the tsars’ green and white Winter Palace.',
+    'Cats have lived in its cellars for centuries to keep the mice away.')
+tip('person', 'Peter and Paul Fortress', 'Peter and Paul Fortress', 59.9500, 30.3166,
+    'Peter the Great founded the city here in 1703, with a fortress on a small island in the Neva.',
+    'He and most of the later tsars are buried in its cathedral with the golden spire.',
+    person='Peter the Great')
+tip('surprise', 'Peterhof', 'Peterhof Palace', 59.8853, 29.9086,
+    'A palace on the Gulf of Finland with more than a hundred fountains that run without a single pump.',
+    'The water comes downhill from springs, carried by channels laid out in the 18th century.')
+
+city('Kazan', 'RU', 20)
+tip('sight', 'Kazan Kremlin', 'Kazan Kremlin', 55.7990, 49.1060,
+    'A white fortress above the Volga where a mosque and an Orthodox cathedral stand side by side.',
+    'The blue-domed Qolşärif Mosque was rebuilt inside its walls and opened in 2005.')
+
+city('Novosibirsk', 'RU', 30)
+tip('sight', 'Novosibirsk Opera and Ballet Theatre', 'Novosibirsk Opera and Ballet Theatre', 55.0306, 82.9244,
+    'The largest theatre building in Russia, under a huge silver dome in the middle of Siberia.',
+    'It was finished in 1945, and the city likes to call it the Siberian Colosseum.')
+tip('surprise', 'Akademgorodok', 'Akademgorodok', 54.8443, 83.1030,
+    'A town of science institutes in the birch forest, built in the 1950s for thousands of researchers.',
+    'Its beach on the Ob Reservoir is known locally as the Ob Sea.')
+
+city('Irkutsk', 'RU', 80)
+tip('surprise', 'Listvyanka on Lake Baikal', 'Listvyanka', 51.8536, 104.8697,
+    'A village on the shore of Lake Baikal, the deepest and oldest lake on Earth.',
+    'In winter the ice gets thick enough for cars and you can look through it into the clear water.')
+tip('sight', 'Circum-Baikal Railway', 'Circum-Baikal Railway', 51.8700, 104.8200,
+    'An old railway line along the cliffs of Lake Baikal, with dozens of tunnels, bridges and galleries.',
+    'Once part of the Trans-Siberian, it now carries slow excursion trains.')
+
+city('Vladivostok', 'RU', 25)
+tip('sight', 'Vladivostok railway station', 'Vladivostok railway station', 43.1112, 131.8818,
+    'The end of the Trans-Siberian Railway, 9,288 km from Moscow.',
+    'A stone marker on the platform shows the distance.')
+tip('surprise', 'Russky Bridge', 'Russky Bridge', 43.0806, 131.9370,
+    'When it opened in 2012, this bridge to Russky Island had the longest cable-stayed span in the world.',
+    'Its two towers are taller than 320 metres.')
+
+# ---- China ----
+city('Shanghai', 'CN', 30)
+tip('sight', 'The Bund', 'The Bund', 31.2400, 121.4900,
+    'A riverside promenade lined with banks and trading houses from the early 20th century.',
+    'Across the Huangpu River the skyscrapers of Pudong light up at night.')
+tip('sight', 'Yu Garden', 'Yu Garden', 31.2272, 121.4921,
+    'A classical Chinese garden from the 16th century, with rock piles, ponds and pavilions.',
+    'The tea house on a zigzag bridge nearby is one of the oldest in the city.')
+tip('surprise', 'Shanghai Maglev', 'Shanghai maglev train', 31.2035, 121.5865,
+    'A magnetic levitation train that floats to the airport at up to 300 km/h.',
+    'The 30 km ride takes about eight minutes.')
+
+city('Xi’an', 'CN', 50)
+tip('surprise', 'Terracotta Army', 'Terracotta Army', 34.3841, 109.2785,
+    'Thousands of life-size clay soldiers, buried with China’s first emperor more than 2,200 years ago.',
+    'Farmers digging a well found the first pieces in 1974.')
+tip('person', 'Giant Wild Goose Pagoda', 'Giant Wild Goose Pagoda', 34.2196, 108.9594,
+    'Built in 652 to keep the Buddhist scriptures the monk Xuanzang brought back from India.',
+    'His long journey later inspired the novel Journey to the West.',
+    person='Xuanzang')
+tip('sight', 'City Wall of Xi’an', 'Fortifications of Xi\'an', 34.2610, 108.9470,
+    'One of the best preserved city walls in China, about 14 km around.',
+    'You can rent a bicycle and ride all the way round on top of it.')
+
+city('Chengdu', 'CN', 60)
+tip('sight', 'Giant Panda Base', 'Chengdu Research Base of Giant Panda Breeding', 30.7330, 104.1460,
+    'A breeding centre where you can watch giant pandas eat bamboo, best in the early morning.',
+    'Many of the pandas born here have gone to zoos around the world.')
+tip('person', 'Du Fu Thatched Cottage', 'Du Fu Thatched Cottage', 30.6600, 104.0300,
+    'The poet Du Fu lived here in a simple hut around 760 and wrote hundreds of poems.',
+    'Today a park with bamboo groves and halls stands on the spot.',
+    person='Du Fu')
+tip('surprise', 'Dujiangyan', 'Dujiangyan', 31.0020, 103.6070,
+    'An irrigation system built in the 3rd century BC that still waters the Chengdu plain today.',
+    'It splits the Min River without a dam.')
+
+city('Guilin', 'CN', 25)
+tip('sight', 'Elephant Trunk Hill', 'Elephant Trunk Hill', 25.2690, 110.2970,
+    'A limestone hill on the Li River that looks like an elephant drinking from the water.',
+    'It has become the symbol of the city.')
+tip('surprise', 'Reed Flute Cave', 'Reed Flute Cave', 25.3100, 110.2650,
+    'A cave full of stalactites and stone curtains, lit in bright colours.',
+    'It is named after the reeds outside, which were used to make flutes.')
+
+city('Hong Kong', 'HK', 30)
+tip('sight', 'Victoria Peak', 'Victoria Peak', 22.2759, 114.1455,
+    'The highest hill on Hong Kong Island, with a view over the skyscrapers and the harbour.',
+    'The Peak Tram has climbed the steep slope since 1888.')
+tip('sight', 'Star Ferry', 'Star Ferry', 22.2937, 114.1688,
+    'Green and white ferries have crossed Victoria Harbour between Kowloon and the island for over a century.',
+    'The crossing takes only a few minutes and costs very little.')
+tip('surprise', 'Tian Tan Buddha', 'Tian Tan Buddha', 22.2540, 113.9050,
+    'A giant bronze Buddha on a hilltop on Lantau Island, reached by 268 steps.',
+    'A long cable car ride leads up from the town below.')
+
+city('Harbin', 'CN', 25)
+tip('sight', 'Saint Sophia Cathedral', 'Saint Sophia Cathedral, Harbin', 45.7690, 126.6240,
+    'A Russian Orthodox church with a green dome, a reminder of the Russians who built the railway here.',
+    'Today it is a museum of the city’s history.')
+tip('surprise', 'Harbin Ice and Snow World', 'Harbin Ice and Snow World', 45.7800, 126.5700,
+    'Each winter whole buildings are carved from blocks of river ice and lit from within.',
+    'It is part of the Harbin Ice Festival, one of the largest in the world.')
+
+city('Lhasa', 'CN', 20)
+tip('sight', 'Potala Palace', 'Potala Palace', 29.6578, 91.1169,
+    'The former winter palace of the Dalai Lamas, rising thirteen storeys up the Red Hill.',
+    'It stands at about 3,700 metres above sea level.')
+tip('sight', 'Jokhang', 'Jokhang', 29.6528, 91.1325,
+    'The most sacred temple in Tibetan Buddhism, circled clockwise by pilgrims all day long.',
+    'Many pilgrims prostrate themselves full length on the stones in front of it.')
+
+# ---- Japan ----
+city('Osaka', 'JP', 15)
+tip('sight', 'Osaka Castle', 'Osaka Castle', 34.6873, 135.5262,
+    'A castle with a white and gold keep above high stone walls and wide moats.',
+    'Around it lies a park with hundreds of cherry trees.')
+tip('sight', 'Dōtonbori', 'Dōtonbori', 34.6687, 135.5013,
+    'A canal street of neon signs and street food; Osaka calls itself the nation’s kitchen.',
+    'Try takoyaki, small balls of batter with octopus inside.')
+tip('surprise', 'Shinsekai', 'Shinsekai', 34.6525, 135.5063,
+    'An old entertainment quarter around the Tsūtenkaku tower, with a lively retro feel.',
+    'It is known for kushikatsu, skewers fried in breadcrumbs.')
+
+city('Nara-shi', 'JP', 12)
+tip('sight', 'Tōdai-ji', 'Tōdai-ji', 34.6890, 135.8398,
+    'A huge wooden temple hall that houses a bronze Buddha about 15 metres tall.',
+    'The hall was rebuilt in 1709 and is still among the largest wooden buildings in the world.')
+tip('surprise', 'Nara Park', 'Nara Park', 34.6851, 135.8430,
+    'Over a thousand tame deer roam the park freely and bow to visitors for crackers.',
+    'In local tradition the deer are messengers of the gods.')
+
+city('Hiroshima', 'JP', 30)
+tip('sight', 'Atomic Bomb Dome', 'Hiroshima Peace Memorial', 34.3955, 132.4536,
+    'The ruin of a hall that stood almost directly below the atomic bomb explosion of 6 August 1945.',
+    'It was left as it was, as a memorial for peace.')
+tip('person', 'Children’s Peace Monument', 'Children\'s Peace Monument', 34.3934, 132.4524,
+    'A memorial to Sadako Sasaki, who folded paper cranes hoping to recover from leukaemia caused by the bomb.',
+    'Children from all over the world still send strings of paper cranes here.',
+    person='Sadako Sasaki')
+tip('surprise', 'Itsukushima Shrine', 'Itsukushima Shrine', 34.2959, 132.3199,
+    'A shrine whose red gate seems to float on the sea at high tide.',
+    'At low tide you can walk across the sand to the gate.')
+
+city('Sapporo', 'JP', 20)
+tip('sight', 'Odori Park', 'Odori Park', 43.0597, 141.3478,
+    'A long park through the city centre where the Sapporo Snow Festival shows giant snow sculptures each February.',
+    'The TV tower at its eastern end gives a view along the whole park.')
+tip('sight', 'Sapporo Clock Tower', 'Sapporo Clock Tower', 43.0625, 141.3536,
+    'A wooden building from 1878 with a clock that has kept time for well over a century.',
+    'It was built for an agricultural college founded with help from the United States.')
+
+city('Naha', 'JP', 20)
+tip('sight', 'Shuri Castle', 'Shuri Castle', 26.2170, 127.7195,
+    'The red palace of the kings of Ryukyu, who ruled Okinawa as their own kingdom for centuries.',
+    'A fire destroyed the main hall in 2019, and it is being rebuilt.')
+
+# ---- South and Southeast Asia ----
+city('Bangkok', 'TH', 30)
+tip('sight', 'Wat Arun', 'Wat Arun', 13.7437, 100.4888,
+    'The Temple of Dawn, its tall spire covered with pieces of porcelain, on the bank of the Chao Phraya.',
+    'It looks best at sunset, seen from the other side of the river.')
+tip('sight', 'Grand Palace', 'Grand Palace', 13.7500, 100.4913,
+    'The royal palace with the Temple of the Emerald Buddha, the most sacred temple in Thailand.',
+    'Visitors need to cover shoulders and knees.')
+tip('surprise', 'Chatuchak Weekend Market', 'Chatuchak Weekend Market', 13.7999, 100.5500,
+    'One of the largest markets in the world, with thousands of stalls open at weekends.',
+    'Everything from plants to vintage clothes and street food.')
+
+city('Hanoi', 'VN', 25)
+tip('sight', 'Hoàn Kiếm Lake', 'Hoàn Kiếm Lake', 21.0288, 105.8525,
+    'A lake in the old town with a red bridge to a small temple on an island.',
+    'Legend says a turtle took back a magic sword from a king here.')
+tip('sight', 'Temple of Literature', 'Temple of Literature, Hanoi', 21.0293, 105.8355,
+    'Vietnam’s first university, founded in 1076 and dedicated to Confucius.',
+    'Stone tablets on the backs of turtles list the names of its best graduates.')
+
+city('Jakarta', 'ID', 25)
+tip('sight', 'National Monument', 'National Monument (Indonesia)', -6.1754, 106.8272,
+    'A tall obelisk with a flame covered in gold leaf, the symbol of Indonesia’s independence.',
+    'A lift takes you up to a viewing platform.')
+tip('sight', 'Kota Tua', 'Kota Tua Jakarta', -6.1352, 106.8133,
+    'The old town of Batavia, the Dutch colonial port, around a square with the former city hall.',
+    'Colourful bicycles can be rented on the square.')
+
+city('Yogyakarta', 'ID', 50)
+tip('surprise', 'Borobudur', 'Borobudur', -7.6079, 110.2038,
+    'The largest Buddhist temple in the world, built in the 9th century as a stepped stone mountain.',
+    'Over 2,600 relief panels tell stories as you climb.')
+tip('sight', 'Prambanan', 'Prambanan', -7.7520, 110.4915,
+    'A Hindu temple compound from the 9th century with tall, pointed stone towers.',
+    'The Ramayana ballet is performed in front of it on many evenings.')
+
+city('Kuala Lumpur', 'MY', 25)
+tip('sight', 'Petronas Towers', 'Petronas Towers', 3.1579, 101.7116,
+    'Twin skyscrapers joined by a skybridge, the tallest buildings in the world from 1998 to 2004.',
+    'Their floor plan is based on an eight-pointed star from Islamic art.')
+tip('surprise', 'Batu Caves', 'Batu Caves', 3.2379, 101.6840,
+    'A Hindu temple inside a limestone cave, reached by 272 colourful steps.',
+    'A golden statue more than 40 metres tall stands at the foot of the stairs.')
+
+city('Delhi', 'IN', 30)
+tip('sight', 'Qutb Minar', 'Qutb Minar', 28.5245, 77.1855,
+    'A tower of red sandstone about 73 metres high, begun around 1200.',
+    'Nearby stands an iron pillar that has hardly rusted in over 1,500 years.')
+tip('sight', 'Humayun’s Tomb', "Humayun's Tomb", 28.5933, 77.2507,
+    'A garden tomb of the Mughal emperor Humayun that set the pattern for the Taj Mahal.',
+    'It is surrounded by a garden divided into four parts by water channels.')
+tip('person', 'Raj Ghat', 'Raj Ghat', 28.6406, 77.2495,
+    'A black marble platform marks the place where Mahatma Gandhi was cremated in 1948.',
+    'An eternal flame burns at one end.',
+    person='Mahatma Gandhi')
+
+city('Agra', 'IN', 20)
+tip('person', 'Taj Mahal', 'Taj Mahal', 27.1751, 78.0421,
+    'The white marble tomb that Emperor Shah Jahan built for his wife Mumtaz Mahal.',
+    'The marble changes colour from pink in the morning to gold at sunset.',
+    person='Shah Jahan')
+tip('sight', 'Agra Fort', 'Agra Fort', 27.1795, 78.0211,
+    'A red sandstone fortress of the Mughal emperors on the Yamuna river.',
+    'Shah Jahan spent his last years here, looking across at the Taj Mahal.')
+
+city('Kathmandu', 'NP', 15)
+tip('sight', 'Boudhanath', 'Boudhanath', 27.7215, 85.3620,
+    'One of the largest stupas in the world, with the Buddha’s eyes painted on its tower.',
+    'Pilgrims walk around it clockwise and turn the prayer wheels.')
+tip('surprise', 'Swayambhunath', 'Swayambhunath', 27.7149, 85.2904,
+    'An old stupa on a hill above the city, known as the Monkey Temple.',
+    'Hundreds of monkeys live on the hill.')
+
+city('Ulan Bator', 'MN', 60)
+tip('sight', 'Gandan Monastery', 'Gandantegchinlen Monastery', 47.9214, 106.8945,
+    'Mongolia’s largest Buddhist monastery, with a statue of a bodhisattva about 26 metres tall.',
+    'Morning prayers with chanting monks are open to visitors.')
+tip('surprise', 'Genghis Khan Equestrian Statue', 'Genghis Khan Equestrian Statue', 47.8081, 107.5296,
+    'A steel statue of Genghis Khan on horseback, about 40 metres tall, in the open steppe.',
+    'You can climb up to the horse’s head for the view.')
+
+city('Samarkand', 'UZ', 15)
+tip('sight', 'Registan', 'Registan', 39.6547, 66.9758,
+    'A square framed by three madrasas covered in blue and turquoise tiles.',
+    'It was the heart of the city on the Silk Road.')
+tip('person', 'Gur-e-Amir', 'Gur-e-Amir', 39.6484, 66.9690,
+    'The tomb of the conqueror Timur, under a ribbed turquoise dome.',
+    'Its design influenced later Mughal tombs such as the Taj Mahal.',
+    person='Timur')
+
+city('Almaty', 'KZ', 25)
+tip('surprise', 'Medeu', 'Medeu', 43.1575, 77.0590,
+    'A huge outdoor ice rink high up in a mountain valley above the city.',
+    'Many speed skating world records were set on its ice.')
+
+# ---- Middle East and Africa ----
+city('Tehran', 'IR', 25)
+tip('sight', 'Golestan Palace', 'Golestan Palace', 35.6800, 51.4202,
+    'The palace of the Qajar shahs, with halls of mirror mosaics and tiled courtyards.',
+    'It is the oldest historic monument in Tehran.')
+tip('sight', 'Azadi Tower', 'Azadi Tower', 35.6997, 51.3380,
+    'A white marble gate tower built in 1971 at the western entrance to the city.',
+    'Its shape mixes Persian architecture of many periods.')
+
+city('Amman', 'JO', 20)
+tip('sight', 'Amman Citadel', 'Amman Citadel', 31.9540, 35.9350,
+    'A hill in the centre that has been settled for thousands of years, with a Roman temple and an Umayyad palace.',
+    'From the top you see the Roman Theatre below.')
+tip('sight', 'Roman Theatre', 'Roman Theatre (Amman)', 31.9515, 35.9393,
+    'A Roman theatre cut into the hillside, with seats for about 6,000 people.',
+    'It is still used for concerts.')
+
+city('Marrakesh', 'MA', 20)
+tip('sight', 'Jemaa el-Fnaa', 'Jemaa el-Fnaa', 31.6258, -7.9891,
+    'The main square of the old town, full of storytellers, musicians and food stalls in the evening.',
+    'UNESCO lists its oral traditions as world heritage.')
+tip('person', 'Majorelle Garden', 'Majorelle Garden', 31.6417, -8.0033,
+    'A garden painted in bright blue, laid out by the painter Jacques Majorelle and later saved by Yves Saint Laurent.',
+    'The fashion designer’s ashes were scattered here.',
+    person='Yves Saint Laurent')
+
+city('Addis Ababa', 'ET', 20)
+tip('sight', 'National Museum of Ethiopia', 'National Museum of Ethiopia', 9.0386, 38.7614,
+    'Home of Lucy, a 3.2 million-year-old skeleton of an early human ancestor found in Ethiopia.',
+    'The original is kept safe; the hall shows a cast.')
+tip('person', 'Holy Trinity Cathedral', 'Holy Trinity Cathedral, Addis Ababa', 9.0300, 38.7660,
+    'Emperor Haile Selassie and his wife are buried in this cathedral.',
+    'Its stained glass windows show scenes from Ethiopian history.',
+    person='Haile Selassie')
+
+city('Lagos', 'NG', 30)
+tip('surprise', 'Lekki Conservation Centre', 'Lekki Conservation Centre', 6.4419, 3.5354,
+    'A nature reserve in the city with a long canopy walkway high above the treetops.',
+    'Monkeys, crocodiles and many birds live in its wetland.')
+tip('sight', 'Third Mainland Bridge', 'Third Mainland Bridge', 6.5000, 3.4000,
+    'A bridge about 11.8 km long across the Lagos Lagoon, from the mainland to Lagos Island.',
+    'Fishing villages on stilts can be seen from it.')
+
+city('Accra', 'GH', 20)
+tip('person', 'Kwame Nkrumah Memorial Park', 'Kwame Nkrumah Mausoleum', 5.5450, -0.2005,
+    'Kwame Nkrumah led Ghana to independence in 1957, the first colony south of the Sahara to become free.',
+    'He is buried here, on the spot where he declared independence.',
+    person='Kwame Nkrumah')
+
+city('Dakar', 'SN', 20)
+tip('sight', 'African Renaissance Monument', 'African Renaissance Monument', 14.7222, -17.4950,
+    'A bronze statue about 49 metres tall on a hill above the Atlantic.',
+    'It was unveiled in 2010, 50 years after Senegal’s independence.')
+tip('surprise', 'Gorée', 'Gorée', 14.6670, -17.3980,
+    'A small island off Dakar, remembered as a place of the Atlantic slave trade.',
+    'The House of Slaves with its Door of No Return is a memorial today.')
+
+city('Zanzibar', 'TZ', 20)
+tip('sight', 'Stone Town', 'Stone Town', -6.1622, 39.1921,
+    'The old trading town of Zanzibar, a maze of lanes with carved wooden doors.',
+    'Freddie Mercury was born here in 1946.')
+
+# ---- The Americas and Oceania ----
+city('Toronto', 'CA', 25)
+tip('sight', 'CN Tower', 'CN Tower', 43.6426, -79.3871,
+    'A tower 553 metres tall that was the world’s tallest free-standing structure for over 30 years.',
+    'A glass floor lets you look straight down 342 metres.')
+
+city('Montréal', 'CA', 20)
+tip('sight', 'Notre-Dame Basilica', 'Notre-Dame Basilica (Montreal)', 45.5045, -73.5562,
+    'A church with a deep blue vault full of golden stars.',
+    'Céline Dion was married here in 1994.')
+
+city('Vancouver', 'CA', 20)
+tip('sight', 'Stanley Park', 'Stanley Park', 49.3043, -123.1443,
+    'A forest park larger than New York’s Central Park, almost surrounded by the sea.',
+    'A seawall path runs about 9 km around it.')
+tip('surprise', 'Capilano Suspension Bridge', 'Capilano Suspension Bridge', 49.3429, -123.1149,
+    'A swaying footbridge 140 metres long, high above a river canyon in the rainforest.',
+    'The first bridge across the canyon here was built of hemp rope in 1889.')
+
+city('Havana', 'CU', 20)
+tip('sight', 'Malecón', 'Malecón, Havana', 23.1441, -82.3720,
+    'A seafront promenade 8 km long where people meet in the evening; waves often spray over the wall.',
+    'Old American cars cruise past the faded colourful facades.')
+tip('person', 'El Floridita', 'El Floridita', 23.1374, -82.3577,
+    'A bar where Ernest Hemingway drank his daiquiris; a bronze statue of him leans on the counter.',
+    'It calls itself the cradle of the daiquiri.',
+    person='Ernest Hemingway')
+
+city('Bogotá', 'CO', 50)
+tip('sight', 'Gold Museum', 'Gold Museum, Bogotá', 4.6018, -74.0720,
+    'One of the largest collections of pre-Hispanic gold work in the world.',
+    'Its most famous piece is a golden raft linked to the legend of El Dorado.')
+tip('sight', 'Monserrate', 'Monserrate', 4.6058, -74.0560,
+    'A mountain above the city at over 3,100 metres, with a church on its summit.',
+    'A funicular and a cable car lead to the top.')
+tip('surprise', 'Salt Cathedral of Zipaquirá', 'Salt Cathedral of Zipaquirá', 5.0193, -74.0098,
+    'A church carved out of a salt mine, about 180 metres underground.',
+    'Its tunnels and halls are lit in changing colours.')
+
+city('Lima', 'PE', 25)
+tip('sight', 'Huaca Pucllana', 'Huaca Pucllana', -12.1107, -77.0336,
+    'A large adobe pyramid from about 500 AD in the middle of the Miraflores district.',
+    'It was built from millions of mud bricks set upright like books on a shelf.')
+tip('sight', 'Larco Museum', 'Larco Museum', -12.0722, -77.0706,
+    'A museum of ancient Peruvian art in an 18th-century mansion.',
+    'Its storerooms are open, with tens of thousands of ceramics on the shelves.')
+
+city('Cusco', 'PE', 20)
+tip('sight', 'Sacsayhuamán', 'Sacsayhuamán', -13.5094, -71.9819,
+    'An Inca fortress above the city with huge stones that fit together without mortar.',
+    'Some of the blocks weigh more than 100 tonnes.')
+tip('sight', 'Qorikancha', 'Coricancha', -13.5203, -71.9750,
+    'The most important temple of the Inca, once covered with sheets of gold.',
+    'The Spanish built a church on top of its walls.')
+
+city('Quito', 'EC', 30)
+tip('surprise', 'Middle of the World', 'Ciudad Mitad del Mundo', -0.0022, -78.4558,
+    'A monument to the equator just north of the city.',
+    'GPS shows that the true equator runs about 240 metres away.')
+tip('sight', 'Basílica del Voto Nacional', 'Basílica del Voto Nacional', -0.2147, -78.5072,
+    'A neo-Gothic church whose gargoyles are Ecuadorian animals such as turtles and armadillos.',
+    'You can climb its towers for a view over the old town.')
+
+city('La Paz', 'BO', 20)
+tip('sight', 'Mi Teleférico', 'Mi Teleférico', -16.5000, -68.1300,
+    'A network of cable cars that is part of everyday transport in this city at about 3,600 metres.',
+    'It is the longest urban cable car system in the world.')
+
+city('Santiago', 'CL', 25)
+tip('sight', 'San Cristóbal Hill', 'San Cristóbal Hill', -33.4253, -70.6331,
+    'A hill in the city with a statue of the Virgin Mary and a view of the Andes.',
+    'A funicular from 1925 runs up the hill.')
+tip('person', 'La Chascona', 'La Chascona', -33.4310, -70.6346,
+    'The house the poet Pablo Neruda built for Matilde Urrutia, full of nooks and odd collections.',
+    'It is named after her wild curly hair.',
+    person='Pablo Neruda')
+
+city('Honolulu', 'US', 30)
+tip('sight', 'Diamond Head', 'Diamond Head', 21.2620, -157.8056,
+    'A volcanic crater behind Waikiki Beach; a trail leads up to its rim.',
+    'Sailors once mistook calcite crystals on its slopes for diamonds.')
+tip('sight', 'USS Arizona Memorial', 'USS Arizona Memorial', 21.3649, -157.9500,
+    'A white memorial over the sunken battleship USS Arizona at Pearl Harbor.',
+    'Drops of oil still rise from the wreck.')
+
+city('Auckland', 'NZ', 30)
+tip('sight', 'Sky Tower', 'Sky Tower (Auckland)', -36.8485, 174.7621,
+    'A tower 328 metres tall with a view over the harbour and the volcanoes of the city.',
+    'Brave visitors jump from it on a guide wire.')
+tip('surprise', 'Rangitoto Island', 'Rangitoto Island', -36.7867, 174.8606,
+    'The youngest volcano of Auckland rose from the sea only about 600 years ago.',
+    'A ferry takes you over, and a trail leads through lava fields to the summit.')
+
+# ---- Europe, more ----
+city('Reykjavík', 'IS', 50)
+tip('sight', 'Hallgrímskirkja', 'Hallgrímskirkja', 64.1417, -21.9266,
+    'A church whose white tower looks like basalt columns.',
+    'Its lift takes you up for a view over the colourful roofs.')
+tip('surprise', 'Blue Lagoon', 'Blue Lagoon (geothermal spa)', 63.8804, -22.4495,
+    'A warm, milky blue lagoon in a lava field, fed by water from a geothermal power station.',
+    'The water is rich in silica, which gives it its colour.')
+
+city('Warsaw', 'PL', 20)
+tip('sight', 'Old Town', 'Warsaw Old Town', 52.2497, 21.0122,
+    'The old town was almost completely destroyed in 1944 and rebuilt from old paintings and drawings.',
+    'UNESCO lists the reconstruction itself as world heritage.')
+tip('person', 'Maria Skłodowska-Curie Museum', 'Maria Skłodowska-Curie Museum', 52.2526, 21.0094,
+    'The house where Marie Curie was born in 1867; she won two Nobel Prizes.',
+    'It shows her life and her research on radioactivity.',
+    person='Marie Curie')
+
+city('Budapest', 'HU', 20)
+tip('sight', 'Hungarian Parliament Building', 'Hungarian Parliament Building', 47.5071, 19.0456,
+    'A huge neo-Gothic parliament on the bank of the Danube.',
+    'The Hungarian crown jewels are kept under its dome.')
+tip('surprise', 'Széchenyi thermal bath', 'Széchenyi thermal bath', 47.5186, 19.0823,
+    'One of the largest thermal baths in Europe, with warm outdoor pools even in winter.',
+    'Men play chess in the steaming water.')
+
 places = json.load(open(os.path.join(ROOT, 'site/data/places.json')))
 rows = places['rows']
 out, n = [], 0
@@ -426,7 +872,7 @@ for c in C:
     m = [r for r in rows if r[0] == c['name'] and r[4] == c['cc']]
     assert m, c['name']
     r = max(m, key=lambda r: r[6])
-    cid = r[0].lower().replace(' ', '-').replace('ü', 'ue')
+    cid = re.sub(r'[^a-z0-9]+', '-', unicodedata.normalize('NFKD', r[0].lower().replace('ü', 'ue')).encode('ascii', 'ignore').decode()).strip('-')
     tips = []
     for k, t in enumerate(c['tips']):
         tips.append({'id': f'{cid}-{k + 1}', **t})

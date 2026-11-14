@@ -1,6 +1,8 @@
 # World in a Nutshell – Product Requirements Document (PRD) für den Prototyp
 
-Version 0.13 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+Version 0.14 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+
+Änderungen in v0.14 (Uwe, 14.11.2026): Alle Orte der Welt sollen gleichwertig anwählbar sein. „Discover here“ deckt jetzt alle Kontinente ab, mit Städten in Russland, China, Japan, Süd- und Südostasien, Afrika, Lateinamerika und Ozeanien (F-25.2). Die Radioliste garantiert jedem Land und jeder Region einen Anteil an Sendern statt nur die weltweit meistgehörten (F-07.1).
 
 Änderungen in v0.13 (Uwe, 14.11.2026): Der Globus soll sich wie ein interaktiver Atlas anfühlen. „Explore freely“ zeigt den Globus aus dem All statt Bielefeld (F-01.8). Nach der Landung öffnet nur noch das Stadt-Pop-up; Ortsname und Ebenenauswahl entfallen, die Ebenenliste ist eingeklappt und über „All layers“ erreichbar (F-01.6). Neu: „Discover here“ mit kuratierten lokalen Tipps und Fotos (F-25), „Radio nearby“ als lokaler Einstieg im Pop-up (F-07.6), „Wonders & records“ mit eigener Liste in der Seitenleiste, 16 Rekorden und einem anschaulichen Vergleich auf jeder Karte (F-02).
 
@@ -165,7 +167,7 @@ Prüfmethoden: **M** = manueller Test nach Testskript, **A** = automatisierter T
 
 | AK | Kriterium | Prüfung |
 | --- | --- | --- |
-| F-07.1 | Quelle ist Radio Browser (gemeinfrei). Die Senderliste mit Koordinaten bereitet die GitHub Action täglich als Snapshot-Datei auf; nur Sender mit Koordinaten und HTTPS-Stream kommen in die Liste. | R |
+| F-07.1 | Quelle ist Radio Browser (gemeinfrei). Die Senderliste mit Koordinaten bereitet die GitHub Action täglich als Snapshot-Datei auf; nur Sender mit Koordinaten und HTTPS-Stream kommen in die Liste. Damit jede Gegend lokale Sender hat (v0.14), bekommt jedes Land bis zu 40 seiner meistgehörten Sender und jede Zelle von 1° × 1° bis zu 3, den Rest füllen die weltweit meistgehörten bis etwa 9 000 Sender auf. | R |
 | F-07.2 | Sender erscheinen als Punkte in #30D158; beim Rauszoomen werden sie auf einem Raster in zwei Stufen zu Gruppen zusammengefasst (größerer Punkt = mehr Sender). Ein Klick auf eine Gruppe zoomt hinein. | M |
 | F-07.3 | Klick auf einen Sender startet die Wiedergabe innerhalb von 5 s (bei funktionierendem Stream) und zeigt Sendername, Ort, Land, Genre, Quelle. | M |
 | F-07.4 | Ein Player bleibt sichtbar (Play/Pause, Lautstärke, Sendername), auch wenn andere Ebenen gewechselt werden. | M |
@@ -291,7 +293,7 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | AK | Kriterium | Prüfung |
 | --- | --- | --- |
 | F-25.1 | Unter dem Wetter zeigt das Stadt-Pop-up „Discover here“: ein Tipp mit Foto, Art (Sight, Person & place, Surprise nearby), Titel und einem Satz, warum der Ort interessant ist. Bis zu drei Tipps pro Ort, mit Pfeilen und auf Touchscreens per Wischen blätterbar. | M |
-| F-25.2 | Die Tipps sind kuratiert (`tools/discover-tips.py` → `site/data/discover.json`, eigene Texte). Jeder Tipp nennt einen realen Ort mit eigenem Artikel der englischen Wikipedia. Ein Ort bekommt die Tipps der nächsten kuratierten Stadt innerhalb ihres Radius (12–30 km). Start: 35 Städte, 99 Tipps, darunter Bielefeld. | R |
+| F-25.2 | Die Tipps sind kuratiert (`tools/discover-tips.py` → `site/data/discover.json`, eigene Texte). Jeder Tipp nennt einen realen Ort mit eigenem Artikel der englischen Wikipedia. Ein Ort bekommt die Tipps der nächsten kuratierten Stadt innerhalb ihres Radius (12–80 km). Start: 35 Städte, 99 Tipps, darunter Bielefeld; seit v0.14 87 Städte mit 206 Tipps auf allen Kontinenten. | R |
 | F-25.3 | Fotos: je Tipp ein Foto aus dem Wikipedia-Artikel des Ortes selbst (zuerst sein Hauptbild), nur Dateien auf Wikimedia Commons mit freier Lizenz. Urheber, Lizenz und Link zur Datei stehen unter dem Foto. Die GitHub Action lädt und verkleinert die Fotos (720 × 405 px) und legt sie auf unsere Seite; das Log nennt jede gewählte Datei zur Kontrolle. | R |
 | F-25.4 | „Visit on the globe“ fliegt zum Ziel (etwa 57 km Höhe) und öffnet eine kurze Detailkarte mit Foto, Text, Entfernung zur Stadt, Wikipedia-Link, „Back to …“ und „Next tip“. | M |
 | F-25.5 | Ohne passende Tipps zeigt das Pop-up wie bisher Ortszeit, Datum, Luftqualität, Koordinaten, Einwohner, Höhe und Kartenlinks. Mit Tipps sind diese Angaben unter „City details“ eingeklappt. | M |

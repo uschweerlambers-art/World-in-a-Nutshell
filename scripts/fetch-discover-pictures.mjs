@@ -78,7 +78,7 @@ for (const c of CITIES) for (const t of c.tips) {
   n++;
   let e = await build(t);
   if (!e.image && e.v === VERSION && e.built && Date.now() - Date.parse(e.built) < 60000) { await pause(5000); await unlink(join(dCache, `${t.id}.json`)).catch(() => {}); e = await build(t); } // one retry, e.g. after a 429
-  await pause(400);
+  if (Date.now() - Date.parse(e.built) < 120000) await pause(1200); // go easy on Wikipedia when a photo was fetched
   // the log lists every chosen file, so a reviewer can check that each photo shows the place
   console.log(`${e.image ? '✓' : '✗'} ${t.id} ${t.title}${e.title && e.title !== t.wiki.replace(/ /g, '_') ? ` [${e.title}]` : ''}: ${e.image ? `${e.image.file} · ${e.image.license} · ${e.image.author}` : 'no photo'}`);
   if (process.env.DISCOVER_DEBUG) console.log(`    lead: ${e.lead || '–'}`);
