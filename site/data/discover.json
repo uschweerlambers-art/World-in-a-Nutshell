@@ -406,7 +406,10 @@
      "lon": -0.1162,
      "text": "Charles Dickens lived in this terraced house when he wrote Oliver Twist.",
      "more": "He moved in with his young family in 1837. Rooms are furnished as in his day, with his writing desk.",
-     "person": "Charles Dickens"
+     "person": "Charles Dickens",
+     "avoid": [
+      "Dickens_dream.jpg"
+     ]
     },
     {
      "id": "london-3",
@@ -1100,7 +1103,10 @@
      "lat": 37.5796,
      "lon": 126.977,
      "text": "The main royal palace of the Joseon dynasty, first built in 1395.",
-     "more": "The changing of the guard takes place at its main gate."
+     "more": "The changing of the guard takes place at its main gate.",
+     "avoid": [
+      "조선물산공진회_광고지-1_(부분)_(cropped).jpg"
+     ]
     },
     {
      "id": "seoul-2",

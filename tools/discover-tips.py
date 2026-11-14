@@ -14,10 +14,11 @@ ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
 C = []
 def city(name, cc, r=12):
     C.append({'name': name, 'cc': cc, 'r': r, 'tips': []})
-def tip(kind, title, wiki, lat, lon, text, more, person=None, photo=None):
+def tip(kind, title, wiki, lat, lon, text, more, person=None, photo=None, avoid=None):
     t = {'kind': kind, 'title': title, 'wiki': wiki, 'lat': lat, 'lon': lon, 'text': text, 'more': more}
     if person: t['person'] = person
     if photo: t['photo'] = photo
+    if avoid: t['avoid'] = avoid  # Commons files that do not show the place itself
     C[-1]['tips'].append(t)
 
 # ---------- Germany ----------
@@ -138,7 +139,7 @@ tip('sight', 'Borough Market', 'Borough Market', 51.5055, -0.0910,
 tip('person', 'Charles Dickens Museum', 'Charles Dickens Museum', 51.5235, -0.1162,
     'Charles Dickens lived in this terraced house when he wrote Oliver Twist.',
     'He moved in with his young family in 1837. Rooms are furnished as in his day, with his writing desk.',
-    person='Charles Dickens')
+    person='Charles Dickens', avoid=['Dickens_dream.jpg'])
 tip('surprise', 'Royal Observatory, Greenwich', 'Royal Observatory, Greenwich', 51.4769, -0.0005,
     'Stand with one foot in each hemisphere on the prime meridian, longitude 0°.',
     'All time zones of the world were once counted from here, Greenwich Mean Time. The red time ball on the roof still drops at 1 pm.')
@@ -339,7 +340,8 @@ tip('surprise', 'Fushimi Inari-taisha', 'Fushimi Inari-taisha', 34.9671, 135.772
 city('Seoul', 'KR', 25)
 tip('sight', 'Gyeongbokgung', 'Gyeongbokgung', 37.5796, 126.9770,
     'The main royal palace of the Joseon dynasty, first built in 1395.',
-    'The changing of the guard takes place at its main gate.')
+    'The changing of the guard takes place at its main gate.',
+    avoid=['조선물산공진회_광고지-1_(부분)_(cropped).jpg'])
 tip('sight', 'Gwangjang Market', 'Gwangjang Market', 37.5700, 126.9996,
     'One of Korea’s oldest markets, famous for its mung bean pancakes.',
     'Hundreds of food stalls fill the covered lanes.')
