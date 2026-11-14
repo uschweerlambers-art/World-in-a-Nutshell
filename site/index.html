@@ -126,6 +126,42 @@ button:disabled { cursor: default; }
 .start-actions .sep { color: #6E6E78; }
 .link-btn { min-height: 44px; padding: 0 10px; border: 0; border-radius: 22px; background: transparent; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
 .link-btn:hover { background: var(--hover); }
+/* Place of the day (F-16) */
+.start-wrap { position: relative; display: flex; align-items: center; gap: 20px; margin-top: -40px; pointer-events: none; }
+.start-wrap > * { pointer-events: auto; }
+.start-wrap .start-card { margin-top: 0; }
+.pod { width: 340px; box-sizing: border-box; border-radius: 28px; overflow: hidden; display: flex; flex-direction: column; border-color: rgba(255,255,255,0.14); box-shadow: 0 24px 80px rgba(0,0,0,0.55); padding: 0; }
+.pod-pics { position: relative; aspect-ratio: 16 / 10; background: rgba(255,255,255,0.06); overflow: hidden; touch-action: pan-y; }
+.pod-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .9s ease; }
+.pod-img.on { opacity: 1; }
+.pod-pics::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 38%; background: linear-gradient(rgba(5,7,13,0), rgba(5,7,13,0.55)); pointer-events: none; }
+.pod-dots { position: absolute; left: 0; right: 0; bottom: 6px; display: flex; justify-content: center; z-index: 2; }
+.pod-dots button { width: 24px; height: 24px; padding: 0; border: 0; background: none; display: grid; place-items: center; }
+.pod-dots button::before { content: ""; width: 7px; height: 7px; border-radius: 4px; background: rgba(255,255,255,0.5); transition: width .3s; }
+.pod-dots button[aria-current="true"]::before { width: 18px; background: #fff; }
+.pod-nav { position: absolute; top: 50%; translate: 0 -50%; z-index: 2; width: 36px; height: 36px; border-radius: 18px; border: 0; padding: 0; background: rgba(5,7,13,0.5); color: #fff; display: grid; place-items: center; opacity: 0; transition: opacity .2s; }
+.pod-pics:hover .pod-nav, .pod-nav:focus-visible { opacity: 1; }
+@media (hover: none) { .pod-nav { opacity: 0.85; } }
+.pod-nav.prev { left: 8px; } .pod-nav.next { right: 8px; }
+.pod-body { padding: 16px 22px 18px; display: flex; flex-direction: column; gap: 2px; }
+.pod-kicker { font-size: 11.5px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--c-place); }
+.pod h2 { margin: 4px 0 0; font-size: 22px; font-weight: 700; letter-spacing: -0.2px; }
+.pod-where { font-size: 14px; color: var(--text-3); }
+.pod-text { margin: 8px 0 0; font-size: 14.5px; line-height: 1.45; color: var(--text-2); }
+.pod-actions { display: flex; align-items: center; gap: 16px; margin-top: 14px; }
+.pod-go { height: 40px; padding: 0 16px; border-radius: 20px; border: 0; background: var(--action); color: #fff; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
+.pod-go:hover { filter: brightness(1.12); }
+.pod-wiki { font-size: 14px; color: var(--text-2); }
+.pod-credit { margin: 12px 0 0; font-size: 11px; line-height: 1.4; color: var(--text-4); }
+.pod-credit a { color: inherit; }
+@media (max-width: 959px) {
+  #start { overflow-y: auto; place-items: safe center; pointer-events: auto; }
+  .start-wrap { flex-direction: column; align-items: stretch; margin: 0; padding: 24px 0 72px; width: min(520px, 100%); }
+  .start-wrap .start-card { width: 100%; }
+  .pod { width: 100%; }
+  .pod-pics { aspect-ratio: 16 / 8; }
+  .start-foot { z-index: 9; }
+}
 .start-foot { position: fixed; left: 0; right: 0; bottom: var(--sb); display: flex; flex-direction: column; align-items: center; gap: 10px; pointer-events: none; z-index: 11; padding-inline: 16px; text-align: center; }
 .loadbar { width: 160px; height: 3px; border-radius: 2px; background: rgba(255,255,255,0.12); overflow: hidden; }
 .loadbar i { display: block; height: 3px; width: 0; background: var(--text); transition: width .3s; }
@@ -419,6 +455,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 
 <!-- Start screen -->
 <div id="start" class="fade">
+  <div class="start-wrap">
   <section class="start-card glass" aria-labelledby="start-title">
     <div class="start-head">
       <svg class="emblem" width="108" height="108" viewBox="0 0 84 84" role="img" aria-label="Logo: stylised globe with an orbit">
@@ -463,9 +500,28 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <button type="button" class="link-btn" data-act="explore"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg>Explore freely</button>
       <span class="sep" aria-hidden="true">·</span>
       <button type="button" class="link-btn" data-act="locate"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 3L3 10.5l7.5 3 3 7.5z"/></svg>Use my location</button>
-      <button type="button" class="link-btn m-only" data-act="wonder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>Surprise me</button>
+      <button type="button" class="link-btn m-only" data-act="wonder" id="m-wonder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>Surprise me</button>
     </div>
   </section>
+  <aside class="pod glass" id="pod" aria-labelledby="pod-title" hidden>
+    <div class="pod-pics" id="pod-pics" aria-roledescription="carousel" aria-label="Pictures of the place of the day">
+      <button type="button" class="pod-nav prev" data-pod="-1" aria-label="Previous picture"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button type="button" class="pod-nav next" data-pod="1" aria-label="Next picture"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+      <div class="pod-dots" id="pod-dots" role="group" aria-label="Choose a picture"></div>
+    </div>
+    <div class="pod-body">
+      <span class="pod-kicker" id="pod-kicker">Place of the day</span>
+      <h2 id="pod-title"></h2>
+      <span class="pod-where" id="pod-where"></span>
+      <p class="pod-text" id="pod-text"></p>
+      <div class="pod-actions">
+        <button type="button" class="pod-go" data-act="pod-visit"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/></svg>Visit on the globe</button>
+        <a class="pod-wiki" id="pod-wiki" href="#" target="_blank" rel="noopener noreferrer">Wikipedia ↗</a>
+      </div>
+      <p class="pod-credit" id="pod-credit"></p>
+    </div>
+  </aside>
+  </div>
 </div>
 <div class="start-foot fade" id="start-foot">
   <div class="loadbar" aria-hidden="true"><i id="loadbar"></i></div>
@@ -670,6 +726,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
         <li>Earth by day and city lights at night: NASA Blue Marble and Black Marble, public domain (taken from the three-globe example package, MIT).</li>
         <li>Place search: GeoNames, places with 5,000 inhabitants or more, CC BY 4.0. Search runs entirely in your browser.</li>
         <li>Outline of Antarctica: Natural Earth 1:110m, public domain. Outline of the Sahara: simplified drawing, to be replaced by Natural Earth.</li>
+        <li>Place of the day: pictures from Wikimedia Commons, with author and licence under each picture, copied to this site once a day. Short texts in our own words.</li>
         <li>Wonders &amp; records: our own short texts, figures as given by the source on each card, links to English Wikipedia.</li>
         <li>Country borders and names: Natural Earth 1:50m, public domain. Capitals: GeoNames, CC BY 4.0.</li>
         <li>Weather, local time and elevation in the place details: Open-Meteo (CC BY 4.0), asked only when you open a place.</li>
@@ -1253,6 +1310,64 @@ function locate() {
   }, { enableHighAccuracy: false, timeout: 8000, maximumAge: 600000 });
 }
 
+/* ---------- Place of the day on the start screen (F-16): switches at midnight Berlin time ---------- */
+const berlinDay = (t = new Date()) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin', year: 'numeric', month: '2-digit', day: '2-digit' }).format(t);
+const POD_DIR = 'data/live/'; // LIVE is defined further down
+let pod = null, podData = null, podIdx = 0, podTimer = null, podMidnight = null, podHold = false;
+async function loadPod() {
+  try { podData = await getJSON(POD_DIR + 'placeofday.json', 10000); } catch { return; }
+  showPod();
+}
+function msToBerlinMidnight() {
+  const now = Date.now(), today = berlinDay(); let lo = now, hi = now + 26 * 3600e3;
+  while (hi - lo > 1000) { const mid = (lo + hi) / 2; if (berlinDay(new Date(mid)) === today) lo = mid; else hi = mid; }
+  return hi - now;
+}
+function showPod() {
+  const d = podData?.days?.find(x => x.date === berlinDay()), box = $('#pod');
+  clearInterval(podTimer); clearTimeout(podMidnight);
+  if (!d) { box.hidden = true; pod = null; return; }
+  pod = d; podIdx = 0;
+  $('#pod-kicker').textContent = `Place of the day · ${new Date(d.date + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' })}`;
+  $('#pod-title').textContent = d.name; $('#pod-where').textContent = d.where; $('#pod-text').textContent = d.text;
+  $('#pod-wiki').href = d.wiki;
+  const pics = $('#pod-pics'), dots = $('#pod-dots'), n = d.images.length;
+  pics.querySelectorAll('img').forEach(i => i.remove());
+  d.images.forEach((im, k) => {
+    const img = document.createElement('img');
+    img.className = 'pod-img'; img.decoding = 'async'; if (k) img.loading = 'lazy';
+    img.alt = `${d.name}, picture ${k + 1} of ${n}`; img.src = POD_DIR + im.src;
+    pics.insertBefore(img, pics.querySelector('.pod-nav'));
+  });
+  dots.innerHTML = n > 1 ? d.images.map((_, k) => `<button type="button" data-podi="${k}" aria-label="Picture ${k + 1} of ${n}"></button>`).join('') : '';
+  pics.hidden = !n;
+  pics.querySelectorAll('.pod-nav').forEach(b => { b.hidden = n < 2; });
+  podShow(0);
+  box.hidden = false;
+  if (!reduceMotion && n > 1) podTimer = setInterval(() => { if (!podHold && !document.hidden && mode === 'start') podShow(podIdx + 1); }, 6000);
+  podMidnight = setTimeout(showPod, msToBerlinMidnight() + 2000);
+}
+function podShow(k) {
+  const imgs = $$('#pod-pics img'), n = imgs.length;
+  if (!n || !pod) { $('#pod-credit').textContent = ''; return; }
+  podIdx = (k + n) % n;
+  imgs.forEach((im, j) => im.classList.toggle('on', j === podIdx));
+  $$('#pod-dots button').forEach((b, j) => b.setAttribute('aria-current', String(j === podIdx)));
+  const im = pod.images[podIdx], ext = (h, t) => `<a href="${esc(h)}" target="_blank" rel="noopener noreferrer">${t}</a>`;
+  $('#pod-credit').innerHTML = `Photo: ${ext(im.page, esc(im.author))} · ${im.licenseUrl ? ext(im.licenseUrl, esc(im.license)) : esc(im.license)} · Wikimedia Commons`;
+}
+$('#pod').addEventListener('click', e => {
+  const b = e.target.closest('[data-pod]'); if (b) { podShow(podIdx + +b.dataset.pod); return; }
+  const d = e.target.closest('[data-podi]'); if (d) podShow(+d.dataset.podi);
+});
+for (const [ev, v] of [['pointerenter', true], ['pointerleave', false], ['focusin', true], ['focusout', false]]) $('#pod').addEventListener(ev, () => { podHold = v; });
+{ // swipe between pictures
+  let x0 = null;
+  $('#pod-pics').addEventListener('pointerdown', e => { x0 = e.clientX; });
+  $('#pod-pics').addEventListener('pointerup', e => { if (x0 != null && Math.abs(e.clientX - x0) > 40) podShow(podIdx + (e.clientX < x0 ? 1 : -1)); x0 = null; });
+}
+loadPod();
+
 /* ---------- Wiring ---------- */
 makeCombo($('#q'), $('#q-list'), p => goToPlace(p));
 makeCombo($('#q2'), $('#q2-list'), p => goToPlace(p));
@@ -1261,6 +1376,7 @@ document.addEventListener('click', e => {
   const act = b.dataset.act;
   if (act === 'explore') goToPlace(BIELEFELD);
   else if (act === 'locate') locate();
+  else if (act === 'pod-visit' && pod) { clearInterval(podTimer); goToPlace({ name: pod.name, label: pod.name, sub: pod.where, lat: pod.lat, lon: pod.lon }); }
   else if (act === 'wonder') nextWonder();
   else if (act === 'next') nextWonder();
   else if (act === 'stay') { closeWonder(); try { history.replaceState(null, '', location.pathname + location.search); } catch {} }
