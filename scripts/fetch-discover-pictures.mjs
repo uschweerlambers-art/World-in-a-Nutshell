@@ -8,7 +8,7 @@
 // own site, so visitors' browsers never contact Wikimedia. Kept in the Action cache for 30 days.
 
 import sharp from 'sharp';
-import { mkdir, readFile, writeFile, copyFile, stat } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, copyFile, stat, unlink } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { get, pictures } from './commons-pictures.mjs';
@@ -22,6 +22,15 @@ await mkdir(dOut, { recursive: true });
 const VERSION = 2, MAX_AGE = 30 * 864e5;
 const exists = async (f) => { try { await stat(f); return true; } catch { return false; } };
 
+// file name of the lead picture on Commons, from an original or a thumbnail URL (query strings dropped)
+function leadFile(u) {
+  if (!u) return null;
+  const path = new URL(u).pathname;
+  if (!/\/wikipedia\/commons\//.test(path)) return null; // only files on Commons
+  const parts = path.split('/');
+  return decodeURIComponent(path.includes('/thumb/') ? parts[parts.length - 2] : parts[parts.length - 1]);
+}
+const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 // the article's own lead picture (its infobox photo) goes first; a title that is not found is looked up once
 async function article(title) {
   try { const j = await get(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`); return { title: j.titles?.canonical || title, lead: j.originalimage?.source }; }
@@ -45,7 +54,7 @@ async function build(t) {
     const art = await article(t.wiki.replace(/ /g, '_'));
     entry.title = art.title;
     entry.lead = art.lead || '';
-    const lead = art.lead && /upload\.wikimedia\.org\/wikipedia\/commons\//.test(art.lead) ? decodeURIComponent(art.lead.split('/').pop()) : null;
+    const lead = leadFile(art.lead);
     for (const pic of await pictures(art.title, 3, { prefer: [...prefer, ...(lead && !prefer.length ? [lead] : [])], photos: true })) {
       try {
         const buf = await get(pic.url, 'buf', 45000);
@@ -65,7 +74,9 @@ const out = [];
 let ok = 0, n = 0;
 for (const c of CITIES) for (const t of c.tips) {
   n++;
-  const e = await build(t);
+  let e = await build(t);
+  if (!e.image && e.v === VERSION && e.built && Date.now() - Date.parse(e.built) < 60000) { await pause(5000); await unlink(join(dCache, `${t.id}.json`)).catch(() => {}); e = await build(t); } // one retry, e.g. after a 429
+  await pause(400);
   // the log lists every chosen file, so a reviewer can check that each photo shows the place
   console.log(`${e.image ? '✓' : '✗'} ${t.id} ${t.title}${e.title && e.title !== t.wiki.replace(/ /g, '_') ? ` [${e.title}]` : ''}: ${e.image ? `${e.image.file} · ${e.image.license} · ${e.image.author}` : 'no photo'}`);
   if (process.env.DISCOVER_DEBUG) console.log(`    lead: ${e.lead || '–'}`);
