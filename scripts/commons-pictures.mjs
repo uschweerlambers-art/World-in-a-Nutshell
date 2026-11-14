@@ -38,7 +38,7 @@ export async function pictures(wiki, MAX_PICS = 5, { prefer = [], photos = false
     if (!p || p.missing || !ii?.thumburl) { why(p ? 'missing on Commons' : 'not returned'); continue; }
     const m = ii.extmetadata || {}, lic = plain(m.LicenseShortName?.value);
     const nonFree = m.NonFree?.value && !/^(false|0|no)$/i.test(String(m.NonFree.value).trim());
-    if (nonFree || !/^(cc|public domain|pd|cc0|attribution|no restrictions)/i.test(lic)) { why(`licence ${lic || '?'}${nonFree ? ' (non-free)' : ''}`); continue; }
+    if (nonFree || !/^(cc|public domain|pd|cc0|attribution|no restrictions|fal|free art|gfdl|gnu free|kogl)/i.test(lic)) { why(`licence ${lic || '?'}${nonFree ? ' (non-free)' : ''}`); continue; }
     if (Math.max(ii.width, ii.height) < 800) { why('too small'); continue; }
     const author = plain(m.Artist?.value).replace(/^(.{3,}?)(?:\s+\1)+$/, '$1').slice(0, 90) || 'Unknown author';
     // landscape pictures fit the slider best; upright ones (towers) only fill up
