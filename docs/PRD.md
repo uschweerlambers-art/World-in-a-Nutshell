@@ -66,7 +66,7 @@ Kernszenario: *Ich öffne die Seite, gebe „Bielefeld“ ein (die Oberfläche i
 
 ### 3.2 Nicht im Prototyp
 
-UFO-Archiv, Schiffe, Züge, TV, Brände, Luftqualität, Webcams, Raketenstarts, Polarlicht, Benutzerkonten, Favoriten mit Server-Speicherung, Monetarisierung jeder Art.
+UFO-Archiv, Züge, TV, Webcams, Raketenstarts, Polarlicht, Benutzerkonten, Favoriten mit Server-Speicherung, Monetarisierung jeder Art. (Schiffe, Brände und Luftqualität sind seit v0.7 dabei, siehe F-13 bis F-15.)
 
 ---
 
@@ -226,6 +226,7 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | F-18.2 | Projektion: Plattkarte (equirectangular), wie alle Texturen. Die Kartenmitte folgt der Ansicht, die Karte lässt sich nach Osten und Westen endlos verschieben; Linien über den Kartenrand (Datumsgrenze auf der Rückseite) werden dort getrennt. | M |
 | F-18.3 | Alle Ebenen, Beschriftungen, Popups, Hervorhebungen und Klicks funktionieren auf der Karte wie auf dem Globus. Satelliten liegen über ihrem Bodenpunkt. Tag und Nacht, Wolken, Wetterkarten und Konfliktgebiete liegen auf der Karte. | M |
 | F-18.4 | Bedienung der Karte: ziehen verschiebt, Mausrad oder zwei Finger zoomen zur Zeigerposition. Weitester Zoom: die ganze Breite der Welt passt auf den Bildschirm; nach Norden und Süden endet die Karte an den Polen. Suche, „Surprise me“ und „Mein Standort“ fliegen auf der Karte zum Ziel. | M |
+
 ### F-09 Übergreifende Bedienung
 
 | AK | Kriterium | Prüfung |
@@ -431,7 +432,7 @@ Entschieden am 13.11.2026:
 Noch offen (spätestens vor M2):
 
 1. **Impressum/Datenschutz:** Texte liefert Uwe; der Prototyp stellt Platzhalter und die Liste der Drittserver bereit. GitHub (USA) ist Hoster und wird in der Datenschutzerklärung genannt.
-2. **Kann-Features F-11/F-12** (Zeitleiste, Globus/Karte): Annahme bis auf Weiteres: im Design-Prototyp als Bedienelement sichtbar, Funktion erst später.
+2. **Kann-Feature F-11** (Zeitleiste): im Prototyp als Bedienelement sichtbar, Funktion erst später. Der Umschalter Globus/Karte (F-12) ist seit v0.9 umgesetzt (F-18).
 
 ## 11. Risiken
 
