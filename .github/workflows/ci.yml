@@ -20,7 +20,7 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Scripts parse
-        run: node --check scripts/fetch-snapshots.mjs && node --check scripts/fetch-clouds.mjs && node --check scripts/fetch-textures.mjs && node --check scripts/fetch-weather.mjs && node --check scripts/fetch-ships.mjs && node --check tools/build-power.mjs
+        run: node --check scripts/fetch-snapshots.mjs && node --check scripts/fetch-clouds.mjs && node --check scripts/fetch-textures.mjs && node --check scripts/fetch-weather.mjs && node --check scripts/fetch-ships.mjs && node --check scripts/fetch-place-of-day.mjs && node --check tools/build-power.mjs
       - name: Data files are valid JSON
         run: |
           for f in site/data/*.json; do node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" && echo "ok $f"; done
@@ -36,11 +36,18 @@ jobs:
           node scripts/fetch-clouds.mjs .cache/live site/data/live
           node scripts/fetch-weather.mjs .cache/live site/data/live
           AIS_LISTEN_SECONDS=20 node scripts/fetch-ships.mjs .cache/live site/data/live
+          node scripts/fetch-place-of-day.mjs .cache/live site/data/live && cat site/data/live/placeofday.json && ls -la site/data/live/pod
           node -e "for (const f of ['cables','ships']) { try { const j = require('./site/data/live/' + f + '.json'); console.log(f, j.count, JSON.stringify(j).length) } catch (e) { console.log(f, 'missing') } }"
           cat site/data/live/weather.json || true
           node scripts/fetch-textures.mjs .cache/textures site/img/hi
           ls -la site/img/hi || true
           ls -la site/data/live
+      - name: Probe (temporary) conflict data sources
+        run: |
+          for u in "https://ucdpapi.pcr.uu.se/api/gedevents/25.1?pagesize=1" "https://ucdpapi.pcr.uu.se/api/gedevents/25.0.10?pagesize=1" "https://ucdp.uu.se/downloads/" "https://ucdp.uu.se/downloads/candidateged/" "https://ucdp.uu.se/downloads/index.html"; do echo "== $u"; curl -sS -m 30 -L -A "WorldInANutshell/0.1" -w "\nHTTP %{http_code} %{size_download}\n" "$u" | head -c 1500; echo; done
+          curl -sS -m 30 -L "https://ucdp.uu.se/downloads/index.html" | grep -oiE 'href="[^"]*(candidate|ged)[^"]*"' | head -40 || true
+          curl -sS -m 30 -L "https://ucdp.uu.se/downloads/" | grep -oiE 'href="[^"]*(candidate|ged|csv|zip)[^"]*"' | head -60 || true
+
       # The preview build lets reviewers download and open the site locally (N-7.4).
       - uses: actions/upload-artifact@v4
         with:
