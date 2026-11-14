@@ -2,7 +2,7 @@
 
 Version 0.7 · Stand: 13.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
 
-Änderungen in v0.7 (Uwe, 13.11.2026, 23:14): Neue Ebenen Gradnetz, Vulkane, Wirbelstürme und weitere Naturereignisse (F-13); Flugzeug- und Satelliten-Details erweitert (F-04.8, F-05.6). Geplant: Wetterkarten und Luftqualität (F-14), Schiffe, Kraftwerke, Seekabel (F-15). Fracht, Passagiere und Crew gibt es in keiner offenen Quelle und werden nicht angezeigt.
+Änderungen in v0.7 (Uwe, 13.11.2026, 23:14): Neue Ebenen Gradnetz, Vulkane, Wirbelstürme und weitere Naturereignisse (F-13); Flugzeug- und Satelliten-Details erweitert (F-04.8, F-05.6). Dazu Wetterkarten und Luftqualität (F-14) sowie Schiffe, Kraftwerke und Seekabel (F-15). Fracht, Passagiere und Crew gibt es in keiner offenen Quelle und werden nicht angezeigt.
 
 Änderungen in v0.6 (Uwes Rückmeldungen vom 13.11.2026 abends): Orientierungs-Ebenen (Grenzen, Länder, Hauptstädte) und Routen-Schalter (F-09.7), Orts-Info schwebt über dem Ort mit Wetter, Ortszeit und Datum (F-09.8, F-09.9), Anzeige-Einstellungen und vier Farbschemata (F-09.10, F-09.11), dickere Linien.
 
@@ -186,6 +186,15 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | F-14.4 | **Dunst, Rauch, Staub:** tägliche Aerosol-Karte (NASA GIBS, optische Dicke), nur wolkenfreie Gebiete. | M |
 | F-14.5 | **Luftqualität in der Orts-Info:** Europäischer Luftqualitätsindex mit Einstufung und PM2.5/PM10 (Copernicus CAMS über Open-Meteo), nur beim Klick, nur Koordinaten des Ortes. | M, R |
 | F-14.6 | Alle Wetterdateien baut die Action (GFS höchstens alle 3 h, Regen stündlich, Aerosole alle 6 h); fehlt eine Datei, meldet die Seite „not available right now“ und der Rest läuft weiter. | A |
+
+### F-15 Schiffe, Kraftwerke, Seekabel (v0.7)
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-15.1 | **Schiffe:** Live-AIS von aisstream.io (kostenloser Schlüssel als Repo-Secret `AISSTREAM_API_KEY`). Die Action hört alle 15 Minuten rund eine Minute weltweit mit und führt das Ergebnis mit früheren Läufen zusammen (Positionen bis 2 h, Schiffsdaten bis 14 Tage). Symbol als Rumpf in Fahrtrichtung, Farbe nach Schiffsart (Fracht, Tanker, Passagier, Fischerei, Schlepper/Dienst, Schnellboot, Segel/Freizeit, Sonstige), Legende mit Anzahl. Fahrende Schiffe werden entlang Kurs und Tempo bis 30 Minuten weiterbewegt. | M, A |
+| F-15.2 | **Schiffsdetails:** Name, Art, Flagge (aus der MMSI), Ziel und ETA (wie von der Crew eingegeben), Status, Tempo, Kurs, Länge und Breite, Tiefgang, Gefahrgut-Kategorie A–D (falls im AIS-Schiffstyp gemeldet), Rufzeichen, IMO, MMSI, letzte Meldung. Fracht, Passagiere, Crew und Heimathafen gibt AIS nicht her und werden nicht angezeigt; der Hinweis steht im Panel. | M |
+| F-15.3 | **Kraftwerke:** Global Power Plant Database v1.3.0 (WRI, CC BY 4.0, Stand 2021), 34.936 Anlagen, einmal gebaut und im Repo (`tools/build-power.mjs`). Farbe nach Energieträger, Größe nach Leistung, Filter Alle / ≥ 100 MW (Standard) / ≥ 1 GW. Panel: Energieträger, Leistung, Erzeugung (falls gemeldet), Inbetriebnahme, Betreiber, Land, Links zu Wikipedia und OpenStreetMap. | M |
+| F-15.4 | **Seekabel:** Daten- und Stromkabel am Meeresgrund aus OpenStreetMap (Overpass API, wöchentlich, ODbL, Namensnennung „© OpenStreetMap contributors“ sichtbar). Abschnitte mit gleichem Namen bilden ein Kabel. Klick auf eine Linie markiert das ganze Kabel und zeigt Name, Art, Betreiber, Spannung, kartierte Länge und Link zu OpenStreetMap. OSM ist unvollständig; das steht im Panel. Die TeleGeography-Karte ist nicht frei lizenziert und wird nicht genutzt. | M, R |
 
 ### F-09 Übergreifende Bedienung
 

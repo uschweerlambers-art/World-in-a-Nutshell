@@ -11,16 +11,16 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Scripts parse
-        run: node --check scripts/fetch-snapshots.mjs && node --check scripts/fetch-clouds.mjs && node --check scripts/fetch-textures.mjs && node --check scripts/fetch-weather.mjs
+        run: node --check scripts/fetch-snapshots.mjs && node --check scripts/fetch-clouds.mjs && node --check scripts/fetch-textures.mjs && node --check scripts/fetch-weather.mjs && node --check scripts/fetch-ships.mjs && node --check tools/build-power.mjs
       - name: Data files are valid JSON
         run: |
           for f in site/data/*.json; do node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" && echo "ok $f"; done
@@ -29,10 +29,14 @@ jobs:
           size=$(du -sm site | cut -f1); echo "site: ${size} MB"; test "$size" -lt 900
       # Smoke test against the real sources; neither script fails the job on a source outage
       - name: Snapshots and clouds (smoke test)
+        env:
+          AISSTREAM_API_KEY: ${{ secrets.AISSTREAM_API_KEY }}
         run: |
           node scripts/fetch-snapshots.mjs .cache/live site/data/live || true
           node scripts/fetch-clouds.mjs .cache/live site/data/live
           node scripts/fetch-weather.mjs .cache/live site/data/live
+          AIS_LISTEN_SECONDS=20 node scripts/fetch-ships.mjs .cache/live site/data/live
+          node -e "for (const f of ['cables','ships']) { try { const j = require('./site/data/live/' + f + '.json'); console.log(f, j.count, JSON.stringify(j).length) } catch (e) { console.log(f, 'missing') } }"
           cat site/data/live/weather.json || true
           node scripts/fetch-textures.mjs .cache/textures site/img/hi
           ls -la site/img/hi || true

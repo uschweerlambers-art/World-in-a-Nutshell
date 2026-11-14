@@ -31,6 +31,9 @@
   --c-volcano: #FF453A;
   --c-storm: #9FE3FF;
   --c-event: #FF6B35;
+  --c-ship: #40C8E0;
+  --c-power: #FFD60A;
+  --c-cable: #5AC8FA;
   --c-country: rgba(245,245,247,0.78);
   --c-cap: #E9FFFC;
   --win: 1; --lbl: 1; --sym: 1;
@@ -238,6 +241,8 @@ button:disabled { cursor: default; }
 .gl-grid { font-family: var(--mono); font-size: calc(10px * var(--lbl)); color: rgba(255,255,255,0.62); text-shadow: 0 0 3px rgba(0,0,0,.95); }
 .apt-label { position: fixed; left: 0; top: 0; z-index: 2; pointer-events: none; font-family: var(--mono); font-size: calc(11px * var(--lbl)); font-weight: 600; color: #05070D; padding: 1px 6px; border-radius: 6px; background: color-mix(in srgb, var(--c-air) 92%, transparent); white-space: nowrap; }
 .sub.legend { flex-direction: row; flex-wrap: wrap; gap: 4px 12px; }
+.sub.legend .full { flex-basis: 100%; display: block; }
+#power-filter .mini-seg button[aria-pressed="true"] { background: color-mix(in srgb, var(--c-power) 20%, transparent); border-color: var(--c-power); }
 .wx-bar { height: 8px; border-radius: 4px; margin-top: 2px; }
 .wx-scale { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
@@ -487,6 +492,8 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <section class="sec" aria-labelledby="h-layers">
       <h3 id="h-layers">Layers</h3>
       <div class="row off" data-layer="air"><span class="ico" style="background:var(--c-air)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><path d="M21 15.5v-2L13.5 9V3.8a1.5 1.5 0 00-3 0V9L3 13.5v2l7.5-2.3V18L8.5 19.5V21l3.5-1 3.5 1v-1.5L13.5 18v-4.8z"/></svg></span><span class="nm">Aircraft</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show aircraft" data-layer-switch="air"></button></span></div>
+      <div class="row off" data-layer="ship"><span class="ico" style="background:var(--c-ship)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><path d="M2.5 14.5h19l-2.8 5.2a1.5 1.5 0 01-1.3.8H6.6a1.5 1.5 0 01-1.3-.8z"/><path d="M6 13V9.5h5.5V6h3v3.5H18V13z"/></svg></span><span class="nm">Ships</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show ships" data-layer-switch="ship"></button></span></div>
+      <div class="sub legend" id="ship-sub" hidden></div>
       <div class="row off" data-layer="sat"><span class="ico" style="background:var(--c-sat)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"/></svg></span><span class="nm">Satellites &amp; ISS</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show satellites" data-layer-switch="sat"></button></span></div>
       <div class="row off" data-layer="quake"><span class="ico" style="background:var(--c-quake)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05070D" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2.5" fill="#05070D"/><circle cx="12" cy="12" r="7"/></svg></span><span class="nm">Earthquakes <small>24 h</small></span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show earthquakes" data-layer-switch="quake"></button></span></div>
       <div class="sub" id="quake-filter" hidden role="group" aria-label="Minimum magnitude">
@@ -520,6 +527,17 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <div class="sub" id="wx-temp-sub" hidden></div>
       <div class="row"><span class="ico" style="background:#B08850"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><circle cx="7" cy="8" r="2"/><circle cx="14" cy="6" r="1.6"/><circle cx="17" cy="12" r="2.2"/><circle cx="10" cy="14" r="2.4"/><circle cx="6" cy="18" r="1.5"/><circle cx="15" cy="18.5" r="1.7"/></svg></span><span class="nm">Haze, smoke &amp; dust</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show haze, smoke and dust (aerosols)" data-toggle="aerosol"></button></span></div>
       <div class="sub" id="wx-aerosol-sub" hidden></div>
+    </section>
+    <section class="sec" aria-labelledby="h-infra">
+      <h3 id="h-infra">Infrastructure</h3>
+      <div class="row off" data-layer="power"><span class="ico" style="background:var(--c-power)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><path d="M13.5 2L4.5 13.5h6L9.5 22l9-11.5h-6z"/></svg></span><span class="nm">Power plants</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show power plants" data-layer-switch="power"></button></span></div>
+      <div class="sub" id="power-filter" hidden role="group" aria-label="Minimum capacity">
+        <span>Capacity</span>
+        <div class="mini-seg"><button type="button" data-minmw="0" aria-pressed="false">All</button><button type="button" data-minmw="100" aria-pressed="true">≥ 100 MW</button><button type="button" data-minmw="1000" aria-pressed="false">≥ 1 GW</button></div>
+      </div>
+      <div class="sub legend" id="power-sub" hidden></div>
+      <div class="row off" data-layer="cable"><span class="ico" style="background:var(--c-cable)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05070D" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M2.5 9c3 0 3-3 6-3s3 6 6 6 3-3 6.5-3"/><path d="M2.5 17c3 0 3-3 6-3s3 4 6 4 3-2 6.5-2" opacity=".55"/></svg></span><span class="nm">Submarine cables</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show submarine cables" data-layer-switch="cable"></button></span></div>
+      <div class="sub legend" id="cable-sub" hidden></div>
     </section>
     <section class="sec" aria-labelledby="h-view">
       <h3 id="h-view">Earth</h3>
@@ -671,6 +689,9 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
         <li>Tropical storms, wildfires, sea and lake ice and other open natural events: NASA EONET, public domain (storm tracks from JTWC and NHC).</li>
         <li>Wind and temperature: NOAA GFS weather model (1°, every 6 hours), public domain, via NOMADS. Rain: NASA GPM IMERG satellite precipitation via GIBS (about 5 hours behind). Haze, smoke and dust: NASA aerosol optical depth via GIBS (daily).</li>
         <li>Air quality in the place details: Copernicus Atmosphere Monitoring Service (CAMS) via Open-Meteo, CC BY 4.0.</li>
+        <li>Ships: live AIS position and voyage reports from aisstream.io (volunteer receivers, best near coasts), collected for about a minute every 15 minutes. Flag from the MMSI number (ITU maritime identification digits). AIS does not carry cargo, passengers or crew.</li>
+        <li>Power plants: Global Power Plant Database v1.3.0, World Resources Institute, CC BY 4.0 (last updated 2021).</li>
+        <li>Submarine cables: © OpenStreetMap contributors, Open Database License (ODbL 1.0), via the Overpass API, refreshed weekly.</li>
         <li>Earthquakes of the last 24 hours: USGS Earthquake Hazards Program, public domain, loaded directly every 5 minutes.</li>
         <li>Radio stations: Radio Browser community database, public domain. Streams come straight from each station.</li>
       </ul>
@@ -1355,9 +1376,9 @@ tick(); setInterval(tick, 20000);
 // Earthquakes load straight from USGS, satellites are propagated live with satellite.js.
 const LIVE = 'data/live/';
 const R_EARTH_KM = 6371;
-const COLORS = { air: scheme().air, sat: scheme().sat, quake: scheme().quake, radio: scheme().radio, volcano: scheme().volcano, storm: '#9FE3FF', event: '#FF6B35' };
-const LAYER_NAMES = { air: 'Aircraft', sat: 'Satellite', quake: 'Earthquake', radio: 'Radio station', volcano: 'Volcano', storm: 'Tropical storm', event: 'Natural event' };
-const LAYER_PLURAL = { air: 'Aircraft', sat: 'Satellites', quake: 'Earthquakes', radio: 'Radio stations', volcano: 'Volcanoes', storm: 'Tropical storms', event: 'Natural events' };
+const COLORS = { air: scheme().air, sat: scheme().sat, quake: scheme().quake, radio: scheme().radio, volcano: scheme().volcano, storm: '#9FE3FF', event: '#FF6B35', ship: '#40C8E0', power: '#FFD60A', cable: '#5AC8FA' };
+const LAYER_NAMES = { air: 'Aircraft', sat: 'Satellite', quake: 'Earthquake', radio: 'Radio station', volcano: 'Volcano', storm: 'Tropical storm', event: 'Natural event', ship: 'Ship', power: 'Power plant', cable: 'Submarine cable' };
+const LAYER_PLURAL = { air: 'Aircraft', sat: 'Satellites', quake: 'Earthquakes', radio: 'Radio stations', volcano: 'Volcanoes', storm: 'Tropical storms', event: 'Natural events', ship: 'Ships', power: 'Power plants', cable: 'Submarine cables' };
 const L = {
   air: { on: false, loaded: false, items: [], pos: null, obj: null },
   sat: { on: false, loaded: false, items: [], pos: null, obj: null },
@@ -1366,6 +1387,9 @@ const L = {
   volcano: { on: false, loaded: false, items: [], pos: null, obj: null },
   storm: { on: false, loaded: false, items: [], pos: null, obj: null },
   event: { on: false, loaded: false, items: [], pos: null, obj: null },
+  ship: { on: false, loaded: false, items: [], pos: null, obj: null },
+  power: { on: false, loaded: false, items: [], pos: null, obj: null, minMW: 100 },
+  cable: { on: false, loaded: false, items: [], pos: null, obj: null, lines: null },
 };
 let liveMeta = null, selected = null, here = null;
 
@@ -1391,7 +1415,7 @@ function northEast(lat, lon) {
   };
 }
 
-// One point shader for all layers. kind: 0 = disc, 1 = aircraft glyph, 2 = quake ring
+// One point shader for all layers. kind: 0 = disc, 1 = glyph turned along its course (aircraft, ships), 2 = quake ring
 function planeTexture() {
   const c = document.createElement('canvas'); c.width = c.height = 64;
   const g = c.getContext('2d');
@@ -1425,7 +1449,7 @@ function pointsMaterial(kind, color, opts = {}) {
     transparent: true, depthWrite: false, depthTest: (opts.limb ?? 1) === 0,
     uniforms: {
       color: { value: new THREE.Color(color) }, px: { value: Math.min(devicePixelRatio, 2) },
-      aspect: { value: innerWidth / innerHeight }, time: { value: 0 }, glyph: { value: kind === 1 ? planeTexture() : kind === 3 ? opts.glyph : null }, useCol: { value: opts.useCol ? 1 : 0 },
+      aspect: { value: innerWidth / innerHeight }, time: { value: 0 }, glyph: { value: kind === 1 ? opts.glyph || planeTexture() : kind === 3 ? opts.glyph : null }, useCol: { value: opts.useCol ? 1 : 0 },
       limb: { value: opts.limb ?? 1 }, zoom: { value: 1 }, pulse: { value: reduceMotion ? 0 : 1 }, sel: { value: -1 }, ui: { value: symF() },
     },
     vertexShader: `
@@ -1762,13 +1786,14 @@ document.addEventListener('click', e => {
 });
 
 /* Switching layers */
-const loaders = { air: loadAir, sat: loadSat, quake: loadQuake, radio: loadRadio, volcano: loadVolcano, storm: loadStorm, event: loadEvent };
+const loaders = { air: loadAir, sat: loadSat, quake: loadQuake, radio: loadRadio, volcano: loadVolcano, storm: loadStorm, event: loadEvent, ship: loadShip, power: loadPower, cable: loadCable };
 async function setLayer(key, on) {
   const st = L[key];
   st.on = on;
   $$(`[data-layer-switch="${key}"]`).forEach(el => el.setAttribute('aria-checked', String(on)));
   $(`.row[data-layer="${key}"]`).classList.toggle('off', !on);
   if (key === 'quake') $('#quake-filter').hidden = !on;
+  if (key === 'power') $('#power-filter').hidden = !on;
   if (key === 'radio' && !on) $('#nearby').hidden = true;
   if (key === 'sat' && !on) { hideIssOrbit(); issLabel.hidden = true; }
   if (!on && selected?.key === key) closeInspector();
@@ -1780,12 +1805,15 @@ async function setLayer(key, on) {
       $$(`[data-layer-switch="${key}"]`).forEach(el => el.setAttribute('aria-checked', 'false'));
       $(`.row[data-layer="${key}"]`).classList.add('off');
       if (key === 'quake') $('#quake-filter').hidden = true;
+      if (key === 'power') $('#power-filter').hidden = true;
       toast(`${LAYER_PLURAL[key]} could not be loaded right now. Please try again later.`, 5000);
       updateCounts(); return;
     }
   }
   if (key === 'quake' && on && Date.now() - (L.quake.at || 0) > 5 * 60000) loadQuake().catch(() => {});
   if (st.obj) st.obj.visible = st.on;
+  if (st.lines) st.lines.visible = st.on;
+  if (key === 'cable' && !on && cableSel) cableSel.visible = false;
   if (key === 'radio' && !on) for (const x of RADIO_LEVELS) if (x.obj) x.obj.visible = false;
   if (key === 'radio' && on) showNearby();
   const sub = $(`#${key}-sub`); if (sub) sub.hidden = !(st.on && st.loaded);
@@ -1799,7 +1827,7 @@ function updateCounts() {
     ct.textContent = L[k].loaded && L[k].on ? fmtInt(L[k].items.length) : '–';
   }
   const on = Object.keys(L).filter(k => L[k].on);
-  const src = { air: 'OpenSky', sat: 'CelesTrak', quake: 'USGS', radio: 'Radio Browser', volcano: 'Smithsonian GVP', storm: 'NASA EONET', event: 'NASA EONET' };
+  const src = { air: 'OpenSky', sat: 'CelesTrak', quake: 'USGS', radio: 'Radio Browser', volcano: 'Smithsonian GVP', storm: 'NASA EONET', event: 'NASA EONET', ship: 'aisstream.io', power: 'WRI', cable: '© OpenStreetMap contributors' };
   $('#attrib-live').textContent = on.length ? ' · Live: ' + [...new Set(on.map(k => src[k]))].join(', ') : '';
 }
 function updateLiveNote() {
@@ -1815,6 +1843,10 @@ document.addEventListener('click', e => {
 $$('[data-minmag]').forEach(b => b.addEventListener('click', () => {
   $$('[data-minmag]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
   L.quake.minMag = +b.dataset.minmag; if (L.quake.loaded) applyQuakeFilter();
+}));
+$$('[data-minmw]').forEach(b => b.addEventListener('click', () => {
+  $$('[data-minmw]').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+  L.power.minMW = +b.dataset.minmw; if (L.power.loaded) applyPowerFilter();
 }));
 // fresh aircraft snapshot: check the small meta file every 2 minutes
 setInterval(async () => {
@@ -1849,7 +1881,7 @@ const projV = new THREE.Vector3();
 function pick(x, y) {
   const camDir = camera.position.clone().normalize();
   let best = null, bestD = innerWidth < 768 ? 22 : 14;
-  for (const key of ['sat', 'air', 'storm', 'volcano', 'event', 'quake', 'radio']) {
+  for (const key of ['sat', 'air', 'ship', 'storm', 'volcano', 'event', 'quake', 'power', 'radio']) {
     const st = L[key]; if (!st.on || !st.loaded || !st.pos) continue;
     const lv = key === 'radio' ? radioLevel() : null;
     const pos = lv ? lv.pos : st.pos, n = lv ? lv.groups.length : st.items.length;
@@ -1863,10 +1895,11 @@ function pick(x, y) {
       } else if (projV.clone().normalize().dot(camDir) < 0.25) continue;
       projV.project(camera);
       const sx = (projV.x * 0.5 + 0.5) * innerWidth, sy = (-projV.y * 0.5 + 0.5) * innerHeight;
-      const d = Math.hypot(sx - x, sy - y) - (key === 'quake' ? Math.max(0, st.items[i].mag) * 1.2 : lv ? Math.min(12, lv.groups[i].m.length) : 0);
+      const d = Math.hypot(sx - x, sy - y) - (key === 'quake' ? Math.max(0, st.items[i].mag) * 1.2 : key === 'power' ? Math.min(8, Math.sqrt(st.items[i].mw) * 0.15) : lv ? Math.min(12, lv.groups[i].m.length) : 0);
       if (d < bestD) { bestD = d; best = lv ? (lv.groups[i].m.length > 1 ? { key, group: lv.groups[i] } : { key, i: lv.groups[i].m[0] }) : { key, i }; }
     }
   }
+  if (!best && L.cable.on && L.cable.loaded) return pickCable(x, y);
   return best;
 }
 const fmtAlt = m => m == null ? '–' : `${fmtInt(Math.round(m))} m`;
@@ -1877,7 +1910,8 @@ function select(key, i) {
   for (const k of Object.keys(L)) if (L[k].obj) L[k].obj.material.uniforms.sel.value = k === key ? i : -1;
   if (!(key === 'sat' && it.id === ISS_ID)) hideIssOrbit();
   if (key !== 'air') hideRoute();
-  $('#i-sw').style.background = key === 'event' ? EVENT_CATS[it.cat]?.[1] || 'var(--c-event)' : key === 'storm' ? stormCat(it.wind).col : `var(--c-${key})`;
+  if (key !== 'cable' && cableSel) cableSel.visible = false;
+  $('#i-sw').style.background = key === 'event' ? EVENT_CATS[it.cat]?.[1] || 'var(--c-event)' : key === 'storm' ? stormCat(it.wind).col : key === 'ship' ? shipCat(it.type).col : key === 'power' ? FUEL_COL[it.fuel] : key === 'cable' ? CABLE_COL[it.kind] : `var(--c-${key})`;
   $('#i-cat-t').textContent = LAYER_NAMES[key];
   let head = '', dl = '', hint = '', act = '', src = '';
   if (key === 'air') {
@@ -1930,7 +1964,9 @@ function select(key, i) {
     dl = row('Type', /prescribed/i.test(it.title) ? 'Prescribed burn' : cat[0], 't') + (Number.isFinite(it.mag) ? row('Size', fmtEventSize(it.mag, it.unit)) : '') + row('First reported', fmtDT(it.first)) + row('Latest update', fmtDT(it.time)) + row('Position', fmtCoord(it.lat, it.lon));
     act = it.url ? extLink(it.url, `Details at ${esc(hostOf(it.url))}`) : '';
     src = `Source: <a href="https://eonet.gsfc.nasa.gov" target="_blank" rel="noopener noreferrer">NASA EONET</a>, public domain`;
-  }
+  } else if (key === 'ship') ({ head, dl, hint, act, src } = shipPanel(it));
+  else if (key === 'power') ({ head, dl, hint, act, src } = powerPanel(it));
+  else if (key === 'cable') ({ head, dl, hint, act, src } = cablePanel(it, i));
   $('#i-head').innerHTML = head; $('#i-dl').innerHTML = dl;
   $('#i-hint').hidden = !hint; $('#i-hint').textContent = hint;
   $('#i-act').innerHTML = act; $('#i-src').innerHTML = src;
@@ -1940,7 +1976,7 @@ function select(key, i) {
   if (innerWidth < 768) { hidePicker(); $('#sidebar').classList.add('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'false'); }
 }
 function closeInspector() {
-  selected = null; hideIssOrbit(); hideRoute();
+  selected = null; hideIssOrbit(); hideRoute(); if (cableSel) cableSel.visible = false;
   for (const k of Object.keys(L)) if (L[k].obj) L[k].obj.material.uniforms.sel.value = -1;
   const box = $('#insp'); box.classList.add('is-out'); setTimeout(() => { if (!selected) box.hidden = true; }, 450);
 }
@@ -2042,6 +2078,196 @@ async function loadEvent() {
   });
   $('#event-sub').innerHTML = Object.entries(count).sort((a, b) => b[1] - a[1]).map(([c, n]) => `<span><i style="background:${EVENT_CATS[c]?.[1] || '#FFD60A'}"></i>${EVENT_CATS[c]?.[0] || c} ${n}</span>`).join('') || '<span>No open events right now.</span>';
   L.event.loaded = true;
+}
+
+/* ---------- Ships: AIS snapshot from aisstream.io, moved on along course and speed (F-15.1) ---------- */
+const SHIP_CATS = [['Cargo', '#30D158'], ['Tanker', '#FF453A'], ['Passenger', '#0A84FF'], ['Fishing', '#FF9F0A'], ['Tug, pilot & service', '#64D2FF'], ['High-speed', '#FFD60A'], ['Sailing & pleasure', '#BF5AF2'], ['Other or not reported', '#E5E5EA']];
+function shipCat(t) {
+  const i = t >= 70 && t < 80 ? 0 : t >= 80 && t < 90 ? 1 : t >= 60 && t < 70 ? 2 : t === 30 ? 3 : (t >= 31 && t <= 34) || (t >= 50 && t <= 59) ? 4 : t >= 40 && t < 50 ? 5 : t === 36 || t === 37 ? 6 : 7;
+  return { i, name: SHIP_CATS[i][0], col: SHIP_CATS[i][1] };
+}
+function shipTypeName(t) {
+  if (!t) return 'Not reported';
+  const one = { 30: 'Fishing vessel', 31: 'Towing vessel', 32: 'Towing vessel (large tow)', 33: 'Dredger or underwater work', 34: 'Diving vessel', 35: 'Military vessel', 36: 'Sailing vessel', 37: 'Pleasure craft', 50: 'Pilot vessel', 51: 'Search and rescue', 52: 'Tug', 53: 'Port tender', 54: 'Anti-pollution vessel', 55: 'Law enforcement', 58: 'Medical transport', 59: 'Non-combatant ship' }[t];
+  return one || { 2: 'Wing-in-ground craft', 4: 'High-speed craft', 6: 'Passenger ship', 7: 'Cargo ship', 8: 'Tanker' }[Math.floor(t / 10)] || 'Other type';
+}
+// AIS types 4x, 6x, 7x and 8x: the second digit 1–4 flags dangerous goods of category A–D on board
+function shipHazard(t) { const d = Math.floor(t / 10), h = t % 10; return [4, 6, 7, 8].includes(d) && h >= 1 && h <= 4 ? 'ABCD'[h - 1] : ''; }
+const NAV_STATUS = ['Under way, using engine', 'At anchor', 'Not under command', 'Restricted in manoeuvring', 'Constrained by draught', 'Moored', 'Aground', 'Engaged in fishing', 'Under way, sailing', '', '', 'Towing astern', 'Pushing or towing alongside', '', 'Emergency beacon (AIS-SART)', ''];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const SHIP_MAX_EXTRAPOLATE = 30 * 60; // s; beyond that, ships stay put
+let shipFetched = null, shipLastStep = 0, shipTex = null;
+const shipGlyph = () => shipTex ||= glyphTexture(g => {
+  const p = new Path2D('M12 2.2c2.8 2.5 4.4 5.5 4.4 9.5v8.6a1.4 1.4 0 01-1.4 1.4H9a1.4 1.4 0 01-1.4-1.4v-8.6c0-4 1.6-7 4.4-9.5z');
+  g.lineWidth = 1.6; g.stroke(p); g.fill(p);
+});
+async function loadShip() { buildShips(await getJSON(LIVE + 'ships.json', 30000)); }
+function buildShips(j) {
+  shipFetched = j.fetched;
+  const items = j.rows.map(r => {
+    const [mmsi, lat, lon, sog, cog, hdg, nav, t, name, type, dest, eta, len, beam, draught, imo, call, flag] = r;
+    const moving = sog >= 0.5 && nav !== 1 && nav !== 5 && nav !== 6;
+    const course = moving && cog >= 0 ? cog : hdg >= 0 ? hdg : cog >= 0 ? cog : 0;
+    const p = vecFromLatLon(lat, lon), { n: N, e: E } = northEast(lat, lon);
+    const d = N.multiplyScalar(Math.cos(course * DEG)).add(E.multiplyScalar(Math.sin(course * DEG)));
+    return { mmsi, sog, cog, hdg, nav, t: t * 1000, name, type, dest, eta, len, beam, draught, imo, call, flag, moving, ms: moving ? sog * 0.514444 : 0, p0: p, d0: d };
+  });
+  L.ship.items = items;
+  const geo = makePoints('ship', items.length, 1, { order: 3, glyph: shipGlyph(), useCol: true });
+  const tmpC = new THREE.Color(), count = new Array(SHIP_CATS.length).fill(0);
+  items.forEach((s, i) => {
+    const c = shipCat(s.type); count[c.i]++;
+    tmpC.set(c.col); geo.attributes.col.array.set([tmpC.r, tmpC.g, tmpC.b], i * 3);
+    geo.attributes.size.array[i] = (s.len > 0 ? 9 + Math.min(7, s.len / 45) : 9) * (s.moving ? 1 : 0.8);
+  });
+  $('#ship-sub').innerHTML = SHIP_CATS.map(([n, c], k) => count[k] ? `<span><i style="background:${c}"></i>${n} ${fmtInt(count[k])}</span>` : '').join('')
+    + `<span class="full">Live AIS as of ${hhmm(Date.parse(j.fetched))}, best near coasts.</span>`;
+  L.ship.loaded = true;
+  stepShip(true);
+}
+function stepShip(force) {
+  const now = Date.now();
+  if (!force && now - shipLastStep < 1000) return;
+  shipLastStep = now;
+  const pos = L.ship.pos, dir = L.ship.obj.geometry.attributes.dir.array, R = 1.0014, RM = R_EARTH_KM * 1000;
+  L.ship.items.forEach((s, i) => {
+    const ang = s.ms ? s.ms * Math.min(SHIP_MAX_EXTRAPOLATE, Math.max(0, (now - s.t) / 1000)) / RM : 0;
+    const c = Math.cos(ang), sn = Math.sin(ang), p = s.p0, d = s.d0;
+    pos[i * 3] = (p.x * c + d.x * sn) * R; pos[i * 3 + 1] = (p.y * c + d.y * sn) * R; pos[i * 3 + 2] = (p.z * c + d.z * sn) * R;
+    dir[i * 3] = d.x * c - p.x * sn; dir[i * 3 + 1] = d.y * c - p.y * sn; dir[i * 3 + 2] = d.z * c - p.z * sn;
+  });
+  const g = L.ship.obj.geometry; g.attributes.position.needsUpdate = true; g.attributes.dir.needsUpdate = true;
+}
+function shipPanel(it) {
+  const i = L.ship.items.indexOf(it), x = L.ship.pos[i * 3], y = L.ship.pos[i * 3 + 1], z = L.ship.pos[i * 3 + 2], r = Math.hypot(x, y, z);
+  const lat = Math.asin(y / r) / DEG, lon = Math.atan2(-z, x) / DEG, hz = shipHazard(it.type);
+  let eta = '–';
+  if (it.eta) { const [md, hm] = it.eta.split(' '), [mo, d] = md.split('-').map(Number); eta = `${d} ${MONTHS[mo - 1]}, ${hm} UTC`; }
+  const dl = row('Type', esc(shipTypeName(it.type)), 't') + row('Flag', esc(it.flag || '–'), 't') + row('Destination', esc(it.dest || '–'), 't') + row('ETA', eta)
+    + row('Status', esc(NAV_STATUS[it.nav] || (it.moving ? 'Under way' : '–')), 't')
+    + row('Speed', it.sog >= 0 ? `${it.sog.toFixed(1)} kn · ${Math.round(it.sog * 1.852)} km/h` : '–')
+    + row('Course', it.cog >= 0 ? `${it.cog}°` : it.hdg >= 0 ? `${it.hdg}° heading` : '–')
+    + row('Size', it.len ? `${it.len} m long${it.beam ? `, ${it.beam} m wide` : ''}` : '–', 't') + row('Draught', it.draught ? `${(+it.draught).toFixed(1)} m` : '–')
+    + (hz ? row('Dangerous goods', `On board, category ${hz}`, 't') : '')
+    + row('Call sign', esc(it.call || '–')) + row('IMO number', it.imo || '–') + row('MMSI', it.mmsi) + row('Position', fmtCoord(lat, lon)) + row('Last report', `${hhmm(it.t)} (${fmtAgo(it.t)})`);
+  const hint = [it.moving && Date.now() - it.t > 120000 ? 'Position estimated from the last report along course and speed.' : '', 'Destination and ETA are typed in by the crew and can be out of date. AIS does not report cargo, passengers or crew.'].filter(Boolean).join(' ');
+  return { head: esc(it.name || `MMSI ${it.mmsi}`), dl, hint, act: '', src: `Source: <a href="https://aisstream.io" target="_blank" rel="noopener noreferrer">aisstream.io</a> (AIS) · flag from the MMSI` };
+}
+// new ship snapshot: look every 5 minutes while the layer is on
+setInterval(async () => {
+  if (!L.ship.on || !L.ship.loaded || document.hidden) return;
+  try {
+    const j = await getJSON(LIVE + 'ships.json', 30000);
+    if (j.fetched === shipFetched) return;
+    const keep = selected?.key === 'ship' ? L.ship.items[selected.i]?.mmsi : null;
+    buildShips(j); updateCounts();
+    if (keep) { const i = L.ship.items.findIndex(s => s.mmsi === keep); if (i >= 0) select('ship', i); else closeInspector(); }
+  } catch {}
+}, 5 * 60000);
+
+/* ---------- Power plants: WRI Global Power Plant Database (F-15.2) ---------- */
+const FUEL_COL = { Solar: '#FFD60A', Wind: '#64D2FF', Hydro: '#0A84FF', Gas: '#FF9F0A', Coal: '#8E8E93', Oil: '#A2845E', Nuclear: '#BF5AF2', Biomass: '#30D158', Waste: '#AC8E68', Geothermal: '#FF375F', Storage: '#5E5CE6', Cogeneration: '#FFB340', Petcoke: '#636366', 'Wave and Tidal': '#40E0D0', Other: '#C7C7CC' };
+const fmtMW = m => m >= 1000 ? `${(m / 1000).toLocaleString('en-GB', { maximumFractionDigits: 1 })} GW` : `${m >= 10 ? fmtInt(Math.round(m)) : m.toLocaleString('en-GB', { maximumFractionDigits: 1 })} MW`;
+async function loadPower() {
+  const j = await getJSON('data/powerplants.json', 30000);
+  L.power.all = j.rows.map(([name, lat, lon, mw, f, year, owner, c, gen, genYear]) => ({ name, lat, lon, mw, fuel: j.fuels[f], year, owner, country: j.countries[c], gen, genYear }));
+  L.power.loaded = true;
+  applyPowerFilter();
+}
+function applyPowerFilter() {
+  const items = L.power.all.filter(p => p.mw >= L.power.minMW); // sorted small first, so big plants are drawn on top
+  L.power.items = items;
+  const geo = makePoints('power', items.length, 0, { order: 1, useCol: true });
+  const tmpC = new THREE.Color(), count = {}, total = {};
+  items.forEach((p, i) => {
+    const v = vecFromLatLon(p.lat, p.lon, 1.0012);
+    geo.attributes.position.array.set([v.x, v.y, v.z], i * 3);
+    tmpC.set(FUEL_COL[p.fuel] || FUEL_COL.Other); geo.attributes.col.array.set([tmpC.r, tmpC.g, tmpC.b], i * 3);
+    geo.attributes.size.array[i] = Math.min(22, 4 + Math.sqrt(p.mw) * 0.34);
+    count[p.fuel] = (count[p.fuel] || 0) + 1; total[p.fuel] = (total[p.fuel] || 0) + p.mw;
+  });
+  const fuels = Object.entries(total).sort((a, b) => b[1] - a[1]), top = fuels.slice(0, 8), rest = fuels.slice(8).reduce((n, [f]) => n + count[f], 0);
+  $('#power-sub').innerHTML = top.map(([f, m]) => `<span title="${fmtInt(count[f])} plants, ${fmtMW(m)} in total"><i style="background:${FUEL_COL[f] || FUEL_COL.Other}"></i>${f} ${fmtInt(count[f])}</span>`).join('')
+    + (rest ? `<span title="${esc(fuels.slice(8).map(([f]) => f).join(', '))}"><i style="background:${FUEL_COL.Other}"></i>More ${fmtInt(rest)}</span>` : '')
+    + '<span class="full">Dot size shows capacity. Data as of 2021.</span>';
+  if (selected?.key === 'power') closeInspector();
+  updateCounts();
+}
+function powerPanel(it) {
+  const gen = it.gen ? `${it.gen >= 10 ? fmtInt(Math.round(it.gen)) : it.gen} GWh in ${it.genYear}` : '';
+  return {
+    head: esc(it.name),
+    dl: row('Fuel', esc(it.fuel), 't') + row('Capacity', fmtMW(it.mw)) + (gen ? row('Generated', gen) : '') + row('In service since', it.year ? String(it.year) : 'Unknown')
+      + row('Owner', esc(it.owner || '–'), 't') + row('Country', esc(it.country || '–'), 't') + row('Position', fmtCoord(it.lat, it.lon)),
+    hint: 'From the Global Power Plant Database, last updated in 2021. Newer plants are missing and some details may have changed.',
+    act: extLink(`https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(it.name)}&go=Go`, 'Wikipedia') + extLink(`https://www.openstreetmap.org/?mlat=${it.lat}&mlon=${it.lon}#map=15/${it.lat}/${it.lon}`, 'OpenStreetMap'),
+    src: 'Source: <a href="https://datasets.wri.org/dataset/globalpowerplantdatabase" target="_blank" rel="noopener noreferrer">WRI Global Power Plant Database</a>, CC BY 4.0',
+  };
+}
+
+/* ---------- Submarine cables: OpenStreetMap via Overpass (F-15.3) ---------- */
+const CABLE_COL = ['#5AC8FA', '#FFCC00'];
+let cableSel = null;
+async function loadCable() {
+  if (!renderer) throw new Error('no WebGL');
+  const j = await getJSON(LIVE + 'cables.json', 30000);
+  // OpenStreetMap splits a cable into many ways: ways with the same name and kind form one cable
+  const groups = new Map();
+  for (const [id, kind, name, op, volt, ll] of j.rows) {
+    const k = name ? kind + '|' + name.toLowerCase() : 'w' + id;
+    let g = groups.get(k); if (!g) groups.set(k, g = { name, kind, op, volt, ways: [], lines: [] });
+    g.ways.push(id); g.lines.push(ll); g.op ||= op; g.volt ||= volt;
+  }
+  // unnamed pieces under 2 km (harbour and wind-farm cables) are left out
+  const lineKm = ll => { let km = 0; for (let k = 2; k < ll.length; k += 2) km += distKm(ll[k - 1], ll[k - 2], ll[k + 1], ll[k]) || 0; return km; };
+  const items = [...groups.values()].filter(it => (it.km = it.lines.reduce((t, ll) => t + lineKm(ll), 0)) >= 2 || it.name);
+  const seg = [], cols = [], segItem = [], count = [0, 0];
+  items.forEach((it, idx) => {
+    it.s0 = seg.length / 6; count[it.kind]++;
+    const c = CABLE_COL[it.kind], r = parseInt(c.slice(1, 3), 16) / 255, g = parseInt(c.slice(3, 5), 16) / 255, b = parseInt(c.slice(5, 7), 16) / 255;
+    for (const ll of it.lines) for (let k = 2; k < ll.length; k += 2) {
+      const n = arcPts(ll[k - 1], ll[k - 2], ll[k + 1], ll[k], 1.0012, seg);
+      for (let m = 0; m < n; m++) { cols.push(r, g, b, r, g, b); segItem.push(idx); }
+    }
+    it.s1 = seg.length / 6; it.lines = null;
+  });
+  if (!L.cable.lines) { L.cable.lines = fatLines('cable', 1, { vertexColors: true }); scene.add(L.cable.lines); }
+  setFatPositions(L.cable.lines, new Float32Array(seg), new Float32Array(cols));
+  L.cable.lines.visible = L.cable.on;
+  L.cable.seg = L.cable.lines.userData.buf; L.cable.segItem = Uint32Array.from(segItem);
+  L.cable.items = items;
+  $('#cable-sub').innerHTML = `<span><i style="background:${CABLE_COL[0]}"></i>Telecom ${fmtInt(count[0])}</span><span><i style="background:${CABLE_COL[1]}"></i>Power ${fmtInt(count[1])}</span>`
+    + `<span class="full">As mapped in OpenStreetMap, ${new Date(j.fetched).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}. Not every cable is mapped.</span>`;
+  L.cable.loaded = true;
+}
+// a click near a cable: nearest segment on screen
+function pickCable(x, y) {
+  const seg = L.cable.seg, n = seg.length / 6, cd = camera.position.clone().normalize(), a = new THREE.Vector3(), b = new THREE.Vector3();
+  let best = -1, bestD = innerWidth < 768 ? 14 : 8;
+  for (let s = 0; s < n; s++) {
+    const o = s * 6;
+    if (seg[o] * cd.x + seg[o + 1] * cd.y + seg[o + 2] * cd.z < 0.25) continue;
+    a.set(seg[o], seg[o + 1], seg[o + 2]).project(camera); b.set(seg[o + 3], seg[o + 4], seg[o + 5]).project(camera);
+    const ax = (a.x * 0.5 + 0.5) * innerWidth, ay = (-a.y * 0.5 + 0.5) * innerHeight, dx = (b.x - a.x) * 0.5 * innerWidth, dy = -(b.y - a.y) * 0.5 * innerHeight;
+    const l2 = dx * dx + dy * dy, t = l2 ? Math.max(0, Math.min(1, ((x - ax) * dx + (y - ay) * dy) / l2)) : 0;
+    const d = Math.hypot(ax + t * dx - x, ay + t * dy - y);
+    if (d < bestD) { bestD = d; best = s; }
+  }
+  return best < 0 ? null : { key: 'cable', i: L.cable.segItem[best] };
+}
+function cablePanel(it) {
+  if (!cableSel) { cableSel = fatLines('cableSel', 3); scene.add(cableSel); }
+  setFatPositions(cableSel, L.cable.seg.slice(it.s0 * 6, it.s1 * 6)); cableSel.visible = true;
+  const kind = it.kind ? 'Power cable' : 'Telecom cable';
+  const volt = (it.volt || '').split(';').filter(Boolean).map(v => +v >= 1000 ? `${fmtInt(Math.round(+v / 1000))} kV` : esc(v)).join(', ');
+  return {
+    head: esc(it.name || `Unnamed ${kind.toLowerCase()}`),
+    dl: row('Type', it.kind ? 'Power cable' : 'Telecom (internet, phone)', 't') + row('Operator', esc(it.op || '–'), 't')
+      + (it.kind ? row('Voltage', volt || '–') : '') + row('Mapped length', `${fmtInt(Math.max(1, Math.round(it.km)))} km`) + row('Map pieces', fmtInt(it.ways.length)),
+    hint: 'Mapped by OpenStreetMap volunteers. Many sea cables are missing or only partly mapped.',
+    act: extLink(`https://www.openstreetmap.org/way/${it.ways[0]}`, 'View on OpenStreetMap') + (it.name ? extLink(`https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(it.name + (it.kind ? ' power cable' : ' cable system'))}&go=Go`, 'Wikipedia') : ''),
+    src: 'Source: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a>, ODbL',
+  };
 }
 
 /* ---------- Aircraft: route, airline and type from adsbdb (on click only) ---------- */
@@ -2245,10 +2471,12 @@ function stepWind() {
 function updateLayers() {
   if (L.air.on && L.air.loaded) stepAir();
   if (L.sat.on && L.sat.loaded) stepSat();
+  if (L.ship.on && L.ship.loaded) stepShip();
   // markers shrink when zoomed out so a full globe stays readable
   const dist = camera.position.length(), zf = 1.9 / dist;
   const ZOOM = { air: Math.min(1.2, Math.max(0.42, zf)), radio: Math.min(1.2, Math.max(0.4, zf)), quake: Math.min(1.15, Math.max(0.55, zf)), sat: 1,
-    volcano: Math.min(1.15, Math.max(0.5, zf)), storm: Math.min(1.2, Math.max(0.75, zf)), event: Math.min(1.15, Math.max(0.5, zf)) };
+    volcano: Math.min(1.15, Math.max(0.5, zf)), storm: Math.min(1.2, Math.max(0.75, zf)), event: Math.min(1.15, Math.max(0.5, zf)),
+    ship: Math.min(1.2, Math.max(0.4, zf)), power: Math.min(1.15, Math.max(0.45, zf)) };
   for (const k of Object.keys(L)) if (L[k].obj) { const u = L[k].obj.material.uniforms; u.time.value = uniforms.time.value; u.aspect.value = innerWidth / innerHeight; u.zoom.value = ZOOM[k]; u.ui.value = symF(); }
   if (L.radio.loaded) {
     const lv = L.radio.on ? radioLevel() : null;
@@ -2535,6 +2763,8 @@ function lineStyle(role) {
     storm: { color: '#FFFFFF', opacity: 0.95, width: 2.4 * m },
     grid: { color: '#FFFFFF', opacity: SET.scheme === 'contrast' ? 0.4 : 0.22, width: 1 * m },
     wind: { color: '#FFFFFF', opacity: 1, width: 1.6 * m },
+    cable: { color: '#FFFFFF', opacity: 0.85, width: 1.7 * m },
+    cableSel: { color: '#FFFFFF', opacity: 1, width: 3.2 * m },
   }[role];
 }
 function styleFat(f) { const st = lineStyle(f.role); f.mat.color.set(st.color); f.mat.opacity = st.opacity; f.mat.linewidth = st.width; }
@@ -2613,7 +2843,7 @@ function loadHiResEarth() {
 applySettings();
 loadGeo();
 // test hook for local browser tests only (?debug)
-if (new URLSearchParams(location.search).has('debug')) window.__wian = { L, select, setLayer, setToggle, camera, flyTo };
+if (new URLSearchParams(location.search).has('debug')) window.__wian = { L, select, setLayer, setToggle, camera, flyTo, pick };
 
 // warm the place index once the start screen stands (non-blocking, PRD F-01.5)
 (window.requestIdleCallback || (f => setTimeout(f, 1200)))(() => loadPlaces());
