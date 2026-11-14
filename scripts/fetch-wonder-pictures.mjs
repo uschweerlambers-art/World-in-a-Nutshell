@@ -19,7 +19,9 @@ const WONDERS = JSON.parse(await readFile(join(root, 'site/data/wonders.json'), 
 const wCache = join(cacheDir, 'wonders'), wOut = join(outDir, 'wonders');
 await mkdir(wCache, { recursive: true });
 await mkdir(wOut, { recursive: true });
-const MAX_PICS = 3, VERSION = 1, MAX_AGE = 30 * 864e5;
+const MAX_PICS = 3, VERSION = 2, MAX_AGE = 30 * 864e5;
+// pictures picked by hand from the articles; missing slots are filled automatically
+const PREFER = JSON.parse(await readFile(join(root, 'scripts/wonder-pictures.json'), 'utf8'));
 const exists = async (f) => { try { await stat(f); return true; } catch { return false; } };
 
 async function build(w) {
@@ -29,12 +31,12 @@ async function build(w) {
     const old = JSON.parse(await readFile(metaFile, 'utf8'));
     const files = await Promise.all(old.images.map((im) => exists(join(wCache, im.src))));
     const fresh = Date.now() - Date.parse(old.built) < (old.images.length ? MAX_AGE : 6 * 3600e3);
-    if (old.v === VERSION && old.wiki === wiki && fresh && files.every(Boolean)) return old;
+    if (old.v === VERSION && old.wiki === wiki && old.prefer === String(PREFER[w.id] || []) && fresh && files.every(Boolean)) return old;
   } catch {}
-  const entry = { id: w.id, wiki, images: [], built: new Date().toISOString(), v: VERSION };
+  const entry = { id: w.id, wiki, prefer: String(PREFER[w.id] || []), images: [], built: new Date().toISOString(), v: VERSION };
   try {
     let k = 0;
-    for (const pic of await pictures(wiki, MAX_PICS)) {
+    for (const pic of await pictures(wiki, MAX_PICS, { prefer: PREFER[w.id] || [], photos: true })) {
       try {
         const buf = await get(pic.url, 'buf', 45000);
         const jpg = await sharp(buf).rotate().resize(840, 472, { fit: 'cover', position: 'attention' }).jpeg({ quality: 80, mozjpeg: true }).toBuffer();

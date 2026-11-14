@@ -10,17 +10,24 @@ export async function get(url, as = 'json', timeout = 30000) {
 export const plain = (html) => String(html || '').replace(/<[^>]*>/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
 const SKIP = /\.svg$|map|locator|location|flag|coat[_ ]of[_ ]arms|logo|icon|diagram|plan\b|seal|signature|chart|graph|stamp|banknote|coin/i;
 
-export async function pictures(wiki, MAX_PICS = 5) {
+// photos only: no PNG (mostly maps and diagrams), no old engravings, fossils or reconstructions
+const NOT_PHOTO = /\.png$|fossil|rainforest|painting|engraving|drawing|illustration|reconstruction|vegetation|(?<!\d)1[0-8]\d\d(?!\d)/i;
+
+// prefer: Commons file names picked by hand, used first (still only with a free licence)
+// photos: skip files that are rarely photos of the place itself
+export async function pictures(wiki, MAX_PICS = 5, { prefer = [], photos = false } = {}) {
   // files in article order (lead image first)
   const ml = await get(`https://en.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(wiki)}`);
-  const files = [...new Set((ml.items || []).filter((it) => it.type === 'image' && it.title).map((it) => it.title.replace(/^File:/, '')))]
-    .filter((f) => /\.(jpe?g|png|webp|tiff?)$/i.test(f) && !SKIP.test(f)).slice(0, 24);
+  const auto = [...new Set((ml.items || []).filter((it) => it.type === 'image' && it.title).map((it) => it.title.replace(/^File:/, '')))]
+    .filter((f) => /\.(jpe?g|png|webp|tiff?)$/i.test(f) && !SKIP.test(f) && !(photos && NOT_PHOTO.test(f)));
+  const chosen = new Set(prefer.map((f) => f.replace(/ /g, '_')));
+  const files = [...new Set([...chosen, ...auto.map((f) => f.replace(/ /g, '_'))])].slice(0, 30);
   if (!files.length) return [];
   // only files hosted on Wikimedia Commons, which only takes freely licensed works
   const q = new URLSearchParams({ action: 'query', format: 'json', formatversion: '2', prop: 'imageinfo', iiprop: 'url|size|extmetadata', iiurlwidth: '1280', titles: files.map((f) => 'File:' + f).join('|') });
   const j = await get('https://commons.wikimedia.org/w/api.php?' + q);
   const byTitle = new Map((j.query?.pages || []).map((p) => [p.title.replace(/^File:/, '').replace(/ /g, '_'), p]));
-  const wide = [], tall = [];
+  const first = [], wide = [], tall = [];
   for (const f of files) {
     const p = byTitle.get(f.replace(/ /g, '_')); const ii = p?.imageinfo?.[0];
     if (!p || p.missing || !ii?.thumburl) continue;
@@ -29,8 +36,9 @@ export async function pictures(wiki, MAX_PICS = 5) {
     if (Math.max(ii.width, ii.height) < 800) continue;
     const author = plain(m.Artist?.value).replace(/^(.{3,}?)(?:\s+\1)+$/, '$1').slice(0, 90) || 'Unknown author';
     // landscape pictures fit the slider best; upright ones (towers) only fill up
-    (ii.width / ii.height >= 1.05 ? wide : tall).push({ file: f, url: ii.thumburl, author, license: lic, licenseUrl: m.LicenseUrl?.value || '', page: ii.descriptionurl });
+    if (!chosen.has(f) && photos && /^public domain$/i.test(lic) && /^unknown/i.test(plain(m.Artist?.value) || 'unknown')) continue;
+    (chosen.has(f) ? first : ii.width / ii.height >= 1.05 ? wide : tall).push({ file: f, url: ii.thumburl, author, license: lic, licenseUrl: m.LicenseUrl?.value || '', page: ii.descriptionurl });
   }
-  return [...wide, ...tall].slice(0, MAX_PICS);
+  return [...first, ...wide, ...tall].slice(0, MAX_PICS);
 }
 
