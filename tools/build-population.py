@@ -8,12 +8,13 @@
 import sys, math, subprocess, tempfile, os
 import numpy as np
 from osgeo import gdal
+gdal.UseExceptions()
 
 src, out = sys.argv[1], sys.argv[2]
 W, H = 4096, 2048
 tmp = os.path.join(tempfile.mkdtemp(), 'sum.tif')
 # people per output cell (the source covers -180..180, about -90..84; sum keeps the totals right)
-gdal.Warp(tmp, src, width=W, height=H, outputBounds=(-180, -90, 180, 90), resampleAlg='sum', outputType=gdal.GDT_Float32, dstNodata=0)
+gdal.Warp(tmp, src, width=W, height=H, outputBounds=(-180, -90, 180, 90), resampleAlg='sum', outputType=gdal.GDT_Float32, srcNodata=-200, dstNodata=0, overviewLevel='NONE', multithread=True, warpMemoryLimit=2048)
 a = gdal.Open(tmp).ReadAsArray().astype(np.float64)
 a[~np.isfinite(a)] = 0; a[a < 0] = 0
 print('total people', round(a.sum() / 1e9, 2), 'billion')
