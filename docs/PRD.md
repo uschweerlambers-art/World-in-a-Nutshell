@@ -1,6 +1,8 @@
 # World in a Nutshell – Product Requirements Document (PRD) für den Prototyp
 
-Version 0.7 · Stand: 13.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+Version 0.8 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+
+Änderungen in v0.8 (Uwe, 14.11.2026): Ort des Tages auf dem Startscreen (F-16). Geplant: Konfliktgebiete (UCDP) und eine echte Kartenansicht.
 
 Änderungen in v0.7 (Uwe, 13.11.2026, 23:14): Neue Ebenen Gradnetz, Vulkane, Wirbelstürme und weitere Naturereignisse (F-13); Flugzeug- und Satelliten-Details erweitert (F-04.8, F-05.6). Dazu Wetterkarten und Luftqualität (F-14) sowie Schiffe, Kraftwerke und Seekabel (F-15). Fracht, Passagiere und Crew gibt es in keiner offenen Quelle und werden nicht angezeigt.
 
@@ -196,6 +198,15 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | F-15.3 | **Kraftwerke:** Global Power Plant Database v1.3.0 (WRI, CC BY 4.0, Stand 2021), 34.936 Anlagen, einmal gebaut und im Repo (`tools/build-power.mjs`). Farbe nach Energieträger, Größe nach Leistung, Filter Alle / ≥ 100 MW (Standard) / ≥ 1 GW. Panel: Energieträger, Leistung, Erzeugung (falls gemeldet), Inbetriebnahme, Betreiber, Land, Links zu Wikipedia und OpenStreetMap. | M |
 | F-15.4 | **Seekabel:** Daten- und Stromkabel am Meeresgrund aus OpenStreetMap (Overpass API, wöchentlich, ODbL, Namensnennung „© OpenStreetMap contributors“ sichtbar). Abschnitte mit gleichem Namen bilden ein Kabel. Klick auf eine Linie markiert das ganze Kabel und zeigt Name, Art, Betreiber, Spannung, kartierte Länge und Link zu OpenStreetMap. OSM ist unvollständig; das steht im Panel. Die TeleGeography-Karte ist nicht frei lizenziert und wird nicht genutzt. | M, R |
 
+
+### F-16 Ort des Tages auf dem Startscreen (v0.8)
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-16.1 | Neben (Handy: unter) der Startkarte steht ein „Place of the day“: Name, Lage, ein Satz in eigenen Worten, Link zu Wikipedia und ein Knopf „Visit on the globe“, der wie die Ortssuche dorthin fliegt. | M |
+| F-16.2 | Mini-Slider mit bis zu 5 Bildern, wechselt alle 6 s (nicht bei „Bewegung reduzieren“, pausiert bei Maus oder Fokus), Punkte, Pfeile und Wischen. Unter jedem Bild Urheber und Lizenz mit Link zur Commons-Seite. | M, A |
+| F-16.3 | Bilder nur von Wikimedia Commons (freie Lizenzen, keine „non-free“-Dateien). Die Action lädt sie einmal täglich, verkleinert sie und legt sie auf unsere Seite; der Browser fragt Wikimedia nicht an. | R, A |
+| F-16.4 | Der Ort wechselt um 00:00 Uhr Berliner Zeit nach fester Reihenfolge aus `scripts/places-of-the-day.json` (63 Orte, Start 14.11.2026). Die Datei enthält heute und morgen, eine offene Seite wechselt um Mitternacht selbst. Fehlt die Datei, bleibt der Startscreen wie bisher. | A |
 ### F-09 Übergreifende Bedienung
 
 | AK | Kriterium | Prüfung |

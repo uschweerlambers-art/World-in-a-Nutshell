@@ -18,7 +18,7 @@ const LIST = JSON.parse(await readFile(join(dirname(fileURLToPath(import.meta.ur
 const podCache = join(cacheDir, 'pod'), podOut = join(outDir, 'pod');
 await mkdir(podCache, { recursive: true });
 await mkdir(podOut, { recursive: true });
-const MAX_PICS = 5;
+const MAX_PICS = 5, VERSION = 2; // bump VERSION to rebuild cached days after changing the picture rules
 
 const berlinDate = (t) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Berlin', year: 'numeric', month: '2-digit', day: '2-digit' }).format(t);
 const addDays = (ymd, n) => new Date(Date.parse(ymd + 'T12:00:00Z') + n * 864e5).toISOString().slice(0, 10);
@@ -39,23 +39,24 @@ async function pictures(wiki) {
   // files in article order (lead image first)
   const ml = await get(`https://en.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(wiki)}`);
   const files = [...new Set((ml.items || []).filter((it) => it.type === 'image' && it.title).map((it) => it.title.replace(/^File:/, '')))]
-    .filter((f) => /\.(jpe?g|png|webp|tiff?)$/i.test(f) && !SKIP.test(f)).slice(0, 16);
+    .filter((f) => /\.(jpe?g|png|webp|tiff?)$/i.test(f) && !SKIP.test(f)).slice(0, 24);
   if (!files.length) return [];
   // only files hosted on Wikimedia Commons, which only takes freely licensed works
   const q = new URLSearchParams({ action: 'query', format: 'json', formatversion: '2', prop: 'imageinfo', iiprop: 'url|size|extmetadata', iiurlwidth: '1280', titles: files.map((f) => 'File:' + f).join('|') });
   const j = await get('https://commons.wikimedia.org/w/api.php?' + q);
   const byTitle = new Map((j.query?.pages || []).map((p) => [p.title.replace(/^File:/, '').replace(/ /g, '_'), p]));
-  const out = [];
+  const wide = [], tall = [];
   for (const f of files) {
     const p = byTitle.get(f.replace(/ /g, '_')); const ii = p?.imageinfo?.[0];
     if (!p || p.missing || !ii?.thumburl) continue;
     const m = ii.extmetadata || {}, lic = plain(m.LicenseShortName?.value);
     if (m.NonFree?.value || !/^(cc|public domain|pd|cc0|attribution|no restrictions)/i.test(lic)) continue;
-    if (ii.width < 800 || ii.width / ii.height < 1.05) continue; // landscape pictures only, they fit the slider
-    out.push({ file: f, url: ii.thumburl, author: plain(m.Artist?.value).slice(0, 90) || 'Unknown author', license: lic, licenseUrl: m.LicenseUrl?.value || '', page: ii.descriptionurl });
-    if (out.length >= MAX_PICS) break;
+    if (Math.max(ii.width, ii.height) < 800) continue;
+    const author = plain(m.Artist?.value).replace(/^(.{3,}?)(?:\s+\1)+$/, '$1').slice(0, 90) || 'Unknown author';
+    // landscape pictures fit the slider best; upright ones (towers) only fill up
+    (ii.width / ii.height >= 1.05 ? wide : tall).push({ file: f, url: ii.thumburl, author, license: lic, licenseUrl: m.LicenseUrl?.value || '', page: ii.descriptionurl });
   }
-  return out;
+  return [...wide, ...tall].slice(0, MAX_PICS);
 }
 
 async function build(ymd) {
@@ -63,11 +64,11 @@ async function build(ymd) {
   try {
     const old = JSON.parse(await readFile(metaFile, 'utf8'));
     const files = await Promise.all(old.images.map((im) => exists(join(podCache, im.src))));
-    if (old.complete && files.every(Boolean)) return old;
-    if (!old.complete && Date.now() - Date.parse(old.built) < 3600e3 && files.every(Boolean)) return old; // retry incomplete days hourly
+    if (old.v === VERSION && old.complete && files.every(Boolean)) return old;
+    if (old.v === VERSION && !old.complete && Date.now() - Date.parse(old.built) < 3600e3 && files.every(Boolean)) return old; // retry incomplete days hourly
   } catch {}
   const p = placeFor(ymd);
-  const entry = { date: ymd, id: p.id, name: p.name, where: p.where, lat: p.lat, lon: p.lon, text: p.text, wiki: `https://en.wikipedia.org/wiki/${encodeURIComponent(p.wiki)}`, images: [], built: new Date().toISOString(), complete: false };
+  const entry = { date: ymd, id: p.id, name: p.name, where: p.where, lat: p.lat, lon: p.lon, text: p.text, wiki: `https://en.wikipedia.org/wiki/${encodeURIComponent(p.wiki)}`, images: [], built: new Date().toISOString(), complete: false, v: VERSION };
   try {
     const pics = await pictures(p.wiki);
     let k = 0;
@@ -97,6 +98,6 @@ for (const d of days) for (const im of d.images) await copyFile(join(podCache, i
 await writeFile(join(outDir, 'placeofday.json'), JSON.stringify({
   generated: new Date().toISOString(), timeZone: 'Europe/Berlin',
   imageSource: 'Wikimedia Commons', textNote: 'Short texts in our own words',
-  days: days.map(({ built, complete, ...d }) => ({ ...d, images: d.images.map((im) => ({ ...im, src: 'pod/' + im.src })) })),
+  days: days.map(({ built, complete, v, ...d }) => ({ ...d, images: d.images.map((im) => ({ ...im, src: 'pod/' + im.src })) })),
 }, null, 1));
 // never fails the run: without the file the start screen simply has no place of the day
