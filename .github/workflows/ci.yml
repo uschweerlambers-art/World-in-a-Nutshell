@@ -38,21 +38,26 @@ jobs:
           AIS_LISTEN_SECONDS=20 node scripts/fetch-ships.mjs .cache/live site/data/live
           node scripts/fetch-place-of-day.mjs .cache/live site/data/live && cat site/data/live/placeofday.json && ls -la site/data/live/pod
           node scripts/fetch-wonder-pictures.mjs .cache/live site/data/live && cat site/data/live/wonders-pictures.json && ls -la site/data/live/wonders
-          node -e "for (const f of ['cables','ships']) { try { const j = require('./site/data/live/' + f + '.json'); console.log(f, j.count, JSON.stringify(j).length) } catch (e) { console.log(f, 'missing') } }"
+          node -e "for (const f of ['cables','ships','disasters']) { try { const j = require('./site/data/live/' + f + '.json'); console.log(f, j.count, JSON.stringify(j).length) } catch (e) { console.log(f, 'missing') } }"
           cat site/data/live/weather.json || true
           node scripts/fetch-textures.mjs .cache/textures site/img/hi
           ls -la site/img/hi || true
           ls -la site/data/live
-      # Close-up imagery tiles are loaded by the browser, so they must answer with CORS headers
+      # Close-up imagery, elevation and map tiles are loaded by the browser, so they must answer with CORS headers
       - name: Imagery tiles answer with CORS (smoke test)
         run: |
           for u in \
             "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/GoogleMapsCompatible/10/339/533.jpg" \
             "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/GoogleMapsCompatible/14/5430/8540.jpg" \
             "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_NextGeneration/default/2004-08-01/GoogleMapsCompatible_Level8/5/10/16.jpeg" \
-            "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble/default/2016-01-01/GoogleMapsCompatible_Level8/5/10/16.png"; do
+            "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble/default/2016-01-01/GoogleMapsCompatible_Level8/5/10/16.png" \
+            "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/10/544/339.png" \
+            "https://tiles.openfreemap.org/planet"; do
             echo "== $u"; curl -s -m 20 -o /tmp/tile -D - -H "Origin: https://uschweerlambers-art.github.io" "$u" | grep -iE "^HTTP|access-control|content-type|cache-control" || true; ls -la /tmp/tile || true
           done
+      # The vector tile decoder in the page must read a real OpenFreeMap tile (F-22)
+      - name: Map tiles decode (smoke test)
+        run: node scripts/check-vector-tile.mjs
       # The preview build lets reviewers download and open the site locally (N-7.4).
       - uses: actions/upload-artifact@v4
         with:

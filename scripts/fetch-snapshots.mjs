@@ -112,6 +112,26 @@ const SOURCES = {
       return { source: 'NASA EONET', sourceUrl: 'https://eonet.gsfc.nasa.gov', license: 'Public Domain (NASA)', fields: ['id', 'title', 'category', 'url', 'magnitudeUnit', 'points[lon,lat,time,magnitude]'], count: rows.length, rows };
     },
   },
+  disasters: {
+    maxAge: 60 * MIN, // Copernicus Emergency Management Service, rapid mapping activations (F-23)
+    async fetch() {
+      const rows = [], since = Date.now() - 365 * 24 * 3600e3;
+      let url = 'https://rapidmapping.emergency.copernicus.eu/backend/dashboard-api/public-activations-info/?limit=100';
+      for (let page = 0; url && page < 6; page++) {
+        const j = await (await get(url, 60000)).json();
+        for (const a of j.results || []) {
+          const m = /POINT\s*\(\s*(-?[\d.]+)\s+(-?[\d.]+)\s*\)/.exec(a.centroid || '');
+          const t = Date.parse(a.activationTime || a.eventTime);
+          if (!m || !(t >= since || !a.closed)) continue;
+          rows.push([a.code, a.name, a.category || '', (a.countries || []).join(', '), +(+m[1]).toFixed(3), +(+m[2]).toFixed(3), Date.parse(a.eventTime) || null, t || null, !!a.closed, a.n_products ?? null]);
+        }
+        // newest first: once a page holds only old, closed activations, stop
+        url = (j.results || []).some((a) => Date.parse(a.activationTime) >= since || !a.closed) ? j.next : null;
+      }
+      if (!rows.length) throw new Error('Copernicus EMS returned no activations');
+      return { source: 'Copernicus Emergency Management Service', sourceUrl: 'https://rapidmapping.emergency.copernicus.eu', license: '© European Union, Copernicus Emergency Management Service (free use with attribution)', fields: ['code', 'name', 'category', 'countries', 'lon', 'lat', 'eventTime', 'activationTime', 'closed', 'products'], count: rows.length, rows };
+    },
+  },
   volcanoes: {
     maxAge: 7 * 24 * 60 * MIN, // the Holocene volcano list changes a few times a year
     async fetch() {

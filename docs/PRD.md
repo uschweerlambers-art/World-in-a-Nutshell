@@ -1,6 +1,8 @@
 # World in a Nutshell – Product Requirements Document (PRD) für den Prototyp
 
-Version 0.11 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+Version 0.12 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+
+Änderungen in v0.12 (Uwe, 14.11.2026): Vier Ergänzungen aus der Quellenprüfung: Relief aus Höhendaten in der Nahansicht (F-21), Ortsnamen, Straßen und Grenzen aus OpenStreetMap beim nahen Heranzoomen (F-22), Katastrophen-Kartierungen von Copernicus EMS (F-23) und eine Bevölkerungskarte aus GHSL (F-24).
 
 Änderungen in v0.11 (Uwe, 14.11.2026): Die Zeitleiste unten ist entfernt, solange sie keine Funktion hat (F-11 zurückgestellt). Die Karten „Wonders & records“ zeigen Bilder von Wikimedia Commons (F-20).
 
@@ -248,6 +250,37 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | F-20.1 | Jede Wunder-Karte zeigt oben bis zu drei Bilder aus dem englischen Wikipedia-Artikel des Ortes, nur Dateien auf Wikimedia Commons mit freier Lizenz (keine Karten, Flaggen, Logos, Diagramme). Wechsel per Pfeil, Punkt oder Wischen, ohne automatischen Wechsel. | M |
 | F-20.2 | Unter der Quelle der Karte stehen Urheber und Lizenz des gezeigten Bildes, mit Link zur Datei und zur Lizenz. | R |
 | F-20.3 | Die GitHub Action lädt die Bilder, verkleinert sie auf 840 × 472 px und legt sie auf unsere eigene Seite; die Browser der Besucher fragen Wikimedia nicht an. Erneuert wird alle 30 Tage oder wenn sich die Liste ändert. Ohne Bilder bleibt die Karte wie bisher. | R, A |
+
+### F-21 Relief in der Nahansicht (v0.12)
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-21.1 | Ab Kachelstufe 7 (etwa 1.300 km Höhe und näher) lädt zu jeder Bildkachel eine Höhenkachel im Terrarium-Format (*Terrain Tiles* der AWS Open Data Registry, Mapzen/Tilezen, aus SRTM, GMTED, ETOPO u. a., frei nutzbar mit Nennung). Das Gelände hebt sich um seine Höhe, 1,5-fach überhöht; das Meer bleibt flach. | M |
+| F-21.2 | Hänge werden schattiert, mit Tag und Nacht nach der Sonne, sonst von Nordwesten. Das Relief blendet weich ein, sobald die Höhen da sind. | M |
+| F-21.3 | Fehlt eine Höhenkachel oder ist der Dienst nicht erreichbar, bleibt die Kachel flach, ohne Fehlermeldung. „Sources & licences“ und „Privacy“ nennen den Dienst. | R |
+
+### F-22 Ortsnamen, Straßen und Grenzen von nahem (v0.12)
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-22.1 | Unter etwa 500 km Höhe zeigt der Globus Städte, Orte, Berggipfel, Straßen und Grenzen aus OpenStreetMap (Vektorkacheln von OpenFreeMap, OpenMapTiles-Schema, © OpenStreetMap-Mitwirkende, ODbL). Je näher, desto kleinere Orte und Straßen. Die Ländernamen treten dann zurück. | M |
+| F-22.2 | Ein- und ausschaltbar unter „Earth“ als „Local names & roads“ (Standard: an). Funktioniert auf Globus und Karte. | M |
+| F-22.3 | Die Quellenzeile nennt „© OpenStreetMap contributors“ mit Link, solange lokale Namen zu sehen sind. Ist der Dienst nicht erreichbar, bleibt es bei Hauptstädten und Ländernamen. | R |
+
+### F-23 Katastrophen-Kartierung (v0.12)
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-23.1 | Ebene „Disaster mapping“ unter „Live“: Aktivierungen des Copernicus Emergency Management Service (Rapid Mapping) der letzten 12 Monate und alle noch laufenden, als Punkte nach Art eingefärbt (Flut, Feuer, Erdbeben, Sturm, Erdrutsch, Vulkan u. a.). Laufende Kartierungen sind größer. | M |
+| F-23.2 | Ein Klick zeigt Name, Art, Länder, Zeitpunkt von Ereignis und Anfrage, Stand und Zahl der Karten, mit Link zu den Karten bei Copernicus. Quelle: © Europäische Union, Copernicus EMS. | M |
+| F-23.3 | Die GitHub Action holt die Liste mit den anderen Live-Daten (der Dienst erlaubt keine Abfrage direkt aus dem Browser). | R, A |
+
+### F-24 Bevölkerung (v0.12)
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-24.1 | Schalter „Population“ unter „Earth“ zeigt, wie viele Menschen pro km² wo leben: *GHS-POP R2023A*, Schätzung für 2025 (Europäische Kommission, Joint Research Centre, CC BY 4.0), auf ein Raster von etwa 9 km verkleinert und logarithmisch eingefärbt (von 1 bis über 10.000 Menschen pro km²) mit Legende. | M |
+| F-24.2 | Die Karte wird einmal mit einem Werkzeug im Repo (`tools/build-population.py`) aus der Originaldatei berechnet und als PNG mit der Seite ausgeliefert; die Summe muss rund 8 Milliarden Menschen ergeben. | A |
 
 ### F-09 Übergreifende Bedienung
 

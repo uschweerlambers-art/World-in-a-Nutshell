@@ -31,6 +31,7 @@
   --c-volcano: #FF453A;
   --c-storm: #9FE3FF;
   --c-event: #FF6B35;
+  --c-ems: #7D7AFF;
   --c-ship: #40C8E0;
   --c-power: #FFD60A;
   --c-cable: #5AC8FA;
@@ -277,6 +278,13 @@ body.flat .m-view .ico-globe { display: block; }
 .gl-cap.dot-only span { display: none; }
 .gl-cap:hover span, .gl-cap:focus-visible span { text-decoration: underline; }
 @media (prefers-reduced-motion: reduce) { #geo-labels > * { transition: none; } }
+.gl-local { display: flex; align-items: center; gap: 4px; font-size: calc(11.5px * var(--lbl)); font-weight: 500; color: rgba(255,255,255,0.94); text-shadow: 0 0 3px rgba(0,0,0,.95), 0 1px 6px rgba(0,0,0,.85); }
+.gl-local i { width: calc(5px * var(--sym)); height: calc(5px * var(--sym)); border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px rgba(5,7,13,.8); flex-shrink: 0; }
+.gl-local.city { font-size: calc(13px * var(--lbl)); font-weight: 650; }
+.gl-local.city i { width: calc(7px * var(--sym)); height: calc(7px * var(--sym)); }
+.gl-local.peak { font-size: calc(10.5px * var(--lbl)); color: #FFE3B8; }
+.gl-local.peak i { width: 0; height: 0; border-radius: 0; background: none; box-shadow: none; border-left: 4px solid transparent; border-right: 4px solid transparent; border-bottom: 7px solid #FFE3B8; }
+.gl-local.peak small { font-family: var(--mono); font-size: 0.85em; opacity: 0.8; }
 .gl-grid { font-family: var(--mono); font-size: calc(10px * var(--lbl)); color: rgba(255,255,255,0.62); text-shadow: 0 0 3px rgba(0,0,0,.95); }
 .apt-label { position: fixed; left: 0; top: 0; z-index: 2; pointer-events: none; font-family: var(--mono); font-size: calc(11px * var(--lbl)); font-weight: 600; color: #05070D; padding: 1px 6px; border-radius: 6px; background: color-mix(in srgb, var(--c-air) 92%, transparent); white-space: nowrap; }
 .sub.legend { flex-direction: row; flex-wrap: wrap; gap: 4px 12px; }
@@ -578,6 +586,8 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <div class="sub legend" id="storm-sub" hidden></div>
       <div class="row off" data-layer="event"><span class="ico" style="background:var(--c-event)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><path d="M12 2.5c.5 3.5 5.5 5.8 5.5 11a5.5 5.5 0 01-11 0c0-2.6 1.3-4.3 2.6-5.6.2 1.8 1 2.9 2 3.3-.6-3 .2-6.2.9-8.7z"/></svg></span><span class="nm">Fires, ice &amp; more</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show natural events: wildfires, ice, floods and more" data-layer-switch="event"></button></span></div>
       <div class="sub legend" id="event-sub" hidden></div>
+      <div class="row off" data-layer="ems"><span class="ico" style="background:var(--c-ems)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#05070D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3.5v5.2c0 4.6-3.3 8-8 9.3-4.7-1.3-8-4.7-8-9.3V6.5z"/><path d="M12 8.5v4.5M12 16.2v.3"/></svg></span><span class="nm">Disaster mapping</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show disaster mapping by Copernicus EMS" data-layer-switch="ems"></button></span></div>
+      <div class="sub legend" id="ems-sub" hidden></div>
     </section>
     <section class="sec" aria-labelledby="h-weather">
       <h3 id="h-weather">Weather</h3>
@@ -611,8 +621,11 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 010 16z" fill="#F5F5F7"/></svg></span><span class="nm">Day and night</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show day and night" data-toggle="night"></button></span></div>
       <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#F5F5F7" aria-hidden="true"><path d="M7 18a4.5 4.5 0 01-.6-8.96A6 6 0 0117.7 8.5 4.75 4.75 0 0117.5 18z"/></svg></span><span class="nm">Clouds</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show clouds" data-toggle="clouds"></button></span></div>
       <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M5 7.5h14M5 16.5h14M12 3c-3 3-3 15 0 18M12 3c3 3 3 15 0 18"/></svg></span><span class="nm">Graticule</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show graticule (latitude and longitude lines)" data-toggle="grid"></button></span></div>
+      <div class="row"><span class="ico" style="background:linear-gradient(135deg,#F7E27A,#F08A3E,#D6336C)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><circle cx="9" cy="7.5" r="3"/><circle cx="16.5" cy="9" r="2.4"/><path d="M3.5 19c0-3.4 2.5-6 5.5-6s5.5 2.6 5.5 6zM14.6 19c0-2.2-.6-4-1.7-5.3a4.6 4.6 0 017.6 3.6V19z"/></svg></span><span class="nm">Population</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show where people live" data-toggle="pop"></button></span></div>
+      <div class="sub" id="pop-sub" hidden></div>
       <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/></svg></span><span class="nm">Countries &amp; borders</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show countries and borders" data-toggle="borders"></button></span></div>
       <div class="row"><span class="ico" style="background:var(--c-place)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><circle cx="12" cy="12" r="5"/></svg></span><span class="nm">Capitals</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show capitals" data-toggle="capitals"></button></span></div>
+      <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20L10 4M14 4l6 16M12 7v2M12 12v2M12 17v2"/></svg></span><span class="nm">Local names &amp; roads</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show towns, peaks, roads and borders when zoomed in close" data-toggle="local"></button></span></div>
     </section>
     <button type="button" class="btn-wonder" data-act="wonder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>Surprise me</button>
     <footer class="side-foot">
@@ -656,7 +669,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     </ul>
   </div>
 
-  <p class="attrib">Earth: NASA Blue Marble &amp; Black Marble · Places: GeoNames (CC BY 4.0) · Outlines: Natural Earth · Clouds: <span id="attrib-clouds">placeholder</span><span id="attrib-tiles" hidden> · Close-up: <a href="https://s2maps.eu" target="_blank" rel="noopener noreferrer">Sentinel-2 cloudless 2016</a> by EOX IT Services GmbH (CC BY 4.0, contains modified Copernicus Sentinel data 2016)</span><span id="attrib-live"></span></p>
+  <p class="attrib">Earth: NASA Blue Marble &amp; Black Marble · Places: GeoNames (CC BY 4.0) · Outlines: Natural Earth · Clouds: <span id="attrib-clouds">placeholder</span><span id="attrib-tiles" hidden> · Close-up: <a href="https://s2maps.eu" target="_blank" rel="noopener noreferrer">Sentinel-2 cloudless 2016</a> by EOX IT Services GmbH (CC BY 4.0, contains modified Copernicus Sentinel data 2016)</span><span id="attrib-osm" hidden> · Names &amp; roads: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a>, <a href="https://openfreemap.org" target="_blank" rel="noopener noreferrer">OpenFreeMap</a></span><span id="attrib-live"></span></p>
 </div>
 
 <!-- Arrival layer picker -->
@@ -743,6 +756,8 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
         <li>Country borders and names: Natural Earth 1:50m, public domain. Capitals: GeoNames, CC BY 4.0.</li>
         <li>Weather, local time and elevation in the place details: Open-Meteo (CC BY 4.0), asked only when you open a place.</li>
         <li>Sharper Earth on large screens: NASA GIBS Blue Marble Next Generation and VIIRS Black Marble.</li>
+        <li>Towns, peaks, main roads and borders when you zoom in close: © OpenStreetMap contributors (ODbL), vector tiles by <a href="https://openfreemap.org" target="_blank" rel="noopener noreferrer">OpenFreeMap</a> in the OpenMapTiles layout.</li>
+        <li>Relief when you zoom in close: Terrarium elevation tiles from the AWS Open Data registry (Mapzen/Tilezen, built from SRTM, GMTED, ETOPO1 and other open sources).</li>
         <li>Close-up pictures when you zoom in: <a href="https://s2maps.eu" target="_blank" rel="noopener noreferrer">Sentinel-2 cloudless 2016</a> by EOX IT Services GmbH, CC BY 4.0 (contains modified Copernicus Sentinel data 2016), loaded from <a href="https://maps.eox.at" target="_blank" rel="noopener noreferrer">EOX::Maps</a>.</li>
         <li id="src-clouds">Clouds: daily satellite imagery from NASA GIBS (MODIS and VIIRS true colour, turned into a cloud mask by our GitHub Action). If it is missing, a drawn placeholder is shown.</li>
       </ul>
@@ -755,6 +770,8 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
         <li>Aircraft: The OpenSky Network, snapshot every 15 minutes, positions moved on along course and speed in your browser.</li>
         <li>Satellites and ISS: orbit data from CelesTrak (at most every 2 hours), positions computed live in your browser with satellite.js (MIT). Owner, launch date and site: CelesTrak SATCAT.</li>
         <li>Flight route, airline and aircraft type: adsbdb.com (open API), asked only when you click an aircraft. Routes come from a community database and can be out of date.</li>
+        <li>Population: Global Human Settlement Layer (GHS-POP R2023A, estimate for 2025), European Commission, Joint Research Centre, CC BY 4.0. Reduced to a grid of about 9 km.</li>
+        <li>Disaster mapping: Copernicus Emergency Management Service, rapid mapping activations, © European Union. Fetched by our GitHub Action.</li>
         <li>Volcanoes: Smithsonian Institution, Global Volcanism Program, Volcanoes of the World (Holocene list) and the weekly volcanic activity report.</li>
         <li>Tropical storms, wildfires, sea and lake ice and other open natural events: NASA EONET, public domain (storm tracks from JTWC and NHC).</li>
         <li>Wind and temperature: NOAA GFS weather model (1°, every 6 hours), public domain, via NOMADS. Rain: NASA GPM IMERG satellite precipitation via GIBS (about 5 hours behind). Haze, smoke and dust: NASA aerosol optical depth via GIBS (daily).</li>
@@ -774,7 +791,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <div data-pane="datenschutz" hidden>
       <h3>Placeholder</h3>
       <p>The privacy policy follows before launch. It will name every server your browser contacts, and GitHub Pages as the host.</p>
-      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you zoom in close, the sharper pictures of the area on screen load directly from EOX in Austria (tiles.maps.eox.at). When you play a radio station, the stream comes directly from that station’s server. All of them see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up weather, air quality, time zone and elevation. When you click an aircraft, its transponder code and call sign go to adsbdb.com to look up route and type.</p>
+      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you zoom in close, the sharper pictures of the area on screen load directly from EOX in Austria (tiles.maps.eox.at), the heights for the relief from Amazon Web Services (s3.amazonaws.com), and names and roads from OpenFreeMap (tiles.openfreemap.org). When you play a radio station, the stream comes directly from that station’s server. All of them see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up weather, air quality, time zone and elevation. When you click an aircraft, its transponder code and call sign go to adsbdb.com to look up route and type.</p>
       <p>Already true today: this site sets no cookies, counts no visits and only asks for your location when you click. What you type into search never leaves your browser. Your display settings (sizes and colours) are kept in your own browser’s storage and are never sent anywhere.</p>
     </div>
   </div>
@@ -970,8 +987,29 @@ if (renderer) {
 
   // Earth
   // the Earth's surface shader; close-up tiles (F-19) use it with their own day picture
-  const earthFrag = tile => `uniform sampler2D dayMap;${tile ? ' uniform sampler2D tileMap; uniform float uFade; varying vec2 vTUv;' : ''} uniform sampler2D nightMap; uniform sampler2D specMap; uniform vec3 sunDir; uniform float nightOn; uniform float uFlat;
-      varying vec2 vUv; varying vec3 vN; varying vec3 vPos;
+  const RELIEF_GLSL = `
+      uniform sampler2D demMap; uniform float uDem; uniform float uTexM;
+      // Terrarium elevation tiles: metres = R * 256 + G + B / 256 - 32768; the sea stays flat
+      float demRaw(vec2 uv) { vec3 c = texture2D(demMap, uv).rgb * 255.0; return max(c.r * 256.0 + c.g + c.b / 256.0 - 32768.0, 0.0); }
+      // the texture is read pixel by pixel (blending the colours would break the metres), so blend the heights here
+      float demH(vec2 uv) {
+        vec2 t = uv * 256.0 - 0.5, f = fract(t), b = (floor(t) + 0.5) / 256.0, d = vec2(1.0 / 256.0, 0.0);
+        return mix(mix(demRaw(b), demRaw(b + d.xy), f.x), mix(demRaw(b + d.yx), demRaw(b + d.xx), f.x), f.y);
+      }`;
+  const RELIEF_FN = `
+      // hillshading (F-21): slopes from the elevation tile, lit by the sun (or from the north-west without day and night)
+      float relief(vec3 n) {
+        if (uDem <= 0.0) return 1.0;
+        float e = 1.0 / 256.0, m = 2.0 * uTexM * sqrt(max(0.0, 1.0 - n.y * n.y));
+        float gE = (demH(vTUv + vec2(e, 0.0)) - demH(vTUv - vec2(e, 0.0))) / m * 2.5;
+        float gN = (demH(vTUv + vec2(0.0, e)) - demH(vTUv - vec2(0.0, e))) / m * 2.5;
+        vec3 east = normalize(vec3(n.z, 0.0, -n.x) + 1e-6), north = cross(n, east);
+        vec3 nn = normalize(n - gE * east - gN * north);
+        vec3 nw = normalize(n + 0.7 * north - 0.7 * east), L = nightOn > 0.5 ? normalize(sunDir * 0.6 + nw * 0.4) : nw;
+        return mix(1.0, clamp(1.0 + (dot(nn, L) - dot(n, L)) * 1.25, 0.5, 1.45), uDem);
+      }`;
+  const earthFrag = tile => `uniform sampler2D dayMap;${tile ? ' uniform sampler2D tileMap; uniform float uFade; varying vec2 vTUv;' + RELIEF_GLSL : ''} uniform sampler2D nightMap; uniform sampler2D specMap; uniform vec3 sunDir; uniform float nightOn; uniform float uFlat;
+      varying vec2 vUv; varying vec3 vN; varying vec3 vPos;${tile ? RELIEF_FN : ''}
       void main(){
         vec3 n = normalize(vN);
         float d = dot(n, sunDir);
@@ -980,7 +1018,7 @@ if (renderer) {
         vec3 night = texture2D(nightMap, vUv).rgb;
         night = pow(night, vec3(1.35)) * vec3(1.3, 1.05, 0.78) * 1.7;
         float lambert = mix(0.9, clamp(d * 1.15 + 0.3, 0.0, 1.0), nightOn);
-        vec3 dayCol = day * (0.16 + 0.98 * lambert);
+        vec3 dayCol = day * (0.16 + 0.98 * lambert)${tile ? ' * relief(n)' : ''};
         vec3 v = normalize(cameraPosition - vPos);
         float spec = texture2D(specMap, vUv).r;
         vec3 h = normalize(sunDir + v);
@@ -1004,11 +1042,13 @@ if (renderer) {
   // (CC BY 4.0), Web Mercator tiles down to about 10 m per pixel. Without them the 8k Earth stays.
   const TILES = {
     url: (z, x, y) => `https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/GoogleMapsCompatible/${z}/${y}/${x}.jpg`,
+    // relief (F-21): Terrarium elevation tiles from the AWS open data registry (Mapzen/Tilezen, SRTM and others)
+    dem: (z, x, y) => `https://s3.amazonaws.com/elevation-tiles-prod/terrarium/${z}/${x}/${y}.png`, demMinZ: 7, demFailed: 0, demOk: 0,
     minZ: 6, maxZ: 14, size: 256, keep: 260, maxLoading: 6,
     cache: new Map(), loading: 0, ok: 0, failed: 0, off: false, shown: new Set(), queue: []
   };
   const tileLoader = new THREE.TextureLoader(); tileLoader.setCrossOrigin('anonymous');
-  const TILE_VERT = MORPH_GLSL + `
+  const TILE_VERT = MORPH_GLSL + RELIEF_GLSL + `
     uniform float uTileLon; attribute vec2 tuv;
     varying vec2 vUv; varying vec2 vTUv; varying vec3 vN; varying vec3 vPos;
     void main(){
@@ -1017,7 +1057,9 @@ if (renderer) {
       // on the map the whole tile stays on one side of the far edge
       float dc = mod(uTileLon - uLon0 + 3.14159265, 6.28318531) - 3.14159265;
       // a hair above the 8k Earth (about 130 m), so the two never fight over the same depth
-      vPos = uFlat <= 0.0 ? vN * 1.00002 : wianPlace(dc + lon - uTileLon, lat, 0.00002);
+      // relief (F-21): the ground rises by its height, 1.5 times exaggerated
+      float hh = 0.00002 + (uDem > 0.0 ? demH(tuv) * uDem * 1.5 / 6371000.0 : 0.0);
+      vPos = uFlat <= 0.0 ? vN * (1.0 + hh) : wianPlace(dc + lon - uTileLon, lat, hh);
       vUv = vec2(lon / 6.28318531 + 0.5, lat / 3.14159265 + 0.5);
       vTUv = tuv;
       gl_Position = projectionMatrix * modelViewMatrix * vec4(vPos, 1.0);
@@ -1044,21 +1086,37 @@ if (renderer) {
     TILES.cache.set(key, t);
     return t;
   }
+  function demLoad(t) {
+    // without relief the tile simply stays flat
+    if (t.z < TILES.demMinZ || (TILES.demFailed > 16 && !TILES.demOk)) return;
+    tileLoader.load(TILES.dem(t.z, t.x, t.y), tex => {
+      TILES.demOk++;
+      if (t.state === 'gone') { tex.dispose(); return; }
+      // the colours encode metres, so they must not be blended or mipmapped
+      tex.colorSpace = THREE.NoColorSpace; tex.magFilter = tex.minFilter = THREE.NearestFilter; tex.generateMipmaps = false;
+      tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+      t.dem = tex; t.dem0 = 0;
+      if (t.mesh) t.mesh.material.uniforms.demMap.value = tex;
+    }, undefined, () => { TILES.demFailed++; });
+  }
   function tileLoad(t) {
-    t.state = 'loading'; TILES.loading++;
+    t.state = 'loading'; TILES.loading++; demLoad(t);
     tileLoader.load(TILES.url(t.z, t.x, t.y), tex => {
       TILES.loading--; TILES.ok++;
       if (t.state !== 'loading') { tex.dispose(); return; }
       tex.colorSpace = THREE.NoColorSpace; tex.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
       tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+      const n = 2 ** t.z;
       const mat = new THREE.ShaderMaterial({
-        uniforms: { ...uniforms, tileMap: { value: tex }, uFade: { value: 0 }, uTileLon: { value: t.lon } },
+        uniforms: { ...uniforms, tileMap: { value: tex }, uFade: { value: 0 }, uTileLon: { value: t.lon },
+          demMap: { value: null }, uDem: { value: 0 }, uTexM: { value: TAU * 6371000 / (n * TILES.size) } },
         vertexShader: TILE_VERT, fragmentShader: tileFrag, transparent: true, depthWrite: false,
         polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -2 - t.z
       });
-      t.mesh = new THREE.Mesh(tileGeometry(t.z, t.x, t.y, t.z < 9 ? 16 : 8), mat);
+      t.mesh = new THREE.Mesh(tileGeometry(t.z, t.x, t.y, t.z < TILES.demMinZ ? 16 : 24), mat);
       t.mesh.frustumCulled = false; t.mesh.renderOrder = -10 + t.z * 0.1; t.mesh.visible = false;
       scene.add(t.mesh); t.state = 'ready'; t.fade0 = 0;
+      if (t.dem) { mat.uniforms.demMap.value = t.dem; t.dem0 = 0; }
     }, undefined, () => {
       TILES.loading--; TILES.failed++; t.state = 'error';
       // the service is away or blocks us: stay with the 8k Earth for this visit
@@ -1067,6 +1125,7 @@ if (renderer) {
   }
   function tileDrop(t) {
     if (t.mesh) { scene.remove(t.mesh); t.mesh.geometry.dispose(); t.mesh.material.uniforms.tileMap.value.dispose(); t.mesh.material.dispose(); t.mesh = null; }
+    t.dem?.dispose(); t.dem = null;
     t.state = 'gone'; TILES.cache.delete(t.key);
   }
   // where a lon/lat point sits right now, on the globe or on the (partly) unrolled map
@@ -1134,6 +1193,11 @@ if (renderer) {
       t.mesh.visible = true;
       if (!t.fade0) t.fade0 = now;
       t.mesh.material.uniforms.uFade.value = reduceMotion ? 1 : Math.min(1, (now - t.fade0) / 400);
+      // the relief grows in softly once its heights are there
+      if (t.dem && t.mesh.material.uniforms.demMap.value) {
+        if (!t.dem0) t.dem0 = now;
+        t.mesh.material.uniforms.uDem.value = reduceMotion ? 1 : Math.min(1, (now - t.dem0) / 700);
+      }
     }
     // keep a few hundred tiles, drop the ones unused for the longest time
     if (TILES.cache.size > TILES.keep) {
@@ -1541,6 +1605,7 @@ if (renderer) {
     placeMarker();
     updateLayers();
     updateTiles(performance.now());
+    updateLocal(performance.now());
     renderer.render(scene, camera);
   });
   addEventListener('resize', () => {
@@ -1864,9 +1929,11 @@ function setToggle(key, on) {
   if (key === 'night') uniforms.nightOn.value = on ? 1 : 0;
   if (key === 'clouds') uniforms.cloudsOn.value = on ? 1 : 0;
   if (key in WX) { setWeather(key, on); return; }
+  if (key === 'pop') { setPopulation(on); return; }
   if (key in ORIENT) {
     ORIENT[key] = on;
     if (key === 'borders' && borderLines) borderLines.visible = on;
+    if (key === 'local') updateLocal(performance.now(), true);
     if (key === 'grid') { if (on) buildGrid(); if (gridLines) gridLines.visible = on; if (!on) gridLabels.forEach(l => { l.el.style.visibility = 'hidden'; l.el.style.opacity = 0; l.shown = false; }); }
     layoutLabels(true); routesTick = 0;
   }
@@ -1962,9 +2029,9 @@ tick(); setInterval(tick, 20000);
 // Earthquakes load straight from USGS, satellites are propagated live with satellite.js.
 const LIVE = 'data/live/';
 const R_EARTH_KM = 6371;
-const COLORS = { air: scheme().air, sat: scheme().sat, quake: scheme().quake, radio: scheme().radio, volcano: scheme().volcano, storm: '#9FE3FF', event: '#FF6B35', ship: '#40C8E0', power: '#FFD60A', cable: '#5AC8FA', conflict: '#FF3B30' };
-const LAYER_NAMES = { air: 'Aircraft', sat: 'Satellite', quake: 'Earthquake', radio: 'Radio station', volcano: 'Volcano', storm: 'Tropical storm', event: 'Natural event', ship: 'Ship', power: 'Power plant', cable: 'Submarine cable', conflict: 'Armed conflict' };
-const LAYER_PLURAL = { air: 'Aircraft', sat: 'Satellites', quake: 'Earthquakes', radio: 'Radio stations', volcano: 'Volcanoes', storm: 'Tropical storms', event: 'Natural events', ship: 'Ships', power: 'Power plants', cable: 'Submarine cables', conflict: 'Armed conflicts' };
+const COLORS = { air: scheme().air, sat: scheme().sat, quake: scheme().quake, radio: scheme().radio, volcano: scheme().volcano, storm: '#9FE3FF', event: '#FF6B35', ems: '#7D7AFF', ship: '#40C8E0', power: '#FFD60A', cable: '#5AC8FA', conflict: '#FF3B30' };
+const LAYER_NAMES = { air: 'Aircraft', sat: 'Satellite', quake: 'Earthquake', radio: 'Radio station', volcano: 'Volcano', storm: 'Tropical storm', event: 'Natural event', ems: 'Disaster mapping', ship: 'Ship', power: 'Power plant', cable: 'Submarine cable', conflict: 'Armed conflict' };
+const LAYER_PLURAL = { air: 'Aircraft', sat: 'Satellites', quake: 'Earthquakes', radio: 'Radio stations', volcano: 'Volcanoes', storm: 'Tropical storms', event: 'Natural events', ems: 'Disaster activations', ship: 'Ships', power: 'Power plants', cable: 'Submarine cables', conflict: 'Armed conflicts' };
 const L = {
   air: { on: false, loaded: false, items: [], pos: null, obj: null },
   sat: { on: false, loaded: false, items: [], pos: null, obj: null },
@@ -1973,6 +2040,7 @@ const L = {
   volcano: { on: false, loaded: false, items: [], pos: null, obj: null },
   storm: { on: false, loaded: false, items: [], pos: null, obj: null },
   event: { on: false, loaded: false, items: [], pos: null, obj: null },
+  ems: { on: false, loaded: false, items: [], pos: null, obj: null },
   ship: { on: false, loaded: false, items: [], pos: null, obj: null },
   power: { on: false, loaded: false, items: [], pos: null, obj: null, minMW: 100 },
   cable: { on: false, loaded: false, items: [], pos: null, obj: null, lines: null },
@@ -2370,7 +2438,7 @@ document.addEventListener('click', e => {
 });
 
 /* Switching layers */
-const loaders = { air: loadAir, sat: loadSat, quake: loadQuake, radio: loadRadio, volcano: loadVolcano, storm: loadStorm, event: loadEvent, ship: loadShip, power: loadPower, cable: loadCable, conflict: loadConflict };
+const loaders = { air: loadAir, sat: loadSat, quake: loadQuake, radio: loadRadio, volcano: loadVolcano, storm: loadStorm, event: loadEvent, ems: loadEms, ship: loadShip, power: loadPower, cable: loadCable, conflict: loadConflict };
 async function setLayer(key, on) {
   const st = L[key];
   st.on = on;
@@ -2412,7 +2480,7 @@ function updateCounts() {
     ct.textContent = L[k].loaded && L[k].on ? fmtInt(L[k].items.length) : '–';
   }
   const on = Object.keys(L).filter(k => L[k].on);
-  const src = { air: 'OpenSky', sat: 'CelesTrak', quake: 'USGS', radio: 'Radio Browser', volcano: 'Smithsonian GVP', storm: 'NASA EONET', event: 'NASA EONET', ship: 'aisstream.io', power: 'WRI', cable: '© OpenStreetMap contributors', conflict: 'UCDP' };
+  const src = { air: 'OpenSky', sat: 'CelesTrak', quake: 'USGS', radio: 'Radio Browser', volcano: 'Smithsonian GVP', storm: 'NASA EONET', event: 'NASA EONET', ems: 'Copernicus EMS', ship: 'aisstream.io', power: 'WRI', cable: '© OpenStreetMap contributors', conflict: 'UCDP' };
   $('#attrib-live').textContent = on.length ? ' · Live: ' + [...new Set(on.map(k => src[k]))].join(', ') : '';
 }
 function updateLiveNote() {
@@ -2467,7 +2535,7 @@ function pick(x, y) {
   if (VIEW.t > 0 && VIEW.t < 1) return null;
   const camDir = camera.position.clone().normalize(), flat = VIEW.t === 1;
   let best = null, bestD = innerWidth < 768 ? 22 : 14;
-  for (const key of ['sat', 'air', 'ship', 'storm', 'volcano', 'event', 'quake', 'power', 'radio']) {
+  for (const key of ['sat', 'air', 'ship', 'storm', 'volcano', 'event', 'ems', 'quake', 'power', 'radio']) {
     const st = L[key]; if (!st.on || !st.loaded || !st.pos) continue;
     const lv = key === 'radio' ? radioLevel() : null;
     const pos = lv ? lv.pos : st.pos, n = lv ? lv.groups.length : st.items.length;
@@ -2497,7 +2565,7 @@ function select(key, i) {
   if (!(key === 'sat' && it.id === ISS_ID)) hideIssOrbit();
   if (key !== 'air') hideRoute();
   if (key !== 'cable' && cableSel) cableSel.visible = false;
-  $('#i-sw').style.background = key === 'event' ? EVENT_CATS[it.cat]?.[1] || 'var(--c-event)' : key === 'storm' ? stormCat(it.wind).col : key === 'ship' ? shipCat(it.type).col : key === 'power' ? FUEL_COL[it.fuel] : key === 'cable' ? CABLE_COL[it.kind] : `var(--c-${key})`;
+  $('#i-sw').style.background = key === 'event' ? EVENT_CATS[it.cat]?.[1] || 'var(--c-event)' : key === 'ems' ? emsCat(it.cat)[1] : key === 'storm' ? stormCat(it.wind).col : key === 'ship' ? shipCat(it.type).col : key === 'power' ? FUEL_COL[it.fuel] : key === 'cable' ? CABLE_COL[it.kind] : `var(--c-${key})`;
   $('#i-cat-t').textContent = LAYER_NAMES[key];
   let head = '', dl = '', hint = '', act = '', src = '';
   if (key === 'air') {
@@ -2550,6 +2618,12 @@ function select(key, i) {
     dl = row('Type', /prescribed/i.test(it.title) ? 'Prescribed burn' : cat[0], 't') + (Number.isFinite(it.mag) ? row('Size', fmtEventSize(it.mag, it.unit)) : '') + row('First reported', fmtDT(it.first)) + row('Latest update', fmtDT(it.time)) + row('Position', fmtCoord(it.lat, it.lon));
     act = it.url ? extLink(it.url, `Details at ${esc(hostOf(it.url))}`) : '';
     src = `Source: <a href="https://eonet.gsfc.nasa.gov" target="_blank" rel="noopener noreferrer">NASA EONET</a>, public domain`;
+  } else if (key === 'ems') {
+    head = esc(it.name);
+    dl = row('Type', esc(emsCat(it.cat)[0]), 't') + row('Countries', esc(it.countries || '–'), 't') + (it.event ? row('Event', fmtDT(it.event)) : '') + (it.act ? row('Mapping requested', fmtDT(it.act)) : '') + row('Status', it.closed ? 'Mapping finished' : 'Mapping in progress', 't') + (it.products != null ? row('Maps made', fmtInt(it.products)) : '') + row('Position', fmtCoord(it.lat, it.lon));
+    hint = 'Copernicus maps the affected area from satellite pictures when a country or agency asks for help.';
+    act = extLink(`https://rapidmapping.emergency.copernicus.eu/${encodeURIComponent(it.code)}/`, `Maps of ${esc(it.code)} at Copernicus EMS`);
+    src = `Source: <a href="https://rapidmapping.emergency.copernicus.eu" target="_blank" rel="noopener noreferrer">Copernicus Emergency Management Service</a> · © European Union`;
   } else if (key === 'ship') ({ head, dl, hint, act, src } = shipPanel(it));
   else if (key === 'power') ({ head, dl, hint, act, src } = powerPanel(it));
   else if (key === 'cable') ({ head, dl, hint, act, src } = cablePanel(it, i));
@@ -2665,6 +2739,28 @@ async function loadEvent() {
   });
   $('#event-sub').innerHTML = Object.entries(count).sort((a, b) => b[1] - a[1]).map(([c, n]) => `<span><i style="background:${EVENT_CATS[c]?.[1] || '#FFD60A'}"></i>${EVENT_CATS[c]?.[0] || c} ${n}</span>`).join('') || '<span>No open events right now.</span>';
   L.event.loaded = true;
+}
+
+/* ---------- Disaster mapping: Copernicus EMS rapid mapping activations of the last 12 months (F-23) ---------- */
+const EMS_CATS = { Flood: ['Flood', '#0A84FF'], Wildfire: ['Wildfire', '#FF6B35'], Earthquake: ['Earthquake', '#FF9F0A'], Storm: ['Storm', '#64D2FF'], 'Mass movement': ['Landslide', '#A2845E'], Volcano: ['Volcano', '#FF453A'], 'Humanitarian': ['Humanitarian', '#FFD60A'], 'Industrial accident': ['Industrial accident', '#AEAEB2'] };
+const emsCat = c => EMS_CATS[c] || Object.entries(EMS_CATS).find(([k]) => (c || '').toLowerCase().includes(k.toLowerCase()))?.[1] || [c || 'Other', '#BF5AF2'];
+async function loadEms() {
+  const j = await getJSON(LIVE + 'disasters.json');
+  const items = j.rows.map(([code, name, cat, countries, lon, lat, event, act, closed, products]) => ({ code, name, cat, countries, lon, lat, event, act, closed, products }));
+  L.ems.items = items;
+  const geo = makePoints('ems', items.length, 0, { order: 2, useCol: true });
+  const tmpC = new THREE.Color(), count = {};
+  let open = 0;
+  items.forEach((e, i) => {
+    const p = vecFromLatLon(e.lat, e.lon, 1.0016);
+    geo.attributes.position.array.set([p.x, p.y, p.z], i * 3);
+    const c = emsCat(e.cat); tmpC.set(c[1]); geo.attributes.col.array.set([tmpC.r, tmpC.g, tmpC.b], i * 3);
+    // mapping still going on: bigger dots
+    geo.attributes.size.array[i] = e.closed ? 9 : 14;
+    count[c[0]] = [c[1], (count[c[0]]?.[1] || 0) + 1]; if (!e.closed) open++;
+  });
+  $('#ems-sub').innerHTML = (Object.entries(count).sort((a, b) => b[1][1] - a[1][1]).map(([n, [col, k]]) => `<span><i style="background:${col}"></i>${esc(n)} ${k}</span>`).join('') || '<span>No activations in the last 12 months.</span>') + `<span>Last 12 months, ${open} still being mapped (bigger dots).</span>`;
+  L.ems.loaded = true;
 }
 
 /* ---------- Ships: AIS snapshot from aisstream.io, moved on along course and speed (F-15.1) ---------- */
@@ -3087,6 +3183,45 @@ function loadOverlay(key, m) {
     ok();
   }, undefined, fail));
 }
+/* ---------- Population (F-24): GHSL people per km², 2025, precomputed as a log scale PNG ---------- */
+let popMesh = null, popOn = false;
+// colour ramp over log10(people per km² + 1) / 5: the countryside pale and see-through, cities red to magenta
+const POP_RAMP = [[0.2, '#FFF3B0'], [0.4, '#FFC94D'], [0.55, '#FF8A3D'], [0.7, '#F2435A'], [0.84, '#D6338F'], [1, '#FFE0F4']];
+async function setPopulation(on) {
+  popOn = on;
+  $$('[data-toggle="pop"]').forEach(el => el.setAttribute('aria-checked', String(on)));
+  const sub = $('#pop-sub');
+  if (!on) { if (popMesh) popMesh.visible = false; sub.hidden = true; return; }
+  try {
+    if (!popMesh && renderer) await new Promise((ok, fail) => new THREE.TextureLoader().load('data/population.png', t => {
+      wrapTex(t); t.colorSpace = THREE.NoColorSpace; t.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      const g = POP_RAMP.map(([v, c]) => { const k = new THREE.Color(c); return `if (v < ${v.toFixed(3)}) return mix(prev, vec3(${k.r.toFixed(3)}, ${k.g.toFixed(3)}, ${k.b.toFixed(3)}), clamp((v - pv) / (${v.toFixed(3)} - pv), 0.0, 1.0)); prev = vec3(${k.r.toFixed(3)}, ${k.g.toFixed(3)}, ${k.b.toFixed(3)}); pv = ${v.toFixed(3)};`; }).join('\n');
+      popMesh = mapMesh(0.0025, new THREE.ShaderMaterial({
+        transparent: true, depthWrite: false,
+        uniforms: { map: { value: t }, uFlat: MORPH.uFlat, uLon0: MORPH.uLon0 },
+        vertexShader: MAP_VERT,
+        fragmentShader: `uniform sampler2D map; varying vec2 vUv;
+          vec3 ramp(float v) { vec3 prev = vec3(1.0, 0.95, 0.69); float pv = 0.0; ${g} return prev; }
+          void main() {
+            float v = texture2D(map, vUv).r;
+            // empty land and sea stay clear, villages faint, cities strong
+            float a = pow(smoothstep(0.12, 0.8, v), 1.2) * 0.9;
+            gl_FragColor = vec4(ramp(v), a);
+          }`,
+      }), 360, 180);
+      popMesh.renderOrder = 0.4; scene.add(popMesh); ok();
+    }, undefined, fail));
+    if (!popOn) return;
+    popMesh.visible = true;
+    // 10 people per km² sits at 0.2 and 10,000 at 0.8 on the scale
+    sub.innerHTML = `<div class="wx-bar" style="background:linear-gradient(90deg,${POP_RAMP.slice(0, -1).map(([v, c]) => `${c} ${Math.round((v - 0.2) / 0.64 * 100)}%`).join(',')})"></div><div class="wx-scale"><span>10</span><span>100</span><span>1,000</span><span>10,000+</span></div><span>People per km², GHSL estimate for 2025, about 9 km grid</span>`;
+    sub.hidden = false;
+  } catch {
+    popOn = false; $$('[data-toggle="pop"]').forEach(el => el.setAttribute('aria-checked', 'false'));
+    toast('Population is not available right now. Please try again later.', 5000);
+  }
+}
+
 // wind: particles drift with the GFS 10 m wind, drawn as short glowing streaks
 let windData = null, windLines = null, windVer = '', windStep = 0;
 const WIND_N = innerWidth < 768 ? 2600 : 5200, WIND_TRAIL = 7, WIND_K = 0.011;
@@ -3172,7 +3307,7 @@ function updateLayers() {
   // markers shrink when zoomed out so a full globe stays readable
   const dist = camDist(), zf = 1.9 / dist;
   const ZOOM = { air: Math.min(1.2, Math.max(0.42, zf)), radio: Math.min(1.2, Math.max(0.4, zf)), quake: Math.min(1.15, Math.max(0.55, zf)), sat: 1,
-    volcano: Math.min(1.15, Math.max(0.5, zf)), storm: Math.min(1.2, Math.max(0.75, zf)), event: Math.min(1.15, Math.max(0.5, zf)),
+    volcano: Math.min(1.15, Math.max(0.5, zf)), storm: Math.min(1.2, Math.max(0.75, zf)), event: Math.min(1.15, Math.max(0.5, zf)), ems: Math.min(1.15, Math.max(0.55, zf)),
     ship: Math.min(1.2, Math.max(0.4, zf)), power: Math.min(1.15, Math.max(0.45, zf)) };
   for (const k of Object.keys(L)) if (L[k].obj) { const u = L[k].obj.material.uniforms; u.time.value = uniforms.time.value; u.aspect.value = innerWidth / innerHeight; u.zoom.value = ZOOM[k]; u.ui.value = symF(); }
   if (L.radio.loaded) {
@@ -3189,7 +3324,7 @@ function updateLayers() {
 }
 
 /* ---------- Orientation: borders, country names, capitals ---------- */
-const ORIENT = { borders: true, capitals: true, routes: false, grid: false };
+const ORIENT = { borders: true, capitals: true, routes: false, grid: false, local: true };
 let borderLines = null, countryLabels = [], capitalLabels = [], geoLoaded = false;
 const labelBox = $('#geo-labels');
 // zooming with the wheel also works over a capital's name
@@ -3274,9 +3409,20 @@ function layoutLabels(force) {
     place(l, true, x, y, p.a);
   }
   if (!ORIENT.capitals) capitalLabels.forEach(l => place(l, false));
+  // close-up names from OpenStreetMap: cities, towns, villages and peaks, the most important first
+  for (const l of localLabels) {
+    const p = LOCAL.on && project(l);
+    if (!p) { place(l, false); continue; }
+    const r = l.kind === 'peak' ? 4 : 3, x = p.x - r, y = p.y - l.h / 2;
+    if (!fits(x - 2, y - 1, l.w + 4, l.h + 2)) { place(l, false); continue; }
+    boxes.push([x - 2, y - 1, x + l.w + 2, y + l.h + 1]);
+    place(l, true, x, y, p.a);
+  }
   // country names: big countries even when zoomed out, small ones only closer in
   const minArea = dist > 3.2 ? 60 : dist > 2.2 ? 12 : dist > 1.6 ? 2 : 0;
-  for (const l of ORIENT.borders ? countryLabels : []) {
+  // very close in, a country name would only hide the towns
+  if (LOCAL.on && localLabels.length) countryLabels.forEach(l => place(l, false));
+  for (const l of ORIENT.borders && !(LOCAL.on && localLabels.length) ? countryLabels : []) {
     const p = l.prio >= minArea && project(l);
     if (!p) { place(l, false); continue; }
     const x = p.x - l.w / 2, y = p.y - l.h / 2;
@@ -3299,6 +3445,198 @@ function layoutLabels(force) {
       place(l, true, x, y, p.a * 0.95);
     }
   }
+}
+
+/* ---------- Close-up names, roads and borders (F-22): OpenStreetMap via OpenFreeMap vector tiles ---------- */
+// Only below about 500 km. The tiles hold OpenStreetMap data in the OpenMapTiles layout; a small decoder
+// below reads the few layers we draw (places, peaks, main roads, borders). © OpenStreetMap contributors, ODbL.
+const LOCAL = { tilejson: 'https://tiles.openfreemap.org/planet', url: null, cache: new Map(), want: '', on: false, failed: 0, ok: 0, checked: 0, lines: null };
+let localLabels = [];
+const MVT_TD = new TextDecoder();
+function mvtDecode(buf) {
+  const b = new Uint8Array(buf), out = {};
+  let p = 0;
+  const vi = () => { let r = 0, m = 1, c; do { c = b[p++]; r += (c & 127) * m; m *= 128; } while (c >= 128 && p < b.length); return r; };
+  // end of a length-delimited field (the length must be read before p is used)
+  const upto = () => { const l = vi(); return p + l; };
+  const skip = w => { if (w === 0) vi(); else if (w === 1) p += 8; else if (w === 2) p = upto(); else if (w === 5) p += 4; };
+  const text = () => { const l = vi(), t = MVT_TD.decode(b.subarray(p, p + l)); p += l; return t; };
+  while (p < b.length) {
+    const tag = vi();
+    if (tag !== 26) { skip(tag & 7); continue; } // field 3, length-delimited: a layer
+    const end = upto(), layer = { name: '', extent: 4096, keys: [], values: [], feats: [] };
+    while (p < end) {
+      const t = vi(), f = Math.floor(t / 8), w = t & 7;
+      if (f === 1) layer.name = text();
+      else if (f === 3) layer.keys.push(text());
+      else if (f === 5) layer.extent = vi();
+      else if (f === 4) {
+        const e2 = upto(); let v = null;
+        while (p < e2) {
+          const vt = vi(), vf = Math.floor(vt / 8);
+          if (vf === 1) v = text();
+          else if (vf === 2) { v = new DataView(b.buffer, b.byteOffset + p, 4).getFloat32(0, true); p += 4; }
+          else if (vf === 3) { v = new DataView(b.buffer, b.byteOffset + p, 8).getFloat64(0, true); p += 8; }
+          else if (vf === 4 || vf === 5) v = vi();
+          else if (vf === 6) { const z = vi(); v = z % 2 ? -(z + 1) / 2 : z / 2; }
+          else if (vf === 7) v = !!vi();
+          else skip(vt & 7);
+        }
+        layer.values.push(v);
+      } else if (f === 2) {
+        const e2 = upto(), ft = { type: 0, tags: [], geom: [] };
+        while (p < e2) {
+          const t2 = vi(), f2 = Math.floor(t2 / 8);
+          if (f2 === 2 || f2 === 4) { const pe = upto(), arr = f2 === 2 ? ft.tags : ft.geom; while (p < pe) arr.push(vi()); }
+          else if (f2 === 3) ft.type = vi();
+          else skip(t2 & 7);
+        }
+        layer.feats.push(ft);
+      } else skip(w);
+    }
+    out[layer.name] = layer;
+  }
+  return out;
+}
+function mvtProps(layer, ft) { const o = {}; for (let i = 0; i + 1 < ft.tags.length; i += 2) o[layer.keys[ft.tags[i]]] = layer.values[ft.tags[i + 1]]; return o; }
+function mvtGeom(g) {
+  const parts = []; let x = 0, y = 0, cur = null;
+  for (let i = 0; i < g.length;) {
+    const c = g[i++], id = c & 7, n = c >> 3;
+    if (id === 7) continue;
+    for (let k = 0; k < n && i + 1 < g.length; k++) {
+      const dx = g[i++], dy = g[i++];
+      x += dx % 2 ? -(dx + 1) / 2 : dx / 2; y += dy % 2 ? -(dy + 1) / 2 : dy / 2;
+      if (id === 1) { cur = [[x, y]]; parts.push(cur); } else cur?.push([x, y]);
+    }
+  }
+  return parts;
+}
+const mercLatJS = (y, n) => Math.atan(Math.sinh(Math.PI * (1 - 2 * y / n))) / DEG;
+const PLACE_ORDER = { city: 0, town: 1, village: 2, hamlet: 3 };
+const ROAD_COL = { motorway: [1, 0.80, 0.45, 0.9], trunk: [1, 0.86, 0.6, 0.8], primary: [1, 1, 1, 0.6], secondary: [1, 1, 1, 0.42] };
+// what one tile adds: labels and line segments in lon/lat
+function localParse(z, x, y, buf) {
+  const t = mvtDecode(buf), n = 2 ** z, labels = [], segs = [];
+  const ll = (layer, px, py) => [(x + px / layer.extent) / n * 360 - 180, mercLatJS(y + py / layer.extent, n)];
+  const nameOf = o => o['name:en'] || o.name_en || o['name:latin'] || o.name_int || o.name;
+  const pl = t.place;
+  if (pl) for (const ft of pl.feats) {
+    const o = mvtProps(pl, ft), cls = o.class;
+    if (!(cls in PLACE_ORDER) || (cls === 'hamlet' && z < 12) || (cls === 'village' && z < 10)) continue;
+    if (o.capital === 2 && ORIENT.capitals) continue; // the capitals layer has those
+    const g = mvtGeom(ft.geom)[0]?.[0], name = nameOf(o); if (!g || !name) continue;
+    const [lon, lat] = ll(pl, g[0], g[1]);
+    labels.push({ key: 'p' + name + Math.round(lat * 100) + Math.round(lon * 100), name, kind: cls, lat, lon, prio: PLACE_ORDER[cls] * 100 + (o.rank ?? 50) });
+  }
+  const pk = t.mountain_peak;
+  if (pk && z >= 9) for (const ft of pk.feats) {
+    const o = mvtProps(pk, ft), name = nameOf(o), g = mvtGeom(ft.geom)[0]?.[0];
+    if (!name || !g || o.class !== 'peak' || !(o.ele > 0)) continue;
+    const [lon, lat] = ll(pk, g[0], g[1]);
+    labels.push({ key: 'k' + name + Math.round(lat * 100), name, ele: Math.round(o.ele), kind: 'peak', lat, lon, prio: 150 + (o.rank ?? 50) });
+  }
+  const add = (layer, ft, col) => {
+    for (const part of mvtGeom(ft.geom)) for (let i = 0; i + 1 < part.length; i++) {
+      const a = ll(layer, part[i][0], part[i][1]), b = ll(layer, part[i + 1][0], part[i + 1][1]);
+      segs.push(a[0], a[1], b[0], b[1], ...col);
+    }
+  };
+  const tr = t.transportation;
+  if (tr) for (const ft of tr.feats) {
+    const o = mvtProps(tr, ft), col = ROAD_COL[o.class];
+    if (ft.type !== 2 || !col || o.ramp || (o.class === 'secondary' && z < 10)) continue;
+    add(tr, ft, col);
+  }
+  const bd = t.boundary;
+  if (bd) for (const ft of bd.feats) {
+    const o = mvtProps(bd, ft);
+    if (ft.type !== 2 || o.maritime || !(o.admin_level <= 4)) continue;
+    add(bd, ft, o.admin_level <= 2 ? [0.82, 0.78, 1, 0.85] : [0.82, 0.78, 1, 0.45]);
+  }
+  return { labels, segs };
+}
+async function localTile(z, x, y) {
+  const key = z + '/' + x + '/' + y;
+  let t = LOCAL.cache.get(key);
+  if (t) { t.used = performance.now(); return t; }
+  t = { key, used: performance.now(), data: null, state: 'loading' };
+  LOCAL.cache.set(key, t);
+  try {
+    if (!LOCAL.url) LOCAL.url = (await getJSON(LOCAL.tilejson, 10000)).tiles[0];
+    const res = await fetch(LOCAL.url.replace('{z}', z).replace('{x}', x).replace('{y}', y), { signal: AbortSignal.timeout(15000) });
+    if (!res.ok) throw new Error(res.status);
+    let buf = await res.arrayBuffer();
+    // a tile that still arrives gzipped (no Content-Encoding) is unpacked here
+    if (buf.byteLength > 2 && new Uint8Array(buf, 0, 2).join() === '31,139') buf = await new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+    t.data = localParse(z, x, y, buf); t.state = 'ready'; LOCAL.ok++;
+  } catch { t.state = 'error'; LOCAL.failed++; }
+  // keep about 80 tiles
+  if (LOCAL.cache.size > 80) [...LOCAL.cache.values()].sort((a, b) => a.used - b.used).slice(0, 20).forEach(o => LOCAL.cache.delete(o.key));
+  return t;
+}
+let localTick = 0, localBuilt = '';
+function updateLocal(now, force) {
+  if (!renderer || (!force && now - localTick < 350)) return;
+  localTick = now;
+  const alt = VIEW.mode === 'flat' || VIEW.t > 0 ? VIEW.h : camera.position.length() - 1;
+  const on = ORIENT.local && alt < 0.08 && !(VIEW.t > 0 && VIEW.t < 1) && !(LOCAL.failed > 12 && !LOCAL.ok);
+  if (!on) {
+    if (LOCAL.on) { LOCAL.on = false; if (LOCAL.lines) LOCAL.lines.visible = false; $('#attrib-osm').hidden = true; layoutLabels(true); }
+    return;
+  }
+  // about three tiles across the screen height, centred on the view
+  const c = viewCenterLL();
+  const z = Math.max(6, Math.min(14, Math.floor(Math.log2(TAU / (alt * tanHalfFov())))));
+  const n = 2 ** z, cx = Math.floor((c.lon + 180) / 360 * n);
+  const cy = Math.floor((1 - Math.log(Math.tan(Math.PI / 4 + c.lat * DEG / 2)) / Math.PI) / 2 * n);
+  const want = [];
+  for (let dy = -1; dy <= 1; dy++) for (let dx = -2; dx <= 2; dx++) { const y = cy + dy; if (y >= 0 && y < n) want.push([z, ((cx + dx) % n + n) % n, y]); }
+  LOCAL.on = true; $('#attrib-osm').hidden = false;
+  if (LOCAL.lines) LOCAL.lines.visible = true;
+  const tiles = want.map(([z, x, y]) => LOCAL.cache.get(z + '/' + x + '/' + y));
+  want.forEach(([z, x, y], i) => { if (!tiles[i]) localTile(z, x, y).then(() => updateLocal(performance.now(), true)); else tiles[i].used = now; });
+  const ready = tiles.filter(t => t?.state === 'ready');
+  const sig = ready.map(t => t.key).join(',');
+  if (sig === localBuilt) return;
+  localBuilt = sig;
+  buildLocal(ready.map(t => t.data));
+}
+function buildLocal(datas) {
+  // labels: reuse the elements that stay, add the new ones, drop the rest
+  const old = new Map(localLabels.map(l => [l.key, l])), next = [], seen = new Set();
+  for (const d of datas) for (const l of d.labels) {
+    if (seen.has(l.key)) continue; seen.add(l.key);
+    let item = old.get(l.key);
+    if (!item) {
+      const el = document.createElement('span'); el.className = 'gl-local ' + l.kind;
+      el.innerHTML = l.kind === 'peak' ? `<i></i>${esc(l.name)} <small>${fmtInt(l.ele)} m</small>` : `<i></i>${esc(l.name)}`;
+      labelBox.appendChild(el);
+      item = { ...l, el, v: vecFromLatLon(l.lat, l.lon, 1.002) };
+      item.w = el.offsetWidth; item.h = el.offsetHeight;
+    }
+    old.delete(l.key); next.push(item);
+  }
+  for (const l of old.values()) l.el.remove();
+  next.sort((a, b) => a.prio - b.prio);
+  localLabels = next.slice(0, 400);
+  for (const l of next.slice(400)) l.el.remove();
+  // roads and borders as thin lines just above the ground (and drawn over the relief)
+  let total = 0; for (const d of datas) total += d.segs.length / 8;
+  const pos = new Float32Array(total * 6), col = new Float32Array(total * 8);
+  let k = 0;
+  for (const d of datas) for (let i = 0; i < d.segs.length; i += 8, k++) {
+    const s = d.segs, a = vecFromLatLon(s[i + 1], s[i], 1.00004), b = vecFromLatLon(s[i + 3], s[i + 2], 1.00004);
+    pos.set([a.x, a.y, a.z, b.x, b.y, b.z], k * 6); col.set([s[i + 4], s[i + 5], s[i + 6], s[i + 7], s[i + 4], s[i + 5], s[i + 6], s[i + 7]], k * 8);
+  }
+  if (!LOCAL.lines) {
+    LOCAL.lines = new THREE.LineSegments(new THREE.BufferGeometry(), morphBasic(new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, depthTest: false, depthWrite: false })));
+    LOCAL.lines.frustumCulled = false; LOCAL.lines.renderOrder = 1.5; scene.add(LOCAL.lines);
+  }
+  const g = LOCAL.lines.geometry;
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.BufferAttribute(col, 4));
+  g.computeBoundingSphere();
+  layoutLabels(true);
 }
 
 /* ---------- Place popup (search result, capitals): hovers over the place ---------- */
@@ -3545,7 +3883,7 @@ function loadHiResEarth() {
 applySettings();
 loadGeo();
 // test hook for local browser tests only (?debug)
-if (new URLSearchParams(location.search).has('debug')) window.__wian = { L, select, setLayer, setToggle, camera, flyTo, pick, setView, VIEW, latLonAt, screenPos };
+if (new URLSearchParams(location.search).has('debug')) window.__wian = { L, select, setLayer, setToggle, camera, flyTo, pick, setView, VIEW, latLonAt, screenPos, LOCAL };
 
 // warm the place index once the start screen stands (non-blocking, PRD F-01.5)
 (window.requestIdleCallback || (f => setTimeout(f, 1200)))(() => loadPlaces());
