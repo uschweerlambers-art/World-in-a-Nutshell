@@ -1,6 +1,8 @@
 # World in a Nutshell – Product Requirements Document (PRD) für den Prototyp
 
-Version 0.8 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+Version 0.9 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+
+Änderungen in v0.9 (Uwe, 14.11.2026): Echte Kartenansicht (F-18). Der Umschalter „Globe / Map“ rollt den Globus in derselben 3D-Szene zu einer flachen Weltkarte ab, alle Ebenen bleiben erhalten.
 
 Änderungen in v0.8 (Uwe, 14.11.2026): Ort des Tages auf dem Startscreen (F-16), Konfliktgebiete nach UCDP (F-17). Geplant: eine echte Kartenansicht.
 
@@ -60,7 +62,7 @@ Kernszenario: *Ich öffne die Seite, gebe „Bielefeld“ ein (die Oberfläche i
 | F-09 | Ebenen-Steuerung, Inspector, Quellen-/Lizenzanzeige (übergreifende UI) | Muss |
 | F-10 | Rechtliche Seiten: Impressum, Datenschutz, Lizenzen | Muss |
 | F-11 | −24-h-Zeitleiste (aus Styleframe Main) | Kann (nur Erdbeben im Prototyp) |
-| F-12 | Umschalter Globus/Karte (aus Styleframe Main) | Kann, sonst nach MVP |
+| F-12 | Umschalter Globus/Karte (aus Styleframe Main) | Umgesetzt in v0.9, siehe F-18 |
 
 ### 3.2 Nicht im Prototyp
 
@@ -215,6 +217,15 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | F-17.1 | Ebene „Armed conflicts“ (Standard aus): rot schraffierte Gebiete, in denen in den letzten 12 Monaten der Daten mindestens 25 Menschen durch organisierte Gewalt im Umkreis von etwa 75 km starben (3 × 3 Zellen à 0,5°; 25 Tote ist auch die UCDP-Schwelle für einen bewaffneten Konflikt). Dichte der Schraffur nach Zahl der Toten. | M |
 | F-17.2 | Quelle: UCDP Candidate Events Dataset (Uppsala Conflict Data Program, CC BY 4.0), monatlich, etwa zwei Monate Verzug. Die Action lädt die Monatsdateien der letzten 12 Monate (höchstens alle 3 Tage) und fasst sie zu Zellen und Ländern zusammen. ACLED scheidet aus (Registrierung, Weitergabe eingeschränkt). | A, R |
 | F-17.3 | Klick auf eine schraffierte Fläche zeigt das Land: Tote (beste Schätzung), Ereignisse, Art der Gewalt, die drei größten Konflikte, letztes Ereignis, Zeitraum, Hinweis „vorläufige Daten“, Links zu UCDP und Wikipedia. Unbekannte Akteure (XXX…) heißen „unidentified group“. | M |
+
+### F-18 Kartenansicht (v0.9)
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-18.1 | Der Umschalter „Globe / Map“ oben rechts (Handy: Knopf mit Karten- bzw. Globus-Symbol in der Werkzeugleiste) wechselt zwischen Globus und flacher Weltkarte. Der Wechsel ist eine weiche Bewegung von etwa 1,5 s, in der sich die Kugel abrollt; die Mitte des Bildes bleibt dabei an ihrem Ort. Bei „reduzierter Bewegung“ wechselt die Ansicht sofort. | M |
+| F-18.2 | Projektion: Plattkarte (equirectangular), wie alle Texturen. Die Kartenmitte folgt der Ansicht, die Karte lässt sich nach Osten und Westen endlos verschieben; Linien über den Kartenrand (Datumsgrenze auf der Rückseite) werden dort getrennt. | M |
+| F-18.3 | Alle Ebenen, Beschriftungen, Popups, Hervorhebungen und Klicks funktionieren auf der Karte wie auf dem Globus. Satelliten liegen über ihrem Bodenpunkt. Tag und Nacht, Wolken, Wetterkarten und Konfliktgebiete liegen auf der Karte. | M |
+| F-18.4 | Bedienung der Karte: ziehen verschiebt, Mausrad oder zwei Finger zoomen zur Zeigerposition. Weitester Zoom: die ganze Breite der Welt passt auf den Bildschirm; nach Norden und Süden endet die Karte an den Polen. Suche, „Surprise me“ und „Mein Standort“ fliegen auf der Karte zum Ziel. | M |
 ### F-09 Übergreifende Bedienung
 
 | AK | Kriterium | Prüfung |
