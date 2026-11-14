@@ -442,6 +442,52 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 .tip-acts .btn-line span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tip-foot { margin-top: 10px; }
 
+/* Webcams (F-26): camera button in the place popup, own dialog with the cameras of the place */
+.pp-tools { display: flex; align-items: center; gap: 6px; }
+.pp-cam { height: 40px; min-width: 40px; margin: -10px 0 -8px; padding: 0 10px; border: 0; border-radius: 20px; background: rgba(64,224,208,0.16); color: var(--c-place); display: inline-flex; align-items: center; justify-content: center; gap: 4px; }
+.pp-cam:hover { background: rgba(64,224,208,0.28); }
+.pp-cam:focus-visible, #cams button:focus-visible, #cams a:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.pp-cam-n { font-size: 12px; font-weight: 600; color: var(--c-place); }
+.pp-cam-n:empty { display: none; }
+#cams { max-width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 48px); overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; padding: 16px 20px 14px; border-radius: 22px; border: 1px solid rgba(255,255,255,0.14); background: var(--glass-deep); box-shadow: 0 24px 80px rgba(0,0,0,0.55); }
+#cams[open] { display: flex; flex-direction: column; gap: 8px; }
+#cams .w-top > span { display: inline-flex; align-items: center; gap: 6px; color: var(--c-place); font-size: 11.5px; letter-spacing: 1.1px; text-transform: uppercase; font-weight: 700; }
+#cams .x { width: 40px; height: 40px; margin: -8px -10px -8px 0; background: rgba(255,255,255,0.1); color: var(--text); }
+#cams .x:hover { background: rgba(255,255,255,0.2); }
+#cams h2 { margin: -2px 0 0; font-size: 22px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.cams-sub { margin: 0; font-size: 13px; color: var(--text-3); }
+.cam-stage { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.cam-frame { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; }
+.cam-frame iframe, .cam-frame img { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.cam-frame img { object-fit: contain; }
+.cam-off { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 16px; text-align: center; font-size: 14px; color: var(--text-2); background: rgba(255,255,255,0.04); }
+.cam-now { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; }
+.cam-cr { margin: 0; font-size: 11.5px; color: var(--text-3); display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; }
+.cam-cr a, .cams-note a { color: var(--link); }
+.cam-fmt { display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 11px; font-size: 11.5px; font-weight: 600; background: rgba(255,255,255,0.1); color: var(--text-2); white-space: nowrap; }
+.cam-fmt.live { background: rgba(255,69,58,0.18); color: #FF8A80; }
+.cam-fmt.live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #FF453A; }
+.cam-fmt.timelapse { background: rgba(255,214,10,0.16); color: #FFE066; }
+.cam-fmt.image { background: rgba(100,210,255,0.16); color: var(--link); }
+.cam-list { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.cam-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); }
+.cam-item[aria-current="true"] { border-color: var(--c-place); background: rgba(64,224,208,0.08); }
+.cam-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.cam-info b { font-size: 14.5px; }
+.cam-info .v { font-size: 12.5px; color: var(--text-2); line-height: 1.4; }
+.cam-info .o { font-size: 12px; color: var(--text-3); display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+.cam-go { flex-shrink: 0; min-height: 40px; padding: 0 14px; border: 0; border-radius: 20px; background: var(--action); color: #fff; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; white-space: nowrap; }
+.cam-go:hover { filter: brightness(1.12); }
+.cam-go.ext { background: transparent; border: 1px solid var(--edge-strong); color: var(--text); }
+.cam-go.ext:hover { background: var(--hover); filter: none; }
+.cam-item[aria-current="true"] .cam-go { display: none; }
+.cams-note { margin: 4px 0 0; font-size: 11px; color: var(--text-4); }
+@media (max-width: 767px) {
+  #cams { max-width: none; width: calc(100vw - 16px); max-height: calc(100dvh - 16px - env(safe-area-inset-top, 0px)); margin: auto 8px calc(8px + env(safe-area-inset-bottom, 0px)); border-radius: 28px; padding: 14px 16px 12px; }
+  .cam-item { flex-wrap: wrap; }
+  .cam-go { width: 100%; }
+}
+
 /* Display settings */
 #settings { position: absolute; right: var(--sr); top: calc(var(--st) + 56px); width: min(320px, calc(100vw - 32px)); box-sizing: border-box; padding: 16px; border-radius: 22px; display: flex; flex-direction: column; gap: 10px; max-height: calc(100vh - 100px); overflow-y: auto; }
 #settings h3 { margin: 0; font-size: 13px; font-weight: 600; color: var(--text-3); }
@@ -750,6 +796,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <li>“Map” unrolls the globe into a flat world map with the same layers. Drag to move it, scroll or pinch to zoom.</li>
       <li>Search finds any place with 5,000 inhabitants or more.</li>
       <li>After a search, the popup of the place shows local tips under “Discover here”. “Visit on the globe” flies you there.</li>
+      <li>A camera button at the top of a place popup means there are public webcams nearby. Pick one to load its player.</li>
       <li>“Wonders &amp; records” lists the extremes of our planet; “Surprise me” picks one for you.</li>
       <li>Day and night match the current time.</li>
       <li>Click a dot on the globe for details. A click on a radio station plays it.</li>
@@ -804,7 +851,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 <div class="apt-label" id="apt-to" hidden></div>
 
 <section id="place-pop" class="glass is-out" aria-labelledby="pp-head" hidden>
-  <div class="w-top"><span><span class="sw" style="background:var(--c-place)"></span><span id="pp-cat">Place</span></span><button type="button" class="x" aria-label="Close place info" id="pp-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="w-top"><span><span class="sw" style="background:var(--c-place)"></span><span id="pp-cat">Place</span></span><div class="pp-tools"><button type="button" class="pp-cam" id="pp-cam" aria-label="View webcams" title="View webcams" aria-haspopup="dialog" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10l5-3v10l-5-3"/><rect x="3" y="6" width="12" height="12" rx="2.5"/></svg><span class="pp-cam-n mono" id="pp-cam-n" aria-hidden="true"></span></button><button type="button" class="x" aria-label="Close place info" id="pp-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></div>
   <h2 id="pp-head"></h2>
   <p class="pp-sub" id="pp-sub"></p>
   <div class="pp-wx" id="pp-wx" aria-live="polite"></div>
@@ -833,6 +880,23 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <span class="w-src" id="pp-src"></span>
   </details>
 </section>
+
+<!-- Webcams of a place: opened from the camera button in the place popup (F-26) -->
+<dialog id="cams" class="glass" aria-labelledby="cams-h" aria-describedby="cams-sub">
+  <div class="w-top"><span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--c-place)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 10l5-3v10l-5-3"/><rect x="3" y="6" width="12" height="12" rx="2.5"/></svg>Webcams</span><button type="button" class="x" aria-label="Close webcams" id="cams-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <h2 id="cams-h"></h2>
+  <p class="cams-sub" id="cams-sub"></p>
+  <div class="cam-stage" id="cam-stage" hidden>
+    <div class="cam-frame" id="cam-frame"></div>
+    <div class="cam-now">
+      <b id="cam-now-t"></b>
+      <span class="cam-fmt" id="cam-now-f"></span>
+    </div>
+    <p class="cam-cr" id="cam-cr"></p>
+  </div>
+  <ul class="cam-list" id="cam-list"></ul>
+  <p class="cams-note">Players load from the operator only after you pick a camera. YouTube players use youtube-nocookie.com.</p>
+</dialog>
 
 <!-- Detail card of a tip from "Discover here" -->
 <article id="tip" class="glass fade is-out" aria-labelledby="tip-h" hidden>
@@ -871,6 +935,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
         <li>Place of the day: pictures from Wikimedia Commons, with author and licence under each picture, copied to this site once a day. Short texts in our own words.</li>
         <li>Wonders &amp; records: our own short texts, figures as given by the source on each card, links to English Wikipedia. Pictures from Wikimedia Commons, with author and licence under each picture, copied to this site by our GitHub Action.</li>
         <li>Discover here (local tips in the place popup): our own short texts, each linked to the English Wikipedia article of the place. Photos from Wikimedia Commons, with author and licence under each photo, copied to this site by our GitHub Action.</li>
+        <li>Webcams (camera button in the place popup): a small hand-picked list of public cameras in site/data/webcams.json. Each player is the operator’s own official player and loads only when you pick a camera; the operator and source are named under each camera. Our GitHub Action re-checks every player every few hours and shows a link to the operator’s site instead when a player is not available.</li>
         <li>Country borders and names: Natural Earth 1:50m, public domain. Capitals: GeoNames, CC BY 4.0.</li>
         <li>Weather, local time and elevation in the place details: Open-Meteo (CC BY 4.0), asked only when you open a place.</li>
         <li>Sharper Earth on large screens: NASA GIBS Blue Marble Next Generation and VIIRS Black Marble.</li>
@@ -909,7 +974,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <div data-pane="datenschutz" hidden>
       <h3>Placeholder</h3>
       <p>The privacy policy follows before launch. It will name every server your browser contacts, and GitHub Pages as the host.</p>
-      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you zoom in close, the sharper pictures of the area on screen load directly from EOX in Austria (tiles.maps.eox.at), the heights for the relief from Amazon Web Services (s3.amazonaws.com), and names and roads from OpenFreeMap (tiles.openfreemap.org). When you play a radio station, the stream comes directly from that station’s server. All of them see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up weather, air quality, time zone and elevation. When you click an aircraft, its transponder code and call sign go to adsbdb.com to look up route and type.</p>
+      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you zoom in close, the sharper pictures of the area on screen load directly from EOX in Austria (tiles.maps.eox.at), the heights for the relief from Amazon Web Services (s3.amazonaws.com), and names and roads from OpenFreeMap (tiles.openfreemap.org). When you play a radio station, the stream comes directly from that station’s server. All of them see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up weather, air quality, time zone and elevation. When you click an aircraft, its transponder code and call sign go to adsbdb.com to look up route and type. Webcams load nothing until you pick a camera: only then does your browser contact that camera’s operator (YouTube via youtube-nocookie.com, feratel, the USGS) to show the player or the latest image. Cameras that only offer a link open the operator’s own site in a new tab.</p>
       <p>Already true today: this site sets no cookies, counts no visits and only asks for your location when you click. What you type into search never leaves your browser. Your display settings (sizes and colours) are kept in your own browser’s storage and are never sent anywhere.</p>
     </div>
   </div>
@@ -2037,6 +2102,7 @@ document.addEventListener('click', e => {
 $('#w-pair').addEventListener('click', e => nextWonder(e.currentTarget.dataset.id));
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
+  if ($('#cams').open) return; // the webcam dialog closes itself, and only itself
   if (mode === 'start' && $('#q-list').hidden) goExplore();
   else if (!$('#tip').hidden) closeTip();
   else if (mode === 'wonder') closeWonder();
@@ -3812,7 +3878,7 @@ function showPlaceInfo(p) {
   panForPop();
   // fresh state for this place: tips first, radio closed, details folded
   $('#pp-radio').setAttribute('aria-expanded', 'false'); $('#pp-radio-box').hidden = true; $('#pp-disc').hidden = true; $('#pp-more').open = false;
-  renderDiscover(p);
+  renderDiscover(p); renderCams(p);
   if (innerWidth < 768) openPanel(null);
   // air quality (CAMS) of the place, second small request
   getJSON(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${p.lat.toFixed(3)}&longitude=${p.lon.toFixed(3)}&current=european_aqi,pm2_5,pm10`, 8000).then(j => {
@@ -3842,6 +3908,7 @@ function showPlaceInfo(p) {
 }
 function closePlacePop() {
   if (!shownPlace) return;
+  closeCams();
   shownPlace = null; popAt = null; popTz = null; clearInterval(popTimer);
   if (innerWidth < 768 && $('#wonder').hidden && $('#tip').hidden) setFocus(0, 0);
   syncCards();
@@ -3904,6 +3971,91 @@ $('#pp-disc').addEventListener('click', e => { const b = e.target.closest('[data
   $('#pp-disc').addEventListener('pointerup', e => { if (x0 != null && Math.abs(e.clientX - x0) > 40 && Math.abs(e.clientX - x0) > Math.abs(e.clientY - y0)) discShow(discIdx + (e.clientX < x0 ? 1 : -1)); x0 = null; });
 }
 $('#disc-go').addEventListener('click', () => visitTip(discCity, discIdx));
+
+/* ---------- Webcams: camera button in the place popup, own dialog (F-26) ---------- */
+// site/data/webcams.json holds the cameras; the Action re-checks their players into data/live/webcams-status.json.
+// Nothing from an operator loads until the visitor picks a camera.
+let camData = null, camList = [], camPlaceName = '';
+const loadCams = () => camData ||= Promise.all([
+  fetch('data/webcams.json').then(r => r.ok ? r.json() : {}).catch(() => ({})),
+  fetch('data/live/webcams-status.json').then(r => r.ok ? r.json() : {}).catch(() => ({}))
+]).then(([d, st]) => ({ places: d.places || [], cams: d.cams || [], status: st.cams || {} }));
+const CAM_FMT = { live: 'Live webcam', timelapse: 'Timelapse', image: 'Latest webcam image' };
+const camDlg = $('#cams');
+// a camera has a working player unless it has none or the last check found it broken
+const camPlayable = (c, st) => !!c.player && !!c.embed && st?.[c.id]?.player !== false;
+async function renderCams(p) {
+  const btn = $('#pp-cam');
+  btn.hidden = true; camList = [];
+  const d = await loadCams();
+  if (shownPlace !== p) return;
+  let best = null, bd = Infinity;
+  for (const w of d.places) { if (w.cc && p.cc && w.cc !== p.cc) continue; const k = distKm(p.lat, p.lon, w.lat, w.lon); if (k <= w.r && k < bd) { bd = k; best = w; } }
+  camList = best ? d.cams.filter(c => c.place === best.id).map(c => ({ ...c, ok: camPlayable(c, d.status) })) : [];
+  camPlaceName = p.label || p.name;
+  btn.hidden = !camList.length;
+  $('#pp-cam-n').textContent = camList.length > 1 ? camList.length : '';
+  btn.title = camList.length === 1 ? 'View webcams (1 camera)' : `View webcams (${camList.length} cameras)`;
+  popW = pop.offsetWidth; popH = pop.offsetHeight; popKey = ''; placePop();
+}
+const extIco = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>';
+const fmtBadge = c => `<span class="cam-fmt ${esc(c.format)}">${CAM_FMT[c.format] || 'Webcam'}</span>`;
+const providerLink = (c, cls = 'cam-go ext') => `<a class="${cls}" href="${esc(c.page)}" target="_blank" rel="noopener noreferrer" aria-label="Watch on provider site: ${esc(c.name)}, ${esc(c.operator)} (opens in a new tab)">Watch on provider site${extIco}</a>`;
+function openCams() {
+  if (!camList.length) return;
+  camStop();
+  $('#cams-h').textContent = camPlaceName;
+  const n = camList.length;
+  $('#cams-sub').textContent = `${n} camera${n > 1 ? 's' : ''} nearby · pick one to load its player`;
+  $('#cam-list').innerHTML = camList.map((c, i) => `<li class="cam-item">
+    <div class="cam-info"><b>${esc(c.name)}</b><span class="v">${esc(c.view)}</span><span class="o">${fmtBadge(c)}<span>${esc(c.operator)}</span></span></div>
+    ${c.ok ? `<button type="button" class="cam-go" data-pick="${i}" aria-label="Show ${esc(c.name)}"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Show camera</button>` : providerLink(c)}
+  </li>`).join('');
+  $('#cam-stage').hidden = true;
+  if (!camDlg.open) camDlg.showModal();
+  camDlg.scrollTop = 0;
+  // the first camera gets the focus (the close button when there is none)
+  ($('#cam-list .cam-go') || $('#cams-close')).focus();
+}
+function camPick(i) {
+  const c = camList[i]; if (!c) return;
+  camStop();
+  $$('#cam-list .cam-item').forEach((li, k) => li.setAttribute('aria-current', String(k === i)));
+  const fr = $('#cam-frame');
+  const fail = () => { fr.innerHTML = `<div class="cam-off"><span>The player of this camera is not available right now.</span>${providerLink(c, 'cam-go')}</div>`; };
+  if (c.player === 'youtube') {
+    // youtube-nocookie.com: YouTube sets no cookies until the visitor presses play
+    const u = new URL(c.embed); u.searchParams.set('rel', '0'); u.searchParams.set('playsinline', '1');
+    fr.innerHTML = `<iframe src="${esc(u.href)}" title="${esc(c.name)} (${esc(c.operator)}, YouTube player)" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+  } else if (c.player === 'iframe') {
+    fr.innerHTML = `<iframe src="${esc(c.embed)}" title="${esc(c.name)} (${esc(c.operator)} player)" allow="fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+  } else if (c.player === 'image') {
+    const img = document.createElement('img');
+    img.alt = `Latest image of the webcam ${c.name}: ${c.view}`; img.decoding = 'async'; img.referrerPolicy = 'no-referrer';
+    img.onerror = fail;
+    img.src = c.embed + (c.embed.includes('?') ? '&' : '?') + 't=' + Math.floor(Date.now() / 60000); // a fresh copy at most once a minute
+    fr.replaceChildren(img);
+  } else fail();
+  $('#cam-now-t').textContent = c.name;
+  $('#cam-now-f').className = 'cam-fmt ' + c.format; $('#cam-now-f').textContent = CAM_FMT[c.format] || 'Webcam';
+  $('#cam-cr').innerHTML = `<span>${esc(c.credit || c.operator)}</span><a href="${esc(c.page)}" target="_blank" rel="noopener noreferrer">Watch on provider site ${extIco}</a>`;
+  $('#cam-stage').hidden = false;
+  camDlg.scrollTop = 0;
+}
+// removing the player ends the playback
+function camStop() { $('#cam-frame').replaceChildren(); $$('#cam-list .cam-item').forEach(li => li.removeAttribute('aria-current')); }
+function closeCams() { if (camDlg.open) camDlg.close(); }
+camDlg.addEventListener('close', () => {
+  camStop(); $('#cam-stage').hidden = true;
+  const b = $('#pp-cam'); if (!b.hidden && !pop.hidden) b.focus();
+});
+camDlg.addEventListener('click', e => {
+  const b = e.target.closest('[data-pick]'); if (b) { camPick(+b.dataset.pick); return; }
+  // a click on the dimmed backdrop closes the dialog
+  if (e.target === camDlg) { const r = camDlg.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeCams(); }
+});
+$('#cams-close').addEventListener('click', closeCams);
+$('#pp-cam').addEventListener('click', openCams);
 
 // "Visit on the globe": the camera flies to the tip and a short detail card opens
 let tipShown = null, markerTip = null;

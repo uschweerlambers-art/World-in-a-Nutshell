@@ -1,6 +1,8 @@
 # World in a Nutshell – Product Requirements Document (PRD) für den Prototyp
 
-Version 0.14 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+Version 0.15 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+
+Änderungen in v0.15 (Uwe, 14.11.2026): Neu sind ausgewählte öffentliche Webcams (F-26). Ein Kamerasymbol im Kopf des Stadt-Pop-ups öffnet ein eigenes Webcam-Pop-up; die offiziellen Player laden erst, wenn Besucher:innen eine Kamera wählen.
 
 Änderungen in v0.14 (Uwe, 14.11.2026): Alle Orte der Welt sollen gleichwertig anwählbar sein. „Discover here“ deckt jetzt alle Kontinente ab, mit Städten in Russland, China, Japan, Süd- und Südostasien, Afrika, Lateinamerika und Ozeanien (F-25.2). Die Radioliste garantiert jedem Land und jeder Region einen Anteil an Sendern statt nur die weltweit meistgehörten (F-07.1).
 
@@ -299,6 +301,20 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | F-25.5 | Ohne passende Tipps zeigt das Pop-up wie bisher Ortszeit, Datum, Luftqualität, Koordinaten, Einwohner, Höhe und Kartenlinks. Mit Tipps sind diese Angaben unter „City details“ eingeklappt. | M |
 | F-25.6 | Das Pop-up ist leicht zu schließen (×, Esc, Klick auf den Globus) und hält das Weiterdrehen nicht auf. Auf dem Smartphone erscheint es als Sheet am unteren Rand, der Ort rückt ins obere Drittel. | M |
 | F-25.7 | Teilbare Links: `#<stadt>/<n>` öffnet direkt den n-ten Tipp einer Stadt. | A |
+
+### F-26 Webcams im Stadt-Pop-up (v0.15)
+
+*Als Besucher:in möchte ich sehen, wie es an einem Ort gerade aussieht, ohne dass mich ein fremder Player schon beim Öffnen des Pop-ups verfolgt.*
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-26.1 | Ist einem Ort mindestens eine Webcam zugeordnet, zeigt der Kopf des Stadt-Pop-ups ein Kamerasymbol mit der zugänglichen Beschriftung „View webcams“ (bei mehreren Kameras mit ihrer Anzahl). Ohne Webcam entfällt der Button vollständig. „Discover here“ bleibt lokalen Entdeckungen vorbehalten. | M |
+| F-26.2 | Ein Klick öffnet ein eigenes, schließbares Webcam-Pop-up (auch bei nur einer Kamera) mit Ortsnamen und Kameraliste: Name, Blickwinkel oder Standort, Betreiber und Format („Live webcam“, „Timelapse“ oder „Latest webcam image“). | M |
+| F-26.3 | Der offizielle Player lädt erst, wenn eine Kamera gewählt wird; abgespielt wird erst auf Wunsch im Player. YouTube-Player laufen über youtube-nocookie.com. Beim Schließen (×, Esc, Klick daneben) endet die Wiedergabe und der Fokus kehrt zum Kamerasymbol zurück. | M |
+| F-26.4 | Bietet der Betreiber nur einen Link, ist der Player gesperrt oder lädt das Bild nicht, zeigt das Pop-up „Watch on provider site“ (neuer Tab). Unter jedem Player stehen Quellenhinweis und Link zur Originalseite. | M |
+| F-26.5 | Die Kameras stehen kuratiert in `site/data/webcams.json` (Orts-ID, Name, Koordinaten, Betreiber, Format, Originalseite, ggf. offizielle Embed-URL, Prüfvermerk). Ein Ort zeigt die Kameras des nächsten Webcam-Ortes desselben Landes innerhalb seines Radius. Start: 6 Orte, 13 Kameras (Salzburg, Hamburg, Rotterdam, Monterey, Hilo/Kīlauea, Fujikawaguchiko). | R |
+| F-26.6 | `scripts/check-webcams.mjs` prüft in der Action alle 3 h jeden Player (YouTube oEmbed, Bild, iframe-Header) und schreibt `data/live/webcams-status.json`; ein ausgefallener Player wird als Link angeboten. Das Log nennt jede Kamera mit Ergebnis. | R |
+| F-26.7 | Nur Player, die der Betreiber zum Einbetten freigibt. Windy: Der Zeitraffer-Player kommt laut API-Doku über die Webcams-API mit Schlüssel und Quellenpflicht; ein freier Embed-Weg war nicht belegbar, daher vorerst nicht genutzt. EarthCam: Einbettung nur mit Lizenz, daher nur zur Recherche. | R |
 
 ### F-09 Übergreifende Bedienung
 
