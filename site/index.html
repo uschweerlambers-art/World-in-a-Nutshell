@@ -223,6 +223,7 @@ body.flat .m-view .ico-globe { display: block; }
 .timeline .lab { font-size: 12px; color: var(--text-3); flex-shrink: 0; }
 .chip-live { display: flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 14px; background: rgba(48,209,88,0.18); color: var(--c-radio); font-size: 13px; font-weight: 600; flex-shrink: 0; }
 .attrib { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(env(safe-area-inset-bottom, 0px) + 8px); width: min(760px, calc(100vw - 32px)); margin: 0; text-align: center; font-size: 11px; color: var(--text-4); text-shadow: 0 1px 6px rgba(0,0,0,.8); }
+.attrib a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
 
 /* Help popover */
 #help { position: absolute; right: var(--sr); top: calc(var(--st) + 56px); width: min(300px, calc(100vw - 32px)); box-sizing: border-box; padding: 16px; border-radius: 22px; font-size: 14px; line-height: 1.5; color: var(--text-2); }
@@ -662,7 +663,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <div class="track"></div>
     <span class="chip-live"><span class="dot" style="width:6px;height:6px"></span>Live</span>
   </div>
-  <p class="attrib">Earth: NASA Blue Marble &amp; Black Marble · Places: GeoNames (CC BY 4.0) · Outlines: Natural Earth · Clouds: <span id="attrib-clouds">placeholder</span><span id="attrib-live"></span></p>
+  <p class="attrib">Earth: NASA Blue Marble &amp; Black Marble · Places: GeoNames (CC BY 4.0) · Outlines: Natural Earth · Clouds: <span id="attrib-clouds">placeholder</span><span id="attrib-tiles" hidden> · Close-up: <a href="https://s2maps.eu" target="_blank" rel="noopener noreferrer">Sentinel-2 cloudless 2016</a> by EOX IT Services GmbH (CC BY 4.0, contains modified Copernicus Sentinel data 2016)</span><span id="attrib-live"></span></p>
 </div>
 
 <!-- Arrival layer picker -->
@@ -744,6 +745,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
         <li>Country borders and names: Natural Earth 1:50m, public domain. Capitals: GeoNames, CC BY 4.0.</li>
         <li>Weather, local time and elevation in the place details: Open-Meteo (CC BY 4.0), asked only when you open a place.</li>
         <li>Sharper Earth on large screens: NASA GIBS Blue Marble Next Generation and VIIRS Black Marble.</li>
+        <li>Close-up pictures when you zoom in: <a href="https://s2maps.eu" target="_blank" rel="noopener noreferrer">Sentinel-2 cloudless 2016</a> by EOX IT Services GmbH, CC BY 4.0 (contains modified Copernicus Sentinel data 2016), loaded from <a href="https://maps.eox.at" target="_blank" rel="noopener noreferrer">EOX::Maps</a>.</li>
         <li id="src-clouds">Clouds: daily satellite imagery from NASA GIBS (MODIS and VIIRS true colour, turned into a cloud mask by our GitHub Action). If it is missing, a drawn placeholder is shown.</li>
       </ul>
       <h3>Software</h3>
@@ -774,7 +776,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
     <div data-pane="datenschutz" hidden>
       <h3>Placeholder</h3>
       <p>The privacy policy follows before launch. It will name every server your browser contacts, and GitHub Pages as the host.</p>
-      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you play a radio station, the stream comes directly from that station’s server. Both see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up weather, air quality, time zone and elevation. When you click an aircraft, its transponder code and call sign go to adsbdb.com to look up route and type.</p>
+      <p>With the earthquake layer on, your browser loads the feed directly from the USGS. When you zoom in close, the sharper pictures of the area on screen load directly from EOX in Austria (tiles.maps.eox.at). When you play a radio station, the stream comes directly from that station’s server. All of them see your IP address, like any website you visit. When you open the details of a place, its coordinates (not yours) go to Open-Meteo to look up weather, air quality, time zone and elevation. When you click an aircraft, its transponder code and call sign go to adsbdb.com to look up route and type.</p>
       <p>Already true today: this site sets no cookies, counts no visits and only asks for your location when you click. What you type into search never leaves your browser. Your display settings (sizes and colours) are kept in your own browser’s storage and are never sent anywhere.</p>
     </div>
   </div>
@@ -862,10 +864,11 @@ try {
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, 0.01, 200);
 let controls;
+let updateTiles = () => {}; // close-up imagery (F-19), set up with the renderer
 const uniforms = {
   dayMap: { value: null }, nightMap: { value: null }, specMap: { value: null },
   sunDir: { value: new THREE.Vector3(1, 0, 0) }, nightOn: { value: 1 }, time: { value: 0 }, cloudsOn: { value: 1 },
-  cloudMap: { value: null }, cloudReal: { value: 0 }
+  cloudMap: { value: null }, cloudReal: { value: 0 }, cloudNear: { value: 1 }
 };
 
 /* ---------- Globe and flat map in one scene (F-18) ---------- */
@@ -963,21 +966,19 @@ if (renderer) {
 
   controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true; controls.dampingFactor = 0.07;
-  controls.enablePan = false; controls.minDistance = 1.25; controls.maxDistance = 7;
+  controls.enablePan = false; controls.minDistance = 1.006; controls.maxDistance = 7;
   controls.rotateSpeed = 0.45; controls.zoomSpeed = 0.7;
   controls.autoRotate = !reduceMotion; controls.autoRotateSpeed = 0.25;
 
   // Earth
-  const earthMat = new THREE.ShaderMaterial({
-    uniforms,
-    vertexShader: MAP_VERT,
-    fragmentShader: `uniform sampler2D dayMap; uniform sampler2D nightMap; uniform sampler2D specMap; uniform vec3 sunDir; uniform float nightOn; uniform float uFlat;
+  // the Earth's surface shader; close-up tiles (F-19) use it with their own day picture
+  const earthFrag = tile => `uniform sampler2D dayMap;${tile ? ' uniform sampler2D tileMap; uniform float uFade; varying vec2 vTUv;' : ''} uniform sampler2D nightMap; uniform sampler2D specMap; uniform vec3 sunDir; uniform float nightOn; uniform float uFlat;
       varying vec2 vUv; varying vec3 vN; varying vec3 vPos;
       void main(){
         vec3 n = normalize(vN);
         float d = dot(n, sunDir);
         float dayAmt = mix(1.0, smoothstep(-0.11, 0.16, d), nightOn);
-        vec3 day = texture2D(dayMap, vUv).rgb;
+        vec3 day = ${tile ? 'texture2D(tileMap, vTUv).rgb' : 'texture2D(dayMap, vUv).rgb'};
         vec3 night = texture2D(nightMap, vUv).rgb;
         night = pow(night, vec3(1.35)) * vec3(1.3, 1.05, 0.78) * 1.7;
         float lambert = mix(0.9, clamp(d * 1.15 + 0.3, 0.0, 1.0), nightOn);
@@ -991,10 +992,157 @@ if (renderer) {
         col += vec3(0.30, 0.10, 0.03) * tw * 0.22;
         float rim = pow(1.0 - max(dot(n, v), 0.0), 3.0) * (1.0 - uFlat);
         col += vec3(0.32, 0.58, 1.0) * rim * 0.38 * (0.25 + 0.75 * dayAmt);
-        gl_FragColor = vec4(col, 1.0);
-      }`
+        gl_FragColor = vec4(col, ${tile ? 'uFade' : '1.0'});
+      }`;
+  const earthMat = new THREE.ShaderMaterial({
+    uniforms,
+    vertexShader: MAP_VERT,
+    fragmentShader: earthFrag(false)
   });
   scene.add(mapMesh(0, earthMat));
+
+  // Close-up imagery (F-19): when the camera comes near the ground, sharper picture tiles load for
+  // just the part of the Earth on screen (level of detail). Source: EOX Sentinel-2 cloudless 2016
+  // (CC BY 4.0), Web Mercator tiles down to about 10 m per pixel. Without them the 8k Earth stays.
+  const TILES = {
+    url: (z, x, y) => `https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/GoogleMapsCompatible/${z}/${y}/${x}.jpg`,
+    minZ: 6, maxZ: 14, size: 256, keep: 260, maxLoading: 6,
+    cache: new Map(), loading: 0, ok: 0, failed: 0, off: false, shown: new Set(), queue: []
+  };
+  const tileLoader = new THREE.TextureLoader(); tileLoader.setCrossOrigin('anonymous');
+  const TILE_VERT = MORPH_GLSL + `
+    uniform float uTileLon; attribute vec2 tuv;
+    varying vec2 vUv; varying vec2 vTUv; varying vec3 vN; varying vec3 vPos;
+    void main(){
+      float lon = position.x, lat = position.y;
+      vN = vec3(cos(lat) * cos(lon), sin(lat), -cos(lat) * sin(lon));
+      // on the map the whole tile stays on one side of the far edge
+      float dc = mod(uTileLon - uLon0 + 3.14159265, 6.28318531) - 3.14159265;
+      // a hair above the 8k Earth (about 130 m), so the two never fight over the same depth
+      vPos = uFlat <= 0.0 ? vN * 1.00002 : wianPlace(dc + lon - uTileLon, lat, 0.00002);
+      vUv = vec2(lon / 6.28318531 + 0.5, lat / 3.14159265 + 0.5);
+      vTUv = tuv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(vPos, 1.0);
+    }`;
+  const tileFrag = earthFrag(true);
+  const mercLat = (y, n) => Math.atan(Math.sinh(Math.PI * (1 - 2 * y / n)));
+  // a tile is a small lon/lat grid whose rows are even in Mercator, so its picture maps on exactly
+  function tileGeometry(z, x, y, seg) {
+    const n = 2 ** z, pos = [], uv = [], idx = [];
+    for (let j = 0; j <= seg; j++) for (let i = 0; i <= seg; i++) {
+      pos.push((x + i / seg) / n * TAU - Math.PI, mercLat(y + j / seg, n), 0);
+      uv.push(i / seg, 1 - j / seg);
+    }
+    for (let j = 0; j < seg; j++) for (let i = 0; i < seg; i++) { const a = j * (seg + 1) + i, c = a + seg + 1; idx.push(a, c, c + 1, a, c + 1, a + 1); }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute('tuv', new THREE.Float32BufferAttribute(uv, 2)); g.setIndex(idx);
+    return g;
+  }
+  function tileMake(z, x, y) {
+    const key = z + '/' + x + '/' + y, n = 2 ** z;
+    const t = { key, z, x, y, state: 'new', mesh: null, used: 0, fade0: 0,
+      lon: (x + 0.5) / n * TAU - Math.PI, lat0: mercLat(y + 1, n), lat1: mercLat(y, n), lon0: x / n * TAU - Math.PI, lon1: (x + 1) / n * TAU - Math.PI };
+    TILES.cache.set(key, t);
+    return t;
+  }
+  function tileLoad(t) {
+    t.state = 'loading'; TILES.loading++;
+    tileLoader.load(TILES.url(t.z, t.x, t.y), tex => {
+      TILES.loading--; TILES.ok++;
+      if (t.state !== 'loading') { tex.dispose(); return; }
+      tex.colorSpace = THREE.NoColorSpace; tex.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+      tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping;
+      const mat = new THREE.ShaderMaterial({
+        uniforms: { ...uniforms, tileMap: { value: tex }, uFade: { value: 0 }, uTileLon: { value: t.lon } },
+        vertexShader: TILE_VERT, fragmentShader: tileFrag, transparent: true, depthWrite: false,
+        polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -2 - t.z
+      });
+      t.mesh = new THREE.Mesh(tileGeometry(t.z, t.x, t.y, t.z < 9 ? 16 : 8), mat);
+      t.mesh.frustumCulled = false; t.mesh.renderOrder = -10 + t.z * 0.1; t.mesh.visible = false;
+      scene.add(t.mesh); t.state = 'ready'; t.fade0 = 0;
+    }, undefined, () => {
+      TILES.loading--; TILES.failed++; t.state = 'error';
+      // the service is away or blocks us: stay with the 8k Earth for this visit
+      if (TILES.failed > 24 && TILES.ok === 0) TILES.off = true;
+    });
+  }
+  function tileDrop(t) {
+    if (t.mesh) { scene.remove(t.mesh); t.mesh.geometry.dispose(); t.mesh.material.uniforms.tileMap.value.dispose(); t.mesh.material.dispose(); t.mesh = null; }
+    t.state = 'gone'; TILES.cache.delete(t.key);
+  }
+  // where a lon/lat point sits right now, on the globe or on the (partly) unrolled map
+  const tP = new THREE.Vector3(), tQ = new THREE.Vector3();
+  function tilePoint(t, lon, lat, out) {
+    if (VIEW.t <= 0) return out.set(Math.cos(lat) * Math.cos(lon), Math.sin(lat), -Math.cos(lat) * Math.sin(lon));
+    return placeJS(wrapPi(t.lon - VIEW.lon0) + lon - t.lon, lat, 0, out);
+  }
+  const frustum = new THREE.Frustum(), projView = new THREE.Matrix4(), tSphere = new THREE.Sphere();
+  const tCorners = [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()];
+  // pick the tiles that are on screen, each as fine as its distance to the camera needs
+  function tileWalk(z, x, y, pxWorld, need, depthLimit) {
+    const n = 2 ** z, key = z + '/' + x + '/' + y;
+    const t = TILES.cache.get(key) || { key, z, x, y, state: 'probe', lon: (x + 0.5) / n * TAU - Math.PI, lat0: mercLat(y + 1, n), lat1: mercLat(y, n), lon0: x / n * TAU - Math.PI, lon1: (x + 1) / n * TAU - Math.PI };
+    const c = tCorners, latM = (t.lat0 + t.lat1) / 2;
+    tilePoint(t, t.lon0, t.lat0, c[0]); tilePoint(t, t.lon1, t.lat0, c[1]); tilePoint(t, t.lon0, t.lat1, c[2]); tilePoint(t, t.lon1, t.lat1, c[3]); tilePoint(t, t.lon, latM, c[4]);
+    // bounding sphere around the corners; a curved tile bulges, so a little extra on big tiles
+    let r = 0; for (const p of c) r = Math.max(r, p.distanceTo(c[4]));
+    tSphere.set(c[4], r * (z < 5 ? 1.25 : 1.05) + 0.002);
+    if (!frustum.intersectsSphere(tSphere)) return;
+    let dist = Infinity, facing = VIEW.t > 0;
+    for (const p of c) {
+      dist = Math.min(dist, p.distanceTo(camera.position));
+      if (!facing) { tQ.subVectors(camera.position, p); if (tQ.dot(p) > -0.05) facing = true; }
+    }
+    if (!facing) return;
+    const edge = Math.max(c[0].distanceTo(c[1]), c[2].distanceTo(c[3]), c[0].distanceTo(c[2]));
+    const texel = edge / TILES.size, px = Math.max(dist, 1e-4) * pxWorld;
+    if (z < TILES.maxZ && z < depthLimit && texel > px * 1.3) {
+      for (let j = 0; j < 2; j++) for (let i = 0; i < 2; i++) tileWalk(z + 1, x * 2 + i, y * 2 + j, pxWorld, need, depthLimit);
+    } else if (z >= TILES.minZ) need.push({ z, x, y, dist });
+  }
+  const tileNeed = [];
+  updateTiles = now => {
+    const alt = VIEW.mode === 'flat' || VIEW.t > 0 ? VIEW.h : camera.position.length() - 1;
+    for (const t of TILES.shown) if (t.mesh) t.mesh.visible = false;
+    TILES.shown.clear();
+    if (TILES.off || alt > 0.9) { const credit = $('#attrib-tiles'); if (credit) credit.hidden = true; return; }
+    camera.updateMatrixWorld();
+    projView.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse); frustum.setFromProjectionMatrix(projView);
+    const pxWorld = 2 * tanHalfFov() / innerHeight;
+    tileNeed.length = 0;
+    for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) tileWalk(3, x, y, pxWorld, tileNeed, 32);
+    // too many tiles at once (a very wide view): one level coarser
+    if (tileNeed.length > 160) { tileNeed.length = 0; for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) tileWalk(3, x, y, pxWorld * 2, tileNeed, 32); }
+    const wanted = [];
+    for (const w of tileNeed) {
+      const key = w.z + '/' + w.x + '/' + w.y;
+      let t = TILES.cache.get(key) || tileMake(w.z, w.x, w.y);
+      t.used = now;
+      if (t.state === 'new') wanted.push([t, w.dist]);
+      // until a tile is there, its nearest loaded parent fills in
+      let s = t;
+      while (s && s.state !== 'ready') {
+        if (s.z <= TILES.minZ) { s = null; break; }
+        s = TILES.cache.get((s.z - 1) + '/' + (s.x >> 1) + '/' + (s.y >> 1));
+      }
+      if (s) { s.used = now; TILES.shown.add(s); }
+    }
+    // coarse and near tiles first
+    wanted.sort((a, b) => a[0].z - b[0].z || a[1] - b[1]);
+    for (const [t] of wanted) { if (TILES.loading >= TILES.maxLoading) break; tileLoad(t); }
+    const credit = $('#attrib-tiles'); if (credit && credit.hidden === TILES.shown.size > 0) credit.hidden = !TILES.shown.size;
+    for (const t of TILES.shown) {
+      t.mesh.visible = true;
+      if (!t.fade0) t.fade0 = now;
+      t.mesh.material.uniforms.uFade.value = reduceMotion ? 1 : Math.min(1, (now - t.fade0) / 400);
+    }
+    // keep a few hundred tiles, drop the ones unused for the longest time
+    if (TILES.cache.size > TILES.keep) {
+      const old = [...TILES.cache.values()].filter(t => t.state !== 'loading' && !TILES.shown.has(t)).sort((a, b) => a.used - b.used);
+      for (let i = 0; i < old.length && TILES.cache.size > TILES.keep * 0.8; i++) tileDrop(old[i]);
+    }
+  };
 
   // Clouds (procedural placeholder until NASA GIBS daily imagery is wired in)
   const noise = `
@@ -1023,7 +1171,7 @@ if (renderer) {
     uniforms, transparent: true, depthWrite: false,
     vertexShader: MAP_VERT,
     fragmentShader: noise + `
-      uniform vec3 sunDir; uniform float nightOn; uniform float time; uniform float cloudsOn; uniform sampler2D cloudMap; uniform float cloudReal; uniform float uFlat;
+      uniform vec3 sunDir; uniform float nightOn; uniform float time; uniform float cloudsOn; uniform sampler2D cloudMap; uniform float cloudReal; uniform float uFlat; uniform float cloudNear;
       varying vec3 vN; varying vec3 vPos; varying vec2 vUv;
       void main(){
         vec3 n = normalize(vN);
@@ -1040,7 +1188,7 @@ if (renderer) {
         float lit = mix(0.95, smoothstep(-0.18, 0.25, d) * 0.95 + 0.04, nightOn);
         vec3 v = normalize(cameraPosition - vPos);
         float edge = mix(smoothstep(0.0, 0.25, dot(n, v)), 1.0, uFlat);
-        gl_FragColor = vec4(vec3(lit), c * 0.78 * edge * cloudsOn);
+        gl_FragColor = vec4(vec3(lit), c * 0.78 * edge * cloudsOn * cloudNear);
       }`
   });
   const clouds = mapMesh(0.008, cloudMat, 96, 72);
@@ -1229,7 +1377,7 @@ function viewCenterLL() {
 }
 
 /* ---------- Flat map: camera, navigation and the change between globe and map ---------- */
-const FLAT_H_MIN = 0.035;
+const FLAT_H_MIN = 0.006;
 const tanHalfFov = () => Math.tan(camera.fov * DEG / 2);
 // zoomed out at most until the whole width of the world fits the screen
 const flatHMax = () => Math.min(6, Math.PI / (tanHalfFov() * camera.aspect));
@@ -1315,9 +1463,16 @@ function frameView(now) {
 // altitude above the ground, so a drag moves the ground about as far as the pointer moves at
 // any zoom. The whole-globe view (distance 3 and beyond) keeps the original feel.
 function tuneControls() {
-  const h = Math.max(0.05, controls.getDistance() - 1);
+  const h = Math.max(0.004, controls.getDistance() - 1);
   controls.rotateSpeed = 0.45 * Math.min(1, h / 2);
   controls.zoomSpeed = 0.7 * Math.min(1, 1.5 * h / (h + 1));
+}
+// close to the ground the near plane moves in, and the coarse clouds thin out over the sharp tiles
+function tuneNear() {
+  const alt = VIEW.mode === 'flat' || VIEW.t > 0 ? VIEW.h : camera.position.length() - 1;
+  const near = Math.min(0.01, Math.max(0.0004, alt * 0.3));
+  if (Math.abs(near - camera.near) > camera.near * 0.1) { camera.near = near; camera.updateProjectionMatrix(); }
+  uniforms.cloudNear.value = 0.3 + 0.7 * Math.min(1, Math.max(0, (alt - 0.02) / 0.25));
 }
 // map navigation: drag to move, wheel or pinch to zoom (the globe keeps its orbit controls)
 const FP = new Map();
@@ -1383,9 +1538,11 @@ if (renderer) {
     if (document.hidden) return;
     if (!reduceMotion) uniforms.time.value += clock.getDelta() * 60; else clock.getDelta();
     frameView(performance.now());
+    tuneNear();
     applyFocus();
     placeMarker();
     updateLayers();
+    updateTiles(performance.now());
     renderer.render(scene, camera);
   });
   addEventListener('resize', () => {
