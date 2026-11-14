@@ -211,7 +211,7 @@ button:disabled { cursor: default; }
 .layers { display: flex; flex-direction: column; gap: 18px; }
 .records { display: flex; flex-direction: column; gap: 10px; }
 .rec-lead { margin: 0 4px; font-size: 13px; color: var(--text-3); line-height: 1.45; }
-.rec-surprise { flex: none; height: 44px; font-size: 14px; }
+.records .rec-surprise { flex: none; height: 44px; font-size: 14px; }
 .rec-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
 .rec-list button { width: 100%; display: flex; align-items: center; gap: 12px; padding: 6px; border: 0; border-radius: 12px; background: none; text-align: left; }
 .rec-list button:hover, .rec-list button:focus-visible { background: var(--hover); }
@@ -428,7 +428,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 /* Tip detail card */
 #tip { position: fixed; right: calc(var(--sr) + 32px); top: 50%; transform: translateY(-50%); width: 380px; max-height: calc(100vh - 120px); overflow-y: auto; box-sizing: border-box; padding: 0; border-radius: 22px; border-color: rgba(255,255,255,0.14); box-shadow: 0 24px 80px rgba(0,0,0,0.55); z-index: 8; display: flex; flex-direction: column; }
 #tip.is-out { transform: translateY(calc(-50% + 8px)); }
-.tip-pic { aspect-ratio: 16 / 9; background: rgba(255,255,255,0.06); flex-shrink: 0; }
+.tip-pic { aspect-ratio: 16 / 9; overflow: hidden; background: rgba(255,255,255,0.06); flex-shrink: 0; }
 .tip-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .tip-body { padding: 18px 22px 16px; display: flex; flex-direction: column; gap: 4px; }
 .tip-body .w-top span { color: var(--c-place); font-size: 11.5px; letter-spacing: 1.1px; text-transform: uppercase; font-weight: 700; }
@@ -504,15 +504,17 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   #settings { max-height: calc(100vh - var(--st) - 200px); }
   .set-row.desk { display: none; }
   /* the place popup becomes a sheet at the bottom; the place moves up into the free part of the screen */
-  #place-pop { left: 8px !important; right: 8px; top: auto !important; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); width: auto; max-height: 66vh; transform: none !important; border-radius: 28px; padding: 14px 18px 12px; visibility: visible !important; transition: opacity .25s ease, translate .25s ease; }
+  #place-pop { z-index: 9; left: 8px !important; right: 8px; top: auto !important; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); width: auto; max-height: 62vh; transform: none !important; border-radius: 28px; padding: 14px 18px 12px; visibility: visible !important; transition: opacity .25s ease, translate .25s ease; }
   #place-pop::after { display: none; }
   #place-pop.is-out { translate: 0 12px; }
   .disc-pic { aspect-ratio: 16 / 7.5; }
-  #tip { left: 8px; right: 8px; top: auto; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); transform: none; width: auto; max-height: 64vh; border-radius: 28px; }
+  #tip { z-index: 9; max-height: 62vh; left: 8px; right: 8px; top: auto; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); transform: none; width: auto; border-radius: 28px; }
   #tip.is-out { transform: translateY(12px); }
   .tip-pic { aspect-ratio: 16 / 7; }
   #tip h2 { font-size: 21px; }
   .tip-body { padding: 14px 18px 14px; }
+  /* while a place or tip card is open, the bottom sheet steps aside */
+  body.card-open .sidebar { transform: translateY(calc(100% + 24px)); }
   .side-top { flex-direction: row; align-items: center; gap: 8px; }
   .side-top .side-search { flex: 1; min-width: 0; }
   .quick { flex-direction: row; flex-shrink: 0; gap: 6px; }
@@ -747,7 +749,8 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <li>Drag to turn the Earth, scroll or use two fingers to zoom.</li>
       <li>“Map” unrolls the globe into a flat world map with the same layers. Drag to move it, scroll or pinch to zoom.</li>
       <li>Search finds any place with 5,000 inhabitants or more.</li>
-      <li>“Surprise me” takes you to remarkable places on Earth.</li>
+      <li>After a search, the popup of the place shows local tips under “Discover here”. “Visit on the globe” flies you there.</li>
+      <li>“Wonders &amp; records” lists the extremes of our planet; “Surprise me” picks one for you.</li>
       <li>Day and night match the current time.</li>
       <li>Click a dot on the globe for details. A click on a radio station plays it.</li>
       <li>Click the marker of a place you searched, or a capital, for weather, local time and map links.</li>
@@ -867,6 +870,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
         <li>Outline of Antarctica: Natural Earth 1:110m, public domain. Outline of the Sahara: simplified drawing, to be replaced by Natural Earth.</li>
         <li>Place of the day: pictures from Wikimedia Commons, with author and licence under each picture, copied to this site once a day. Short texts in our own words.</li>
         <li>Wonders &amp; records: our own short texts, figures as given by the source on each card, links to English Wikipedia. Pictures from Wikimedia Commons, with author and licence under each picture, copied to this site by our GitHub Action.</li>
+        <li>Discover here (local tips in the place popup): our own short texts, each linked to the English Wikipedia article of the place. Photos from Wikimedia Commons, with author and licence under each photo, copied to this site by our GitHub Action.</li>
         <li>Country borders and names: Natural Earth 1:50m, public domain. Capitals: GeoNames, CC BY 4.0.</li>
         <li>Weather, local time and elevation in the place details: Open-Meteo (CC BY 4.0), asked only when you open a place.</li>
         <li>Sharper Earth on large screens: NASA GIBS Blue Marble Next Generation and VIIRS Black Marble.</li>
@@ -3803,7 +3807,7 @@ function showPlaceInfo(p) {
     + link(`https://www.waze.com/live-map/directions?to=ll.${encodeURIComponent(ll)}`, 'Waze');
   $('#pp-src').innerHTML = 'Sources: <a href="https://www.geonames.org" target="_blank" rel="noopener noreferrer">GeoNames</a> · <a href="https://open-meteo.com" target="_blank" rel="noopener noreferrer">Open-Meteo</a> weather and CAMS air quality, CC BY 4.0';
   closePopovers();
-  pop.hidden = false; popW = pop.offsetWidth; popH = pop.offsetHeight; placePop();
+  pop.hidden = false; syncCards(); popW = pop.offsetWidth; popH = pop.offsetHeight; placePop();
   requestAnimationFrame(() => pop.classList.remove('is-out'));
   panForPop();
   // fresh state for this place: tips first, radio closed, details folded
@@ -3840,6 +3844,7 @@ function closePlacePop() {
   if (!shownPlace) return;
   shownPlace = null; popAt = null; popTz = null; clearInterval(popTimer);
   if (innerWidth < 768 && $('#wonder').hidden && $('#tip').hidden) setFocus(0, 0);
+  syncCards();
   pop.classList.add('is-out'); setTimeout(() => { if (!shownPlace) pop.hidden = true; }, 260);
 }
 $('#pp-close').addEventListener('click', closePlacePop);
@@ -3932,12 +3937,15 @@ function openTipCard() {
   $('#tip-next').hidden = n < 2;
   if (n > 1) { const nx = c.tips[(s.i + 1) % n]; $('#tip-next').setAttribute('aria-label', `Next tip: ${nx.title}`); }
   card.hidden = false; requestAnimationFrame(() => card.classList.remove('is-out'));
-  showUI();
+  showUI(); document.body.classList.add('card-open');
 }
+// phones: the bottom sheet steps aside while the place popup or a tip card is open
+function syncCards() { document.body.classList.toggle('card-open', !!shownPlace || !$('#tip').classList.contains('is-out')); }
 function closeTip(silent) {
   const card = $('#tip');
   if (card.hidden) { if (!silent) tipShown = null; return; }
   card.classList.add('is-out'); setTimeout(() => { if (card.classList.contains('is-out')) card.hidden = true; }, 450);
+  syncCards();
   if (!silent) { tipShown = null; if ($('#wonder').hidden) setFocus(0, 0); }
 }
 const cityPlace = c => places?.find(q => q.name === c.name && q.cc === c.cc) || { name: c.name, lat: c.lat, lon: c.lon, cc: c.cc, region: '' };

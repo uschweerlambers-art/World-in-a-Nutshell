@@ -186,12 +186,12 @@
     {
      "id": "cologne-2",
      "kind": "sight",
-     "title": "Chocolate Museum",
-     "wiki": "Imhoff Chocolate Museum",
-     "lat": 50.9322,
-     "lon": 6.9644,
-     "text": "A museum on a peninsula in the Rhine harbour, with a chocolate fountain and a small working factory.",
-     "more": "It tells the story of cocoa from the plantations to the bar."
+     "title": "Museum Ludwig",
+     "wiki": "Museum Ludwig",
+     "lat": 50.9409,
+     "lon": 6.9606,
+     "text": "Right next to the cathedral, one of the largest collections of Pop Art outside the United States.",
+     "more": "It also holds one of the biggest Picasso collections in Europe."
     },
     {
      "id": "cologne-3",
@@ -216,8 +216,8 @@
     {
      "id": "frankfurt-am-main-1",
      "kind": "sight",
-     "title": "Römerberg",
-     "wiki": "Römerberg",
+     "title": "Römer",
+     "wiki": "Römer (Frankfurt)",
      "lat": 50.1105,
      "lon": 8.6822,
      "text": "The old town square with its half-timbered houses and the Römer, the city hall since 1405.",

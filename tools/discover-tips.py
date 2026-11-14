@@ -73,15 +73,15 @@ city('Cologne', 'DE', 15)
 tip('sight', 'Cologne Cathedral', 'Cologne Cathedral', 50.9413, 6.9583,
     'Building began in 1248 and was only finished in 1880; for a few years it was the tallest building in the world.',
     '533 steps lead up the south tower to a view over the Rhine. Inside stands the golden Shrine of the Three Kings.')
-tip('sight', 'Chocolate Museum', 'Imhoff Chocolate Museum', 50.9322, 6.9644,
-    'A museum on a peninsula in the Rhine harbour, with a chocolate fountain and a small working factory.',
-    'It tells the story of cocoa from the plantations to the bar.')
+tip('sight', 'Museum Ludwig', 'Museum Ludwig', 50.9409, 6.9606,
+    'Right next to the cathedral, one of the largest collections of Pop Art outside the United States.',
+    'It also holds one of the biggest Picasso collections in Europe.')
 tip('surprise', 'Hohenzollern Bridge', 'Hohenzollern Bridge', 50.9413, 6.9658,
     'Tens of thousands of love locks hang on the railway bridge leading to the cathedral.',
     'Couples have fastened padlocks to its fence since about 2008. Over 1,000 trains a day cross the bridge.')
 
 city('Frankfurt am Main', 'DE', 15)
-tip('sight', 'Römerberg', 'Römerberg', 50.1105, 8.6822,
+tip('sight', 'Römer', 'Römer (Frankfurt)', 50.1105, 8.6822,
     'The old town square with its half-timbered houses and the Römer, the city hall since 1405.',
     'Emperors were celebrated here after their coronation. Most of the houses were rebuilt after the Second World War.')
 tip('person', 'Goethe House', 'Goethe House', 50.1110, 8.6778,

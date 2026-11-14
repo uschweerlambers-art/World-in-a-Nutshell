@@ -38,7 +38,7 @@ jobs:
           AIS_LISTEN_SECONDS=20 node scripts/fetch-ships.mjs .cache/live site/data/live
           node scripts/fetch-place-of-day.mjs .cache/live site/data/live && cat site/data/live/placeofday.json && ls -la site/data/live/pod
           node scripts/fetch-wonder-pictures.mjs .cache/live site/data/live && cat site/data/live/wonders-pictures.json && ls -la site/data/live/wonders
-          node scripts/fetch-discover-pictures.mjs .cache/live site/data/live
+          DISCOVER_DEBUG=1 node scripts/fetch-discover-pictures.mjs .cache/live site/data/live
           node -e "for (const f of ['cables','ships','disasters']) { try { const j = require('./site/data/live/' + f + '.json'); console.log(f, j.count, JSON.stringify(j).length) } catch (e) { console.log(f, 'missing') } }"
           cat site/data/live/weather.json || true
           node scripts/fetch-textures.mjs .cache/textures site/img/hi

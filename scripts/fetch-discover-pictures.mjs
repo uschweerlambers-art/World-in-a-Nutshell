@@ -44,6 +44,7 @@ async function build(t) {
   try {
     const art = await article(t.wiki.replace(/ /g, '_'));
     entry.title = art.title;
+    entry.lead = art.lead || '';
     const lead = art.lead && /upload\.wikimedia\.org\/wikipedia\/commons\//.test(art.lead) ? decodeURIComponent(art.lead.split('/').pop()) : null;
     for (const pic of await pictures(art.title, 3, { prefer: [...prefer, ...(lead && !prefer.length ? [lead] : [])], photos: true })) {
       try {
@@ -67,6 +68,7 @@ for (const c of CITIES) for (const t of c.tips) {
   const e = await build(t);
   // the log lists every chosen file, so a reviewer can check that each photo shows the place
   console.log(`${e.image ? '✓' : '✗'} ${t.id} ${t.title}${e.title && e.title !== t.wiki.replace(/ /g, '_') ? ` [${e.title}]` : ''}: ${e.image ? `${e.image.file} · ${e.image.license} · ${e.image.author}` : 'no photo'}`);
+  if (process.env.DISCOVER_DEBUG) console.log(`    lead: ${e.lead || '–'}`);
   if (!e.image) continue;
   ok++;
   await copyFile(join(dCache, e.image.src), join(dOut, e.image.src));
