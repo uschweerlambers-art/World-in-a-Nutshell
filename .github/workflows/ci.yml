@@ -42,6 +42,10 @@ jobs:
           node scripts/fetch-textures.mjs .cache/textures site/img/hi
           ls -la site/img/hi || true
           ls -la site/data/live
+      - name: Probe (temporary) dump conflicts
+        run: |
+          echo "=====conflicts"; gzip -9c site/data/live/conflicts.json | base64 -w 0; echo; echo "=====end"
+
       # The preview build lets reviewers download and open the site locally (N-7.4).
       - uses: actions/upload-artifact@v4
         with:
