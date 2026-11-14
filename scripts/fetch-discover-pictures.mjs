@@ -19,6 +19,8 @@ const CITIES = JSON.parse(await readFile(join(root, 'site/data/discover.json'), 
 const dCache = join(cacheDir, 'discover'), dOut = join(outDir, 'discover');
 await mkdir(dCache, { recursive: true });
 await mkdir(dOut, { recursive: true });
+// old black-and-white shots and building sites rarely show a place as visitors see it today
+const OLD = /construction|(?<!\d)19[0-7]\d(?!\d)/i;
 const VERSION = 3, MAX_AGE = 30 * 864e5;
 const exists = async (f) => { try { await stat(f); return true; } catch { return false; } };
 
@@ -47,7 +49,7 @@ async function build(t) {
   try {
     const old = JSON.parse(await readFile(metaFile, 'utf8'));
     const fresh = Date.now() - Date.parse(old.built) < (old.image ? MAX_AGE : 6 * 3600e3);
-    if (old.v === VERSION && old.wiki === t.wiki && old.prefer === String([...prefer, ...avoid]) && fresh && (!old.image || await exists(join(dCache, old.image.src)))) return old;
+    if (old.v === VERSION && old.wiki === t.wiki && old.prefer === String([...prefer, ...avoid]) && fresh && !(old.image && OLD.test(old.image.file)) && (!old.image || await exists(join(dCache, old.image.src)))) return old;
   } catch {}
   const entry = { id: t.id, wiki: t.wiki, prefer: String([...prefer, ...avoid]), image: null, built: new Date().toISOString(), v: VERSION };
   try {
@@ -56,8 +58,8 @@ async function build(t) {
     entry.lead = art.lead || '';
     // the lead picture only when it looks like a photo (some articles lead with a map, a painting or a poster)
     let lead = leadFile(art.lead);
-    if (lead && (!isPhoto(lead) || avoid.includes(lead.replace(/ /g, '_')))) lead = null;
-    for (const pic of await pictures(art.title, 3, { prefer: [...prefer, ...(lead && !prefer.length ? [lead] : [])], photos: true, avoid })) {
+    if (lead && (!isPhoto(lead) || OLD.test(lead) || avoid.includes(lead.replace(/ /g, '_')))) lead = null;
+    for (const pic of await pictures(art.title, 3, { prefer: [...prefer, ...(lead && !prefer.length ? [lead] : [])], photos: true, avoid, skip: OLD, debug: !!process.env.DISCOVER_DEBUG })) {
       try {
         const buf = await get(pic.url, 'buf', 45000);
         const jpg = await sharp(buf).rotate().resize(720, 405, { fit: 'cover', position: 'attention' }).jpeg({ quality: 78, mozjpeg: true }).toBuffer();
@@ -78,7 +80,7 @@ for (const c of CITIES) for (const t of c.tips) {
   n++;
   let e = await build(t);
   if (!e.image && e.v === VERSION && e.built && Date.now() - Date.parse(e.built) < 60000) { await pause(5000); await unlink(join(dCache, `${t.id}.json`)).catch(() => {}); e = await build(t); } // one retry, e.g. after a 429
-  await pause(400);
+  if (Date.now() - Date.parse(e.built) < 120000) await pause(1200); // go easy on Wikipedia when a photo was fetched
   // the log lists every chosen file, so a reviewer can check that each photo shows the place
   console.log(`${e.image ? '✓' : '✗'} ${t.id} ${t.title}${e.title && e.title !== t.wiki.replace(/ /g, '_') ? ` [${e.title}]` : ''}: ${e.image ? `${e.image.file} · ${e.image.license} · ${e.image.author}` : 'no photo'}`);
   if (process.env.DISCOVER_DEBUG) console.log(`    lead: ${e.lead || '–'}`);
