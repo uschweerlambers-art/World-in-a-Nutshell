@@ -187,7 +187,7 @@
      "id": "cologne-2",
      "kind": "sight",
      "title": "Chocolate Museum",
-     "wiki": "Chocolate Museum (Cologne)",
+     "wiki": "Imhoff Chocolate Museum",
      "lat": 50.9322,
      "lon": 6.9644,
      "text": "A museum on a peninsula in the Rhine harbour, with a chocolate fountain and a small working factory.",
@@ -217,7 +217,7 @@
      "id": "frankfurt-am-main-1",
      "kind": "sight",
      "title": "Römerberg",
-     "wiki": "Römerberg (Frankfurt am Main)",
+     "wiki": "Römerberg",
      "lat": 50.1105,
      "lon": 8.6822,
      "text": "The old town square with its half-timbered houses and the Römer, the city hall since 1405.",
@@ -237,12 +237,12 @@
     {
      "id": "frankfurt-am-main-3",
      "kind": "surprise",
-     "title": "Kleinmarkthalle",
-     "wiki": "Kleinmarkthalle",
-     "lat": 50.1128,
-     "lon": 8.6834,
-     "text": "The market hall where Frankfurt buys the seven herbs for its Green Sauce.",
-     "more": "About 60 stalls sell local produce, sausages and food from all over the world."
+     "title": "Main Tower",
+     "wiki": "Main Tower",
+     "lat": 50.1125,
+     "lon": 8.672,
+     "text": "Frankfurt’s only skyscraper with a viewing platform open to the public, about 200 metres up.",
+     "more": "From the top you look out over the towers of the banks, the river Main and the Taunus hills."
     }
    ]
   },
@@ -308,12 +308,12 @@
     {
      "id": "dresden-2",
      "kind": "surprise",
-     "title": "Pfunds Molkerei",
-     "wiki": "Pfunds Molkerei",
-     "lat": 51.0627,
-     "lon": 13.7564,
-     "text": "A dairy shop from 1880, covered from floor to ceiling in hand-painted tiles.",
-     "more": "It is often called the most beautiful dairy shop in the world."
+     "title": "Blue Wonder",
+     "wiki": "Loschwitz Bridge",
+     "lat": 51.0526,
+     "lon": 13.8095,
+     "text": "A blue steel bridge across the Elbe from 1893 that the people of Dresden call the Blue Wonder.",
+     "more": "Next to it, one of the oldest suspension railways in the world climbs the hillside."
     }
    ]
   },
@@ -605,13 +605,13 @@
     {
      "id": "vienna-2",
      "kind": "person",
-     "title": "Sigmund Freud Museum",
-     "wiki": "Sigmund Freud Museum",
-     "lat": 48.2184,
-     "lon": 16.3632,
-     "text": "Sigmund Freud lived and worked at Berggasse 19 for 47 years, until he fled to London in 1938.",
-     "more": "His waiting room is still furnished as it was; the famous couch went with him to London.",
-     "person": "Sigmund Freud"
+     "title": "Mozarthaus",
+     "wiki": "Mozarthaus Vienna",
+     "lat": 48.2075,
+     "lon": 16.3755,
+     "text": "Wolfgang Amadeus Mozart lived in this apartment from 1784 to 1787 and wrote The Marriage of Figaro here.",
+     "more": "It is the only one of his Vienna homes that still stands.",
+     "person": "Wolfgang Amadeus Mozart"
     },
     {
      "id": "vienna-3",
@@ -688,7 +688,7 @@
      "id": "istanbul-2",
      "kind": "person",
      "title": "Museum of Innocence",
-     "wiki": "Museum of Innocence (museum)",
+     "wiki": "Museum of Innocence",
      "lat": 41.0315,
      "lon": 28.9783,
      "text": "Nobel laureate Orhan Pamuk wrote a novel and built this museum of everyday objects to go with it.",
@@ -993,14 +993,13 @@
    "tips": [
     {
      "id": "nairobi-1",
-     "kind": "person",
-     "title": "Karen Blixen Museum",
-     "wiki": "Karen Blixen Museum",
-     "lat": -1.3517,
-     "lon": 36.7128,
-     "text": "The Danish writer Karen Blixen lived in this farmhouse from 1917 to 1931 and later wrote Out of Africa about it.",
-     "more": "The district around it is still called Karen.",
-     "person": "Karen Blixen"
+     "kind": "sight",
+     "title": "Nairobi National Museum",
+     "wiki": "Nairobi National Museum",
+     "lat": -1.274,
+     "lon": 36.8146,
+     "text": "Kenya’s national museum, with collections on the country’s history, nature, culture and art.",
+     "more": "A snake park is part of the museum grounds."
     },
     {
      "id": "nairobi-2",

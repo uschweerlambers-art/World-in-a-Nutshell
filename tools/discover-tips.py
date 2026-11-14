@@ -73,7 +73,7 @@ city('Cologne', 'DE', 15)
 tip('sight', 'Cologne Cathedral', 'Cologne Cathedral', 50.9413, 6.9583,
     'Building began in 1248 and was only finished in 1880; for a few years it was the tallest building in the world.',
     '533 steps lead up the south tower to a view over the Rhine. Inside stands the golden Shrine of the Three Kings.')
-tip('sight', 'Chocolate Museum', 'Chocolate Museum (Cologne)', 50.9322, 6.9644,
+tip('sight', 'Chocolate Museum', 'Imhoff Chocolate Museum', 50.9322, 6.9644,
     'A museum on a peninsula in the Rhine harbour, with a chocolate fountain and a small working factory.',
     'It tells the story of cocoa from the plantations to the bar.')
 tip('surprise', 'Hohenzollern Bridge', 'Hohenzollern Bridge', 50.9413, 6.9658,
@@ -81,16 +81,16 @@ tip('surprise', 'Hohenzollern Bridge', 'Hohenzollern Bridge', 50.9413, 6.9658,
     'Couples have fastened padlocks to its fence since about 2008. Over 1,000 trains a day cross the bridge.')
 
 city('Frankfurt am Main', 'DE', 15)
-tip('sight', 'Römerberg', 'Römerberg (Frankfurt am Main)', 50.1105, 8.6822,
+tip('sight', 'Römerberg', 'Römerberg', 50.1105, 8.6822,
     'The old town square with its half-timbered houses and the Römer, the city hall since 1405.',
     'Emperors were celebrated here after their coronation. Most of the houses were rebuilt after the Second World War.')
 tip('person', 'Goethe House', 'Goethe House', 50.1110, 8.6778,
     'Johann Wolfgang von Goethe was born in this house in 1749 and wrote his first works here.',
     'The house was destroyed in 1944 and rebuilt; much of the original furniture had been saved and is back in its place.',
     person='Johann Wolfgang von Goethe')
-tip('surprise', 'Kleinmarkthalle', 'Kleinmarkthalle', 50.1128, 8.6834,
-    'The market hall where Frankfurt buys the seven herbs for its Green Sauce.',
-    'About 60 stalls sell local produce, sausages and food from all over the world.')
+tip('surprise', 'Main Tower', 'Main Tower', 50.1125, 8.6720,
+    'Frankfurt’s only skyscraper with a viewing platform open to the public, about 200 metres up.',
+    'From the top you look out over the towers of the banks, the river Main and the Taunus hills.')
 
 city('Leipzig', 'DE', 15)
 tip('sight', 'St. Nicholas Church', 'St. Nicholas Church, Leipzig', 51.3404, 12.3781,
@@ -108,9 +108,9 @@ city('Dresden', 'DE', 15)
 tip('sight', 'Frauenkirche', 'Dresden Frauenkirche', 51.0519, 13.7416,
     'Destroyed in 1945, its ruins were a memorial for decades; it was rebuilt from 1994 and consecrated again in 2005.',
     'Many of the old stones were put back in their original places; they show up darker in the new walls.')
-tip('surprise', 'Pfunds Molkerei', 'Pfunds Molkerei', 51.0627, 13.7564,
-    'A dairy shop from 1880, covered from floor to ceiling in hand-painted tiles.',
-    'It is often called the most beautiful dairy shop in the world.')
+tip('surprise', 'Blue Wonder', 'Loschwitz Bridge', 51.0526, 13.8095,
+    'A blue steel bridge across the Elbe from 1893 that the people of Dresden call the Blue Wonder.',
+    'Next to it, one of the oldest suspension railways in the world climbs the hillside.')
 
 city('Bonn', 'DE')
 tip('person', 'Beethoven House', 'Beethoven House', 50.7372, 7.1015,
@@ -195,10 +195,10 @@ city('Vienna', 'AT', 20)
 tip('sight', 'Naschmarkt', 'Naschmarkt', 48.1986, 16.3632,
     'Vienna’s best-known market, about 1.5 km of stalls along the Wienzeile.',
     'On Saturdays a flea market joins it at the far end.')
-tip('person', 'Sigmund Freud Museum', 'Sigmund Freud Museum', 48.2184, 16.3632,
-    'Sigmund Freud lived and worked at Berggasse 19 for 47 years, until he fled to London in 1938.',
-    'His waiting room is still furnished as it was; the famous couch went with him to London.',
-    person='Sigmund Freud')
+tip('person', 'Mozarthaus', 'Mozarthaus Vienna', 48.2075, 16.3755,
+    'Wolfgang Amadeus Mozart lived in this apartment from 1784 to 1787 and wrote The Marriage of Figaro here.',
+    'It is the only one of his Vienna homes that still stands.',
+    person='Wolfgang Amadeus Mozart')
 tip('surprise', 'Wiener Riesenrad', 'Wiener Riesenrad', 48.2166, 16.3958,
     'One of the oldest Ferris wheels still turning, built in 1897 in the Prater.',
     'Its red cabins rise to almost 65 metres above the amusement park.')
@@ -220,7 +220,7 @@ city('Istanbul', 'TR', 30)
 tip('sight', 'Hagia Sophia', 'Hagia Sophia', 41.0086, 28.9802,
     'Built as a church in 537, it became a mosque in 1453; its dome has shaped the city for almost 1,500 years.',
     'Christian mosaics and Islamic calligraphy are seen side by side inside.')
-tip('person', 'Museum of Innocence', 'Museum of Innocence (museum)', 41.0315, 28.9783,
+tip('person', 'Museum of Innocence', 'Museum of Innocence', 41.0315, 28.9783,
     'Nobel laureate Orhan Pamuk wrote a novel and built this museum of everyday objects to go with it.',
     'Each display case belongs to a chapter of the book, and a ticket is printed inside the novel.',
     person='Orhan Pamuk')
@@ -309,10 +309,9 @@ tip('surprise', 'Boulders Beach', 'Boulders Beach', -34.1972, 18.4517,
     'Wooden walkways lead you right past the colony.')
 
 city('Nairobi', 'KE', 25)
-tip('person', 'Karen Blixen Museum', 'Karen Blixen Museum', -1.3517, 36.7128,
-    'The Danish writer Karen Blixen lived in this farmhouse from 1917 to 1931 and later wrote Out of Africa about it.',
-    'The district around it is still called Karen.',
-    person='Karen Blixen')
+tip('sight', 'Nairobi National Museum', 'Nairobi National Museum', -1.2740, 36.8146,
+    'Kenya’s national museum, with collections on the country’s history, nature, culture and art.',
+    'A snake park is part of the museum grounds.')
 tip('surprise', 'Nairobi National Park', 'Nairobi National Park', -1.3733, 36.8589,
     'Lions, rhinos and giraffes live in a national park with the city skyline in the background.',
     'It lies only about 7 km from the centre of the capital.')

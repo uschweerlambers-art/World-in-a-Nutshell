@@ -86,12 +86,6 @@ button:disabled { cursor: default; }
 }
 @keyframes pulse { from { transform: translate(-50%,-50%) scale(.6); opacity: 1; } to { transform: translate(-50%,-50%) scale(1.25); opacity: 0; } }
 
-/* Arrival title */
-#arrival { position: fixed; left: 0; right: 0; top: 57%; display: flex; flex-direction: column; align-items: center; gap: 4px; text-shadow: 0 0 2px rgba(0,0,0,.6), 0 2px 18px rgba(0,0,0,.9), 0 0 40px rgba(5,7,13,.8); pointer-events: none; z-index: 3; padding-inline: 16px; text-align: center; }
-#arrival .name { font-size: 40px; font-weight: 700; letter-spacing: -0.6px; text-wrap: balance; }
-#arrival .region { font-size: 15px; color: var(--text-2); }
-#arrival .coords { font-size: 12px; color: var(--text-3); }
-
 /* Start screen */
 #start { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: var(--st) var(--sr) var(--sb) var(--sl); pointer-events: none; }
 #start::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 520px 420px at 50% 46%, rgba(5,7,13,0.55), rgba(5,7,13,0) 100%); }
@@ -176,7 +170,7 @@ button:disabled { cursor: default; }
 /* Explore UI */
 #ui { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
 #ui > * { pointer-events: auto; }
-.sidebar { position: absolute; left: var(--sl); top: var(--st); bottom: var(--sb); width: 296px; box-sizing: border-box; padding: 20px 16px 16px; display: flex; flex-direction: column; gap: 18px; border-radius: 24px; overflow-y: auto; }
+.sidebar { position: absolute; left: var(--sl); top: var(--st); max-height: calc(100vh - var(--st) - var(--sb)); width: 296px; box-sizing: border-box; padding: 20px 16px 16px; display: flex; flex-direction: column; gap: 18px; border-radius: 24px; overflow-y: auto; }
 .brand h2 { margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
 .live { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-3); margin-top: 4px; }
 .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--c-radio); flex-shrink: 0; }
@@ -199,8 +193,33 @@ button:disabled { cursor: default; }
 .switch:disabled { opacity: .45; }
 .switch-hit { display: grid; place-items: center; width: 44px; height: 44px; margin: 0 -3px; }
 .note { margin: 4px 6px 0; font-size: 12px; line-height: 1.45; color: var(--text-4); }
+.side-top { display: flex; flex-direction: column; gap: 10px; }
 .btn-wonder { height: 44px; border: 1px solid var(--edge-strong); border-radius: 22px; background: transparent; font-size: 14px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; }
 .btn-wonder:hover { background: var(--hover); }
+.quick { display: flex; flex-direction: column; gap: 8px; }
+.quick-btn svg { flex-shrink: 0; }
+.quick-btn { flex: 1; min-width: 0; height: 40px; padding: 0 14px; border: 1px solid var(--edge-strong); border-radius: 20px; background: transparent; font-size: 13.5px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 7px; white-space: nowrap; }
+.quick-btn:hover { background: var(--hover); }
+.quick-btn[aria-expanded="true"] { background: rgba(255,255,255,0.14); border-color: transparent; }
+.quick-btn.rec { color: #FFE7A8; border-color: rgba(255,214,10,0.45); background: rgba(255,214,10,0.08); }
+.quick-btn.rec[aria-expanded="true"] { background: rgba(255,214,10,0.2); }
+.quick-btn .sh { display: none; }
+.quick-btn .chev { transition: transform .2s; opacity: .7; margin-left: auto; }
+.quick-btn { justify-content: flex-start; }
+.quick-btn .lg { flex: 1; text-align: left; }
+.quick-btn[aria-expanded="true"] .chev { transform: rotate(180deg); }
+.layers { display: flex; flex-direction: column; gap: 18px; }
+.records { display: flex; flex-direction: column; gap: 10px; }
+.rec-lead { margin: 0 4px; font-size: 13px; color: var(--text-3); line-height: 1.45; }
+.rec-surprise { flex: none; height: 44px; font-size: 14px; }
+.rec-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.rec-list button { width: 100%; display: flex; align-items: center; gap: 12px; padding: 6px; border: 0; border-radius: 12px; background: none; text-align: left; }
+.rec-list button:hover, .rec-list button:focus-visible { background: var(--hover); }
+.rec-th { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: rgba(255,255,255,0.08); display: grid; place-items: center; color: #FFE7A8; }
+.rec-tx { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.rec-tx b { font-size: 14px; font-weight: 600; }
+.rec-tx small { font-size: 12px; color: var(--text-3); line-height: 1.35; }
+.rec-tx .v { color: var(--text-2); font-family: var(--mono); font-size: 11.5px; }
 .side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 6px; padding: 12px 4px 0; border-top: 1px solid rgba(255,255,255,0.1); font-size: 12px; color: var(--text-3); line-height: 1.45; }
 .side-foot nav { display: flex; gap: 12px; flex-wrap: wrap; }
 .side-foot button { border: 0; background: none; padding: 0; color: var(--link); font-size: 12px; min-height: 24px; }
@@ -225,15 +244,6 @@ body.flat .m-view .ico-globe { display: block; }
 #help h3 { margin: 0 0 8px; font-size: 15px; color: var(--text); }
 #help ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
 
-/* Arrival layer picker */
-#picker { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(var(--sb) + 24px); display: flex; flex-direction: column; align-items: center; gap: 12px; z-index: 6; width: max-content; max-width: calc(100vw - 32px); }
-#picker.is-out { transform: translate(-50%, 8px); }
-#picker > span { font-size: 13px; font-weight: 600; color: var(--text-2); text-shadow: 0 1px 8px rgba(0,0,0,.8); }
-.pick { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 8px; border-radius: 28px; border-color: rgba(255,255,255,0.14); }
-.pick button { height: 44px; padding: 0 16px 0 12px; display: flex; align-items: center; gap: 8px; border: 0; border-radius: 22px; background: var(--hover); font-size: 15px; font-weight: 500; }
-.pick button:hover { background: rgba(255,255,255,0.14); }
-.pick button.primary { background: rgba(48,209,88,0.2); box-shadow: inset 0 0 0 1.5px var(--c-radio); font-weight: 600; }
-.pick button.all { background: transparent; color: var(--text-3); padding: 0 16px; }
 .sw { width: 10px; height: 10px; border-radius: 5px; flex-shrink: 0; }
 
 /* Wonder card */
@@ -245,6 +255,8 @@ body.flat .m-view .ico-globe { display: block; }
 .x:hover { background: var(--hover); }
 #wonder h2 { margin: 0; font-size: 28px; font-weight: 700; line-height: 1.2; letter-spacing: -0.4px; text-wrap: balance; }
 #wonder p.body { margin: 10px 0 0; font-size: 15px; line-height: 1.55; color: var(--text-2); }
+.w-cmp { margin: 0; padding: 12px 14px; border-radius: 14px; background: rgba(255,214,10,0.1); border: 1px solid rgba(255,214,10,0.28); font-size: 15px; line-height: 1.45; font-weight: 600; color: #FFF1C7; }
+.w-cmp::before { content: "Picture this"; display: block; margin-bottom: 2px; font-size: 11px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; color: #FFD60A; }
 #wonder dl { margin: 0; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 12px; padding: 14px 0; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); }
 #wonder dl div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 #wonder dt { font-size: 12px; color: var(--text-3); }
@@ -350,12 +362,13 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 .dlg .tabs button[aria-selected="true"] { background: rgba(255,255,255,0.16); border-color: transparent; font-weight: 600; }
 
 /* Place popup: hovers over the place it belongs to */
-#place-pop { position: fixed; left: 0; top: 0; z-index: 4; width: 300px; box-sizing: border-box; padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 8px; border-radius: 20px; transform-origin: 0 0; transition: opacity .25s ease; will-change: transform; }
+#place-pop { position: fixed; left: 0; top: 0; z-index: 4; width: 320px; max-height: calc(100vh - 24px); overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; padding: 14px 16px 12px; display: flex; flex-direction: column; gap: 8px; border-radius: 20px; transform-origin: 0 0; transition: opacity .25s ease; will-change: transform; }
 #place-pop.is-out { opacity: 0; pointer-events: none; }
 #place-pop::after { content: ""; position: absolute; left: calc(var(--ax, 150px) - 9px); bottom: -9px; width: 16px; height: 16px; background: inherit; border: inherit; border-top: 0; border-left: 0; transform: rotate(45deg); clip-path: polygon(100% 0, 100% 100%, 0 100%); border-bottom-right-radius: 4px; backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; }
 #place-pop.below::after { bottom: auto; top: -9px; transform: rotate(225deg); }
 #place-pop .w-top > span { display: flex; align-items: center; gap: 6px; }
-#place-pop .x { width: 36px; height: 36px; margin: -8px -8px -8px 0; }
+#place-pop .x { width: 40px; height: 40px; margin: -10px -10px -8px 0; background: rgba(255,255,255,0.1); color: var(--text); }
+#place-pop .x:hover { background: rgba(255,255,255,0.2); }
 #place-pop h2 { margin: -4px 0 0; font-size: 20px; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
 #place-pop .pp-sub { margin: 0; font-size: 13px; color: var(--text-2); }
 .pp-wx { display: grid; grid-template-columns: auto 1fr; align-items: center; column-gap: 12px; padding: 10px 0 2px; border-top: 1px solid rgba(255,255,255,0.1); min-height: 44px; }
@@ -372,6 +385,62 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 .pp-links a { display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 11px; border-radius: 15px; border: 1px solid var(--edge-strong); color: var(--link); font-size: 12.5px; font-weight: 600; text-decoration: none; }
 .pp-links a:hover { background: var(--hover); }
 #place-pop .w-src { font-size: 11px; }
+/* Discover here (F-25) */
+.disc { display: flex; flex-direction: column; gap: 4px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); touch-action: pan-y; }
+.disc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+.disc-top h3 { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; color: var(--c-place); }
+.disc-nav { display: flex; align-items: center; gap: 2px; font-size: 12px; color: var(--text-3); }
+.disc-nav button { width: 32px; height: 32px; border: 0; border-radius: 16px; background: rgba(255,255,255,0.08); color: var(--text); display: grid; place-items: center; padding: 0; }
+.disc-nav button:hover { background: rgba(255,255,255,0.16); }
+.disc-nav span { min-width: 34px; text-align: center; }
+.disc-pic { aspect-ratio: 16 / 8.5; border-radius: 12px; overflow: hidden; background: rgba(255,255,255,0.06); margin-bottom: 4px; }
+.disc-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.disc-kind { font-size: 11.5px; font-weight: 600; color: var(--text-3); }
+.disc-t { font-size: 16px; font-weight: 700; line-height: 1.25; }
+.disc-x { margin: 0; font-size: 13px; line-height: 1.45; color: var(--text-2); }
+.disc-go { align-self: flex-start; margin-top: 6px; height: 36px; padding: 0 14px; border: 0; border-radius: 18px; background: var(--action); color: #fff; font-size: 13.5px; font-weight: 600; display: inline-flex; align-items: center; gap: 7px; }
+.disc-go:hover { filter: brightness(1.12); }
+.disc-cr { margin: 4px 0 0; font-size: 10.5px; line-height: 1.4; color: var(--text-4); }
+.disc-cr a { color: inherit; }
+.pp-acts { display: flex; gap: 6px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1); }
+.pp-act { flex: 1; height: 36px; padding: 0 10px; border: 1px solid var(--edge-strong); border-radius: 18px; background: transparent; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; }
+.pp-act:hover { background: var(--hover); }
+#pp-radio { border-color: color-mix(in srgb, var(--c-radio) 55%, transparent); }
+#pp-radio[aria-expanded="true"] { background: rgba(48,209,88,0.16); }
+.pp-radio { display: flex; flex-direction: column; gap: 4px; }
+.pp-rh { font-size: 12px; color: var(--text-3); line-height: 1.4; }
+.pp-radio ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.pp-radio li button { width: 100%; min-height: 42px; display: flex; align-items: center; gap: 10px; border: 0; background: none; padding: 0 4px; border-radius: 10px; text-align: left; font-size: 13px; color: var(--text); }
+.pp-radio li button:hover, .pp-radio li button[aria-current="true"] { background: var(--hover); }
+.pp-radio .pl { width: 28px; height: 28px; border-radius: 14px; background: var(--c-radio); color: #05070D; display: grid; place-items: center; flex-shrink: 0; }
+.pp-radio .n { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.pp-radio .n b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pp-radio .n small { font-size: 11.5px; color: var(--text-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pp-radio .d { color: var(--text-3); font-size: 11.5px; }
+.pp-radio .link-inline { align-self: flex-start; margin: 2px 4px 0; }
+.pp-more { border-top: 1px solid rgba(255,255,255,0.1); }
+.pp-more summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; min-height: 36px; font-size: 13px; font-weight: 600; color: var(--text-2); }
+.pp-more summary::-webkit-details-marker { display: none; }
+.pp-more summary .chev { transition: transform .2s; opacity: .7; }
+.pp-more[open] summary .chev { transform: rotate(180deg); }
+.pp-more[open] { display: flex; flex-direction: column; gap: 8px; padding-bottom: 2px; }
+#place-pop .pp-more dl { border-bottom: 0; padding-top: 0; border-top: 0; }
+/* Tip detail card */
+#tip { position: fixed; right: calc(var(--sr) + 32px); top: 50%; transform: translateY(-50%); width: 380px; max-height: calc(100vh - 120px); overflow-y: auto; box-sizing: border-box; padding: 0; border-radius: 22px; border-color: rgba(255,255,255,0.14); box-shadow: 0 24px 80px rgba(0,0,0,0.55); z-index: 8; display: flex; flex-direction: column; }
+#tip.is-out { transform: translateY(calc(-50% + 8px)); }
+.tip-pic { aspect-ratio: 16 / 9; background: rgba(255,255,255,0.06); flex-shrink: 0; }
+.tip-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tip-body { padding: 18px 22px 16px; display: flex; flex-direction: column; gap: 4px; }
+.tip-body .w-top span { color: var(--c-place); font-size: 11.5px; letter-spacing: 1.1px; text-transform: uppercase; font-weight: 700; }
+#tip .x { background: rgba(255,255,255,0.1); color: var(--text); width: 40px; height: 40px; margin: -8px -10px -8px 0; }
+#tip h2 { margin: 2px 0 0; font-size: 24px; font-weight: 700; line-height: 1.2; letter-spacing: -0.3px; }
+.tip-where { font-size: 13px; color: var(--text-3); }
+.tip-text { margin: 8px 0 0; font-size: 15px; line-height: 1.5; color: var(--text); }
+.tip-more { margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: var(--text-2); }
+.tip-acts { display: flex; gap: 8px; margin-top: 14px; }
+.tip-acts .btn-line { flex: 1; min-width: 0; height: 42px; padding: 0 12px; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.tip-acts .btn-line span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tip-foot { margin-top: 10px; }
 
 /* Display settings */
 #settings { position: absolute; right: var(--sr); top: calc(var(--st) + 56px); width: min(320px, calc(100vw - 32px)); box-sizing: border-box; padding: 16px; border-radius: 22px; display: flex; flex-direction: column; gap: 10px; max-height: calc(100vh - 100px); overflow-y: auto; }
@@ -391,13 +460,13 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 
 /* Panel size (desktop and tablet): panels scale around the corner they are pinned to */
 @media (min-width: 768px) {
-  .sidebar { scale: var(--win); transform-origin: 0 0; bottom: auto; height: calc((100vh - var(--st) - var(--sb)) / var(--win)); }
+  .sidebar { scale: var(--win); transform-origin: 0 0; max-height: calc((100vh - var(--st) - var(--sb)) / var(--win)); }
   .toolbar { scale: var(--win); transform-origin: 100% 0; }
   #help, #settings { scale: var(--win); transform-origin: 100% 0; top: calc(var(--st) + 56px * var(--win)); }
   #settings { max-height: calc((100vh - 100px) / var(--win)); }
   #insp { scale: var(--win); transform-origin: 100% 0; top: calc(var(--st) + 56px * var(--win)); max-height: calc((100vh - 140px) / var(--win)); }
-  #player, #picker { scale: var(--win); transform-origin: 50% 100%; }
-  #wonder { scale: var(--win); transform-origin: 100% 50%; max-height: calc((100vh - 120px) / var(--win)); }
+  #player { scale: var(--win); transform-origin: 50% 100%; }
+  #wonder, #tip { scale: var(--win); transform-origin: 100% 50%; max-height: calc((100vh - 120px) / var(--win)); }
 }
 
 /* Mobile */
@@ -415,8 +484,6 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   .start-actions .link-btn + .sep + .link-btn, .start-actions .m-only { border-top: 1px solid rgba(255,255,255,0.1); }
   .start-foot .claim { display: none; }
   .m-only { display: inline-flex; }
-  #arrival { top: 54%; }
-  #arrival .name { font-size: 32px; }
   .toolbar .seg, .toolbar .tn { display: none; }
   .toolbar .round.m-view { display: grid; }
   .toolbar { flex-direction: column; gap: 0; border-radius: 22px; background: var(--glass-soft); backdrop-filter: blur(24px) saturate(1.4); -webkit-backdrop-filter: blur(24px) saturate(1.4); border: 1px solid var(--edge); overflow: hidden; top: calc(var(--st) + 42px); }
@@ -436,10 +503,23 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   #help, #settings { top: calc(var(--st) + 42px); right: calc(var(--sr) + 54px); width: min(300px, calc(100vw - 32px - 54px)); }
   #settings { max-height: calc(100vh - var(--st) - 200px); }
   .set-row.desk { display: none; }
-  #place-pop { width: min(300px, calc(100vw - 24px)); }
-  #picker { bottom: calc(var(--sb) + 132px); }
-  .pick { border-radius: 24px; }
-  .pick button { font-size: 14px; }
+  /* the place popup becomes a sheet at the bottom; the place moves up into the free part of the screen */
+  #place-pop { left: 8px !important; right: 8px; top: auto !important; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); width: auto; max-height: 66vh; transform: none !important; border-radius: 28px; padding: 14px 18px 12px; visibility: visible !important; transition: opacity .25s ease, translate .25s ease; }
+  #place-pop::after { display: none; }
+  #place-pop.is-out { translate: 0 12px; }
+  .disc-pic { aspect-ratio: 16 / 7.5; }
+  #tip { left: 8px; right: 8px; top: auto; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); transform: none; width: auto; max-height: 64vh; border-radius: 28px; }
+  #tip.is-out { transform: translateY(12px); }
+  .tip-pic { aspect-ratio: 16 / 7; }
+  #tip h2 { font-size: 21px; }
+  .tip-body { padding: 14px 18px 14px; }
+  .side-top { flex-direction: row; align-items: center; gap: 8px; }
+  .side-top .side-search { flex: 1; min-width: 0; }
+  .quick { flex-direction: row; flex-shrink: 0; gap: 6px; }
+  .quick-btn { height: 40px; padding: 0 12px; justify-content: center; }
+  .quick-btn .lg, .quick-btn .chev { display: none; }
+  .quick-btn .sh { display: inline; }
+  #layers-btn { width: 40px; padding: 0; flex: none; }
   #wonder { left: 8px; right: 8px; top: auto; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); transform: none; width: auto; max-height: 64vh; padding: 20px; gap: 14px; border-radius: 30px; }
   #wonder.is-out { transform: translateY(12px); }
   #wonder h2 { font-size: 23px; }
@@ -460,12 +540,6 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
 <div id="nogl" hidden><p>Your browser can’t use WebGL right now, and the globe needs it. Try a current browser or turn on hardware acceleration.</p></div>
 
 <div class="marker" id="marker" hidden><span class="r3"></span><span class="r2"></span><span class="r1"></span></div>
-
-<div id="arrival" class="fade is-out" aria-live="polite">
-  <span class="name" id="arr-name">Bielefeld</span>
-  <span class="region" id="arr-region">North Rhine-Westphalia, Germany</span>
-  <span class="coords mono" id="arr-coords">52.03° N · 8.53° E</span>
-</div>
 
 <!-- Start screen -->
 <div id="start" class="fade">
@@ -552,6 +626,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <h2>World in a Nutshell</h2>
       <div class="live"><span class="dot"></span><span class="clock">Live</span></div>
     </div>
+    <div class="side-top">
     <div class="side-search">
       <label class="field" for="q2">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A1A1AA" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
@@ -559,6 +634,17 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       </label>
       <ul class="suggest" id="q2-list" role="listbox" aria-label="Suggestions" hidden></ul>
     </div>
+    <div class="quick">
+      <button type="button" class="quick-btn rec" id="rec-btn" aria-expanded="false" aria-controls="records"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg><span class="lg">Wonders &amp; records</span><span class="sh">Wonders</span></button>
+      <button type="button" class="quick-btn" id="layers-btn" aria-expanded="false" aria-controls="layers" aria-label="All layers"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg><span class="lg">All layers</span><svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+    </div>
+    </div>
+    <div class="records" id="records" hidden>
+      <p class="rec-lead">Extremes of our planet. Pick one, or let chance decide.</p>
+      <button type="button" class="btn-primary rec-surprise" data-act="wonder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>Surprise me</button>
+      <ul class="rec-list" id="rec-list" aria-label="Wonders and records"></ul>
+    </div>
+    <div class="layers" id="layers" hidden>
     <section class="sec" aria-labelledby="h-layers">
       <h3 id="h-layers">Layers</h3>
       <div class="row off" data-layer="air"><span class="ico" style="background:var(--c-air)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><path d="M21 15.5v-2L13.5 9V3.8a1.5 1.5 0 00-3 0V9L3 13.5v2l7.5-2.3V18L8.5 19.5V21l3.5-1 3.5 1v-1.5L13.5 18v-4.8z"/></svg></span><span class="nm">Aircraft</span><span class="ct mono">–</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="false" aria-label="Show aircraft" data-layer-switch="air"></button></span></div>
@@ -627,7 +713,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
       <div class="row"><span class="ico" style="background:var(--c-place)"><svg width="15" height="15" viewBox="0 0 24 24" fill="#05070D" aria-hidden="true"><circle cx="12" cy="12" r="5"/></svg></span><span class="nm">Capitals</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show capitals" data-toggle="capitals"></button></span></div>
       <div class="row"><span class="ico" style="background:rgba(255,255,255,0.14)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F5F5F7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20L10 4M14 4l6 16M12 7v2M12 12v2M12 17v2"/></svg></span><span class="nm">Local names &amp; roads</span><span class="switch-hit"><button type="button" class="switch" role="switch" aria-checked="true" aria-label="Show towns, peaks, roads and borders when zoomed in close" data-toggle="local"></button></span></div>
     </section>
-    <button type="button" class="btn-wonder" data-act="wonder"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/><path d="M19 16l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></svg>Surprise me</button>
+    </div>
     <footer class="side-foot">
       <span>Open · Free · No sign-up</span>
       <nav aria-label="Legal"><button type="button" data-dlg="quellen">Sources &amp; licences</button><button type="button" data-dlg="impressum">Legal notice</button><button type="button" data-dlg="datenschutz">Privacy</button></nav>
@@ -672,18 +758,6 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   <p class="attrib">Earth: NASA Blue Marble &amp; Black Marble · Places: GeoNames (CC BY 4.0) · Outlines: Natural Earth · Clouds: <span id="attrib-clouds">placeholder</span><span id="attrib-tiles" hidden> · Close-up: <a href="https://s2maps.eu" target="_blank" rel="noopener noreferrer">Sentinel-2 cloudless 2016</a> by EOX IT Services GmbH (CC BY 4.0, contains modified Copernicus Sentinel data 2016)</span><span id="attrib-osm" hidden> · Names &amp; roads: <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a>, <a href="https://openfreemap.org" target="_blank" rel="noopener noreferrer">OpenFreeMap</a></span><span id="attrib-live"></span></p>
 </div>
 
-<!-- Arrival layer picker -->
-<section id="picker" class="fade is-out" aria-label="Choose layers" hidden>
-  <span>What would you like to discover here?</span>
-  <div class="pick glass" role="group" aria-label="Layers">
-    <button type="button" class="primary" data-layer-pick="radio"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--c-radio)" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.5 5.5 0 000 8M16 8a5.5 5.5 0 010 8M5 5a9.5 9.5 0 000 14M19 5a9.5 9.5 0 010 14"/></svg>Radio nearby</button>
-    <button type="button" data-layer-pick="air"><span class="sw" style="background:var(--c-air)"></span>Aircraft</button>
-    <button type="button" data-layer-pick="sat"><span class="sw" style="background:var(--c-sat)"></span>Satellites</button>
-    <button type="button" data-layer-pick="quake"><span class="sw" style="background:var(--c-quake)"></span>Earthquakes</button>
-    <button type="button" class="all" data-layer-pick="all">All layers</button>
-  </div>
-</section>
-
 <!-- Wonder card -->
 <article id="wonder" class="glass fade is-out" aria-labelledby="w-head" hidden>
   <div class="pod-pics w-pics" id="w-pics" aria-roledescription="carousel" aria-label="Pictures of this wonder" hidden>
@@ -693,6 +767,7 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   </div>
   <div class="w-top"><span id="w-cat">Wonders &amp; records</span><button type="button" class="x" aria-label="Close card" data-act="stay"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
   <div><h2 id="w-head"></h2><p class="body" id="w-body"></p></div>
+  <p class="w-cmp" id="w-cmp" hidden></p>
   <dl><div><dt>Place</dt><dd id="w-place"></dd></div><div><dt id="w-stat-l"></dt><dd class="mono" id="w-stat-v"></dd></div></dl>
   <div>
     <button type="button" class="w-link" id="w-pair"><span class="sw" style="background:var(--c-quake)"></span><span class="t" id="w-pair-t"></span><svg width="10" height="16" viewBox="0 0 10 16" fill="none" stroke="#8E8E98" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 2l6 6-6 6"/></svg></button>
@@ -730,10 +805,49 @@ dialog::backdrop { background: rgba(5,7,13,0.6); }
   <h2 id="pp-head"></h2>
   <p class="pp-sub" id="pp-sub"></p>
   <div class="pp-wx" id="pp-wx" aria-live="polite"></div>
-  <dl id="pp-dl"></dl>
-  <div class="pp-links" id="pp-links"></div>
-  <span class="w-src" id="pp-src"></span>
+  <section class="disc" id="pp-disc" aria-roledescription="carousel" aria-labelledby="disc-h" hidden>
+    <div class="disc-top"><h3 id="disc-h">Discover here</h3><span class="disc-nav" id="disc-nav"><button type="button" data-disc="-1" aria-label="Previous tip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><span class="mono" id="disc-n" aria-live="polite"></span><button type="button" data-disc="1" aria-label="Next tip"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></span></div>
+    <div class="disc-pic" id="disc-pic"><img id="disc-img" alt="" decoding="async"></div>
+    <span class="disc-kind" id="disc-kind"></span>
+    <b class="disc-t" id="disc-t"></b>
+    <p class="disc-x" id="disc-x"></p>
+    <button type="button" class="disc-go" id="disc-go"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>Visit on the globe</button>
+    <p class="disc-cr" id="disc-cr"></p>
+  </section>
+  <div class="pp-acts">
+    <button type="button" class="pp-act" id="pp-radio" aria-expanded="false" aria-controls="pp-radio-box"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--c-radio)" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="2"/><path d="M8 8a5.5 5.5 0 000 8M16 8a5.5 5.5 0 010 8M5 5a10 10 0 000 14M19 5a10 10 0 010 14"/></svg>Radio nearby</button>
+    <button type="button" class="pp-act" data-open-layers><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>All layers</button>
+  </div>
+  <div class="pp-radio" id="pp-radio-box" hidden>
+    <span class="pp-rh" id="pp-rh"></span>
+    <ul id="pp-rl"></ul>
+    <button type="button" class="link-inline" id="pp-rall">Show all stations of the world on the globe</button>
+  </div>
+  <details class="pp-more" id="pp-more">
+    <summary>City details<svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+    <dl id="pp-dl"></dl>
+    <div class="pp-links" id="pp-links"></div>
+    <span class="w-src" id="pp-src"></span>
+  </details>
 </section>
+
+<!-- Detail card of a tip from "Discover here" -->
+<article id="tip" class="glass fade is-out" aria-labelledby="tip-h" hidden>
+  <div class="tip-pic" id="tip-pic"><img id="tip-img" alt="" decoding="async"></div>
+  <div class="tip-body">
+    <div class="w-top"><span id="tip-kind"></span><button type="button" class="x" aria-label="Close" id="tip-close"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <h2 id="tip-h"></h2>
+    <span class="tip-where" id="tip-where"></span>
+    <p class="tip-text" id="tip-text"></p>
+    <p class="tip-more" id="tip-more"></p>
+    <div class="tip-acts">
+      <button type="button" class="btn-line" id="tip-back"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg><span id="tip-back-t">Back</span></button>
+      <button type="button" class="btn-line" id="tip-next"><span>Next tip</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+    </div>
+    <div class="tip-foot"><a class="pod-wiki" id="tip-wiki" href="#" target="_blank" rel="noopener noreferrer">Wikipedia ↗</a></div>
+    <p class="pod-credit" id="tip-cr"></p>
+  </div>
+</article>
 
 <div id="toast" class="glass fade is-out" role="status"></div>
 
@@ -1690,24 +1804,13 @@ function makeCombo(input, list, onPick) {
 
 /* ---------- App state ---------- */
 let mode = 'start';
-let pickerTimer;
 function hideStart() {
   $('#start').classList.add('is-out'); $('#start-foot').classList.add('is-out');
   setTimeout(() => { $('#start').hidden = true; $('#start-foot').hidden = true; }, 500);
 }
 function showUI() { $('#ui').hidden = false; }
-function showArrival(p) {
-  $('#arr-name').textContent = p.label || p.name;
-  $('#arr-region').textContent = p.sub || ctx(p);
-  $('#arr-coords').textContent = fmtCoord(p.lat, p.lon);
-  const a = $('#arrival'); a.classList.remove('is-out');
-  setTimeout(() => a.classList.add('is-out'), 3600);
-  clearTimeout(pickerTimer);
-  pickerTimer = setTimeout(() => { const pk = $('#picker'); pk.hidden = false; requestAnimationFrame(() => pk.classList.remove('is-out')); }, reduceMotion ? 300 : 1200);
-}
-function hidePicker() { const pk = $('#picker'); pk.classList.add('is-out'); setTimeout(() => { if (pk.classList.contains('is-out')) pk.hidden = true; }, 450); }
 function goToPlace(p, opts = {}) {
-  closeWonder(true);
+  closeWonder(true); closeTip(true); tipShown = null; markerTip = null;
   if (mode === 'start') hideStart();
   mode = 'explore';
   showOutline(null);
@@ -1717,8 +1820,19 @@ function goToPlace(p, opts = {}) {
   currentPlace = p;
   if (L.radio.on && L.radio.loaded) showNearby();
   if (!opts.keepHash) try { history.replaceState(null, '', '#' + slug(p)); } catch {}
-  $('#picker').classList.add('is-out');
-  flyTo(p.lat, p.lon, innerWidth < 768 ? 2.0 : 1.75, () => { showUI(); showArrival(p); });
+  if (innerWidth < 768) openPanel(null);
+  loadDiscover(); // the tips load during the flight
+  // a calm landing: when the flight ends, only the popup of the place opens
+  flyTo(p.lat, p.lon, innerWidth < 768 ? 2.0 : 1.75, () => { showUI(); showPlaceInfo(p); });
+}
+// "Explore freely": no place chosen, the Earth seen from space
+function goExplore() {
+  closeWonder(true); closeTip(true); tipShown = null; markerTip = null; closePlacePop();
+  if (mode === 'start') hideStart();
+  mode = 'explore';
+  showOutline(null); setMarker(null); currentPlace = null; here = null;
+  try { history.replaceState(null, '', location.pathname + location.search); } catch {}
+  showUI();
 }
 
 /* ---------- Wonders ---------- */
@@ -1780,8 +1894,7 @@ function openWonder(w) {
   current = w;
   if (mode === 'start') hideStart();
   mode = 'wonder';
-  hidePicker();
-  $('#arrival').classList.add('is-out');
+  closePlacePop(); closeTip(true); tipShown = null; markerTip = null;
   const card = $('#wonder');
   card.classList.add('is-out');
   if (w.shape === 'region') { buildOutline(w.id, w.id === 'antarktis' ? 0xF5F5F7 : 0xFFD8A0); showOutline(w.id); setMarker(null); }
@@ -1794,6 +1907,7 @@ function openWonder(w) {
     $('#w-cat').textContent = 'Wonders & records · ' + w.category + (innerWidth < 768 ? ` · ${wIdx + 1}/${order.length}` : '');
     $('#w-head').textContent = w.headline;
     $('#w-body').textContent = w.body;
+    $('#w-cmp').textContent = w.compare || ''; $('#w-cmp').hidden = !w.compare;
     $('#w-place').textContent = w.place + (w.where ? ' · ' + w.where : '');
     $('#w-stat-l').textContent = w.stat.label;
     $('#w-stat-v').textContent = w.stat.value;
@@ -1909,7 +2023,7 @@ makeCombo($('#q2'), $('#q2-list'), p => goToPlace(p));
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-act]'); if (!b) return;
   const act = b.dataset.act;
-  if (act === 'explore') goToPlace(BIELEFELD);
+  if (act === 'explore') goExplore();
   else if (act === 'locate') locate();
   else if (act === 'pod-visit' && pod) { clearInterval(podTimer); goToPlace({ name: pod.name, label: pod.name, sub: pod.where, lat: pod.lat, lon: pod.lon }); }
   else if (act === 'wonder') nextWonder();
@@ -1919,7 +2033,8 @@ document.addEventListener('click', e => {
 $('#w-pair').addEventListener('click', e => nextWonder(e.currentTarget.dataset.id));
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
-  if (mode === 'start' && $('#q-list').hidden) goToPlace(BIELEFELD);
+  if (mode === 'start' && $('#q-list').hidden) goExplore();
+  else if (!$('#tip').hidden) closeTip();
   else if (mode === 'wonder') closeWonder();
   else if (shownPlace) closePlacePop();
   else closePopovers();
@@ -1944,25 +2059,14 @@ document.addEventListener('click', e => {
   const cur = (t.getAttribute('aria-checked') ?? t.getAttribute('aria-pressed')) === 'true';
   setToggle(t.dataset.toggle, !cur);
 });
-// layer picker after arrival
-document.addEventListener('click', e => {
-  const b = e.target.closest('[data-layer-pick]'); if (!b) return;
-  hidePicker();
-  const sb = $('#sidebar'); sb.classList.remove('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'true');
-  const k = b.dataset.layerPick;
-  const keys = k === 'all' ? ['air', 'sat', 'quake', 'radio'] : [k];
-  Promise.all(keys.map(x => L[x].on ? null : setLayer(x, true))).then(() => { if (keys.includes('radio') && L.radio.loaded) showNearby(); });
-  const row = k !== 'all' && $(`.row[data-layer="${k}"]`);
-  if (row) { row.style.background = 'rgba(255,255,255,0.08)'; setTimeout(() => row.style.background = '', 2500); }
-});
 // mobile sheet
 $('#sheet-handle').addEventListener('click', () => {
-  const sb = $('#sidebar'); const open = sb.classList.toggle('collapsed') === false;
-  if (open) hidePicker();
+  const open = $('#sidebar').classList.contains('collapsed');
+  openPanel(open ? ($('#records').hidden ? 'layers' : 'records') : null);
   $('#sheet-handle').setAttribute('aria-expanded', String(open));
   $('#sheet-handle').setAttribute('aria-label', open ? 'Collapse panel' : 'Expand panel');
 });
-$('#q2').addEventListener('focus', () => { const sb = $('#sidebar'); if (innerWidth < 768) { hidePicker(); sb.classList.remove('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'true'); } });
+$('#q2').addEventListener('focus', () => { const sb = $('#sidebar'); if (innerWidth < 768) { sb.classList.remove('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'true'); } });
 // help and display settings: small popovers under the toolbar, one at a time
 function closePopovers(except) {
   for (const [box, btn] of [['#help', '#help-btn'], ['#settings', '#set-btn']]) if (box !== except) { $(box).hidden = true; $(btn).setAttribute('aria-expanded', 'false'); }
@@ -2517,7 +2621,7 @@ let downAt = null;
 canvas.addEventListener('pointerdown', e => { downAt = [e.clientX, e.clientY]; });
 canvas.addEventListener('pointerup', e => {
   if (!downAt || Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]) > 6) return;
-  if (hitMarker(e.clientX, e.clientY)) { showPlaceInfo(currentPlace); return; }
+  if (hitMarker(e.clientX, e.clientY)) { if (markerTip) { if (tipShown) openTipCard(); } else showPlaceInfo(currentPlace); return; }
   const hit = pick(e.clientX, e.clientY);
   if (hit?.group) {
     // zoom into a group of stations
@@ -2634,7 +2738,7 @@ function select(key, i) {
   if (key === 'air') airDetails(it);
   closePopovers();
   const box = $('#insp'); box.hidden = false; requestAnimationFrame(() => box.classList.remove('is-out'));
-  if (innerWidth < 768) { hidePicker(); $('#sidebar').classList.add('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'false'); }
+  if (innerWidth < 768) { $('#sidebar').classList.add('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'false'); }
 }
 function closeInspector() {
   selected = null; hideIssOrbit(); hideRoute(); if (cableSel) cableSel.visible = false;
@@ -3702,7 +3806,10 @@ function showPlaceInfo(p) {
   pop.hidden = false; popW = pop.offsetWidth; popH = pop.offsetHeight; placePop();
   requestAnimationFrame(() => pop.classList.remove('is-out'));
   panForPop();
-  if (innerWidth < 768) { hidePicker(); $('#sidebar').classList.add('collapsed'); $('#sheet-handle').setAttribute('aria-expanded', 'false'); }
+  // fresh state for this place: tips first, radio closed, details folded
+  $('#pp-radio').setAttribute('aria-expanded', 'false'); $('#pp-radio-box').hidden = true; $('#pp-disc').hidden = true; $('#pp-more').open = false;
+  renderDiscover(p);
+  if (innerWidth < 768) openPanel(null);
   // air quality (CAMS) of the place, second small request
   getJSON(`https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${p.lat.toFixed(3)}&longitude=${p.lon.toFixed(3)}&current=european_aqi,pm2_5,pm10`, 8000).then(j => {
     if (shownPlace !== p) return;
@@ -3732,12 +3839,212 @@ function showPlaceInfo(p) {
 function closePlacePop() {
   if (!shownPlace) return;
   shownPlace = null; popAt = null; popTz = null; clearInterval(popTimer);
+  if (innerWidth < 768 && $('#wonder').hidden && $('#tip').hidden) setFocus(0, 0);
   pop.classList.add('is-out'); setTimeout(() => { if (!shownPlace) pop.hidden = true; }, 260);
 }
 $('#pp-close').addEventListener('click', closePlacePop);
+
+/* ---------- Discover here: curated local tips in the place popup (F-25) ---------- */
+// site/data/discover.json holds the tips (our texts); the Action adds one Commons photo per tip
+let discData = null, discPics = null, discTips = [], discIdx = 0, discCity = null;
+const loadDiscover = () => discData ||= Promise.all([
+  fetch('data/discover.json').then(r => r.ok ? r.json() : { cities: [] }).catch(() => ({ cities: [] })),
+  fetch('data/live/discover-pictures.json').then(r => r.ok ? r.json() : { items: [] }).catch(() => ({ items: [] }))
+]).then(([d, pics]) => { discPics = new Map((pics.items || []).map(x => [x.id, x])); return d.cities || []; });
+// the curated city a place belongs to: the nearest one within its radius
+function discoverCity(cities, p) {
+  let best = null, bd = Infinity;
+  for (const c of cities) { const d = distKm(p.lat, p.lon, c.lat, c.lon); if (d <= c.r && d < bd) { bd = d; best = c; } }
+  return best;
+}
+const KIND = { sight: 'Sight', person: 'Person & place', surprise: 'Surprise nearby' };
+const fmtKm = d => d < 10 ? d.toFixed(1) : String(Math.round(d));
+const credit = im => { const ext = (h, t) => `<a href="${esc(h)}" target="_blank" rel="noopener noreferrer">${t}</a>`; return `Photo: ${ext(im.page, esc(im.author))} · ${im.licenseUrl ? ext(im.licenseUrl, esc(im.license)) : esc(im.license)} · Wikimedia Commons`; };
+function kindLine(t, c) {
+  if (t.kind === 'person') return `${KIND.person} · ${t.person}`;
+  if (t.kind === 'surprise') { const d = distKm(c.lat, c.lon, t.lat, t.lon); return d >= 8 ? `${KIND.surprise} · ${fmtKm(d)} km from ${c.name}` : KIND.surprise; }
+  return KIND.sight;
+}
+async function renderDiscover(p) {
+  const box = $('#pp-disc'), more = $('#pp-more');
+  const cities = await loadDiscover();
+  if (shownPlace !== p) return;
+  const c = discoverCity(cities, p);
+  discCity = c; discTips = c ? c.tips.slice(0, 3) : [];
+  box.hidden = !discTips.length;
+  // without tips the popup shows its place information as before; with tips they fold away under "City details"
+  more.open = !discTips.length;
+  if (discTips.length) discShow(0);
+  popW = pop.offsetWidth; popH = pop.offsetHeight; popKey = ''; placePop(); panForPop();
+}
+function discShow(k) {
+  const n = discTips.length; if (!n) return;
+  discIdx = (k + n) % n;
+  const t = discTips[discIdx], im = discPics?.get(t.id);
+  $('#disc-n').textContent = `${discIdx + 1} / ${n}`;
+  $('#disc-nav').querySelectorAll('button').forEach(b => { b.hidden = n < 2; });
+  $('#disc-nav').setAttribute('aria-label', `Tip ${discIdx + 1} of ${n}`);
+  $('#disc-pic').hidden = !im;
+  if (im) { $('#disc-img').src = 'data/live/' + im.src; $('#disc-img').alt = `Photo: ${t.title}`; }
+  $('#disc-kind').textContent = kindLine(t, discCity);
+  $('#disc-t').textContent = t.title;
+  $('#disc-x').textContent = t.text;
+  $('#disc-cr').innerHTML = im ? credit(im) : '';
+  $('#disc-go').setAttribute('aria-label', `Visit ${t.title} on the globe`);
+}
+$('#pp-disc').addEventListener('click', e => { const b = e.target.closest('[data-disc]'); if (b) discShow(discIdx + +b.dataset.disc); });
+{ // swipe between tips on touch screens
+  let x0 = null, y0 = null;
+  $('#pp-disc').addEventListener('pointerdown', e => { x0 = e.clientX; y0 = e.clientY; });
+  $('#pp-disc').addEventListener('pointerup', e => { if (x0 != null && Math.abs(e.clientX - x0) > 40 && Math.abs(e.clientX - x0) > Math.abs(e.clientY - y0)) discShow(discIdx + (e.clientX < x0 ? 1 : -1)); x0 = null; });
+}
+$('#disc-go').addEventListener('click', () => visitTip(discCity, discIdx));
+
+// "Visit on the globe": the camera flies to the tip and a short detail card opens
+let tipShown = null, markerTip = null;
+const TIP_DIST = 1.009; // about 57 km above the ground: streets and the area around stay in view
+function visitTip(c, i) {
+  const t = c?.tips[i]; if (!t) return;
+  const back = currentPlace;
+  closePlacePop(); closeTip(true); closeWonder(true);
+  tipShown = { c, i, t, back };
+  markerTip = t; setMarker(t.lat, t.lon);
+  try { history.replaceState(null, '', '#' + c.id + '/' + t.id.split('-').pop()); } catch {}
+  setFocus(...wonderFocus());
+  flyTo(t.lat, t.lon, innerWidth < 768 ? TIP_DIST + 0.006 : TIP_DIST, () => { if (tipShown?.t === t) openTipCard(); });
+}
+function openTipCard() {
+  const s = tipShown; if (!s) return;
+  const { t, c } = s, im = discPics?.get(t.id), card = $('#tip');
+  $('#tip-pic').hidden = !im;
+  if (im) { $('#tip-img').src = 'data/live/' + im.src; $('#tip-img').alt = `Photo: ${t.title}`; }
+  $('#tip-kind').textContent = KIND[t.kind];
+  $('#tip-h').textContent = t.title;
+  const d = distKm(c.lat, c.lon, t.lat, t.lon);
+  $('#tip-where').textContent = [t.person, d >= 3 ? `${fmtKm(d)} km from the centre of ${c.name}` : c.name].filter(Boolean).join(' · ');
+  $('#tip-text').textContent = t.text;
+  $('#tip-more').textContent = t.more || '';
+  $('#tip-wiki').href = 'https://en.wikipedia.org/wiki/' + encodeURIComponent((im?.wiki || t.wiki).replace(/ /g, '_'));
+  $('#tip-wiki').setAttribute('aria-label', `Read more on Wikipedia: ${t.title} (opens in a new tab)`);
+  $('#tip-cr').innerHTML = im ? credit(im) : '';
+  $('#tip-back-t').textContent = `Back to ${c.name}`;
+  const n = Math.min(3, c.tips.length);
+  $('#tip-next').hidden = n < 2;
+  if (n > 1) { const nx = c.tips[(s.i + 1) % n]; $('#tip-next').setAttribute('aria-label', `Next tip: ${nx.title}`); }
+  card.hidden = false; requestAnimationFrame(() => card.classList.remove('is-out'));
+  showUI();
+}
+function closeTip(silent) {
+  const card = $('#tip');
+  if (card.hidden) { if (!silent) tipShown = null; return; }
+  card.classList.add('is-out'); setTimeout(() => { if (card.classList.contains('is-out')) card.hidden = true; }, 450);
+  if (!silent) { tipShown = null; if ($('#wonder').hidden) setFocus(0, 0); }
+}
+const cityPlace = c => places?.find(q => q.name === c.name && q.cc === c.cc) || { name: c.name, lat: c.lat, lon: c.lon, cc: c.cc, region: '' };
+function backToCity() {
+  const s = tipShown; closeTip();
+  markerTip = null;
+  const p = s?.back || (s && cityPlace(s.c));
+  if (p) goToPlace(p);
+}
+$('#tip-close').addEventListener('click', () => closeTip());
+$('#tip-back').addEventListener('click', backToCity);
+$('#tip-next').addEventListener('click', () => { const s = tipShown; if (s) visitTip(s.c, (s.i + 1) % Math.min(3, s.c.tips.length)); });
+
+/* ---------- Radio nearby: stations of the place first (F-07, F-25) ---------- */
+async function popRadio() {
+  const btn = $('#pp-radio'), box = $('#pp-radio-box'), p = shownPlace;
+  const open = btn.getAttribute('aria-expanded') !== 'true';
+  btn.setAttribute('aria-expanded', String(open)); box.hidden = !open;
+  if (!open || !p) return;
+  $('#pp-rh').textContent = 'Looking for stations …'; $('#pp-rl').innerHTML = '';
+  if (!L.radio.loaded) { try { await loaders.radio(); } catch { if (shownPlace === p) $('#pp-rh').textContent = 'The radio stations could not be loaded right now.'; return; } }
+  if (shownPlace !== p) return;
+  const name = p.label || p.name, seen = new Set(), all = [];
+  // nearest first, one entry per station name (the database lists some stations twice)
+  for (const x of nearestStations(p.lat, p.lon, 60)) { const k = x.s.name.trim().toLowerCase(); if (!seen.has(k)) { seen.add(k); all.push(x); } }
+  let list = all.filter(x => x.d <= 15), head;
+  if (list.length >= 3) head = `Stations in ${name}`;
+  else if ((list = all.filter(x => x.d <= 60)).length) head = list.some(x => x.d <= 15) ? `Stations in and around ${name}` : `Stations around ${name}`;
+  else {
+    list = all.slice(0, 5);
+    // only stations from farther away: name the region they come from
+    const regs = list.map(x => { const q = nearestPlace(x.s.lat, x.s.lon); return q?.region || ''; });
+    const ccs = new Set(list.map(x => x.s.cc));
+    const region = regs[0] && regs.every(r => r === regs[0]) ? `${regs[0]}, ${countryName(list[0].s.cc)}` : ccs.size === 1 ? countryName(list[0].s.cc) : 'the wider region';
+    head = list.length ? `No stations listed for ${name} itself. The nearest are in ${region}:` : 'No stations found nearby.';
+  }
+  list = list.slice(0, 5);
+  $('#pp-rh').textContent = head;
+  $('#pp-rl').innerHTML = list.map(({ s, d }) => `<li><button type="button" data-pstation="${esc(s.id)}" aria-current="${playing?.id === s.id}"><span class="pl">${playing?.id === s.id && !audio.paused ? `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${ICON_PAUSE}</svg>` : `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${ICON_PLAY}</svg>`}</span><span class="n"><b>${esc(s.name)}</b>${s.tags ? `<small>${esc(s.tags.split(',').slice(0, 2).join(', '))}</small>` : ''}</span><span class="d mono">${fmtKm(d)} km</span></button></li>`).join('');
+  $$('#pp-rl button').forEach(b => b.setAttribute('aria-label', `Play ${b.querySelector('b').textContent}`));
+  popW = pop.offsetWidth; popH = pop.offsetHeight; popKey = ''; placePop();
+}
+$('#pp-radio').addEventListener('click', popRadio);
+$('#pp-rl').addEventListener('click', e => {
+  const b = e.target.closest('[data-pstation]'); if (!b) return;
+  const s = L.radio.items.find(x => x.id === b.dataset.pstation); if (!s) return;
+  if (playing?.id === s.id && !audio.paused) { audio.pause(); clearTimeout(playTimer); setPlayerIcon(false); $('#pl-toggle').classList.remove('wait'); }
+  else playStation(s);
+  syncPopRadio();
+});
+function syncPopRadio() {
+  $$('#pp-rl button').forEach(b => {
+    const on = playing?.id === b.dataset.pstation;
+    b.setAttribute('aria-current', String(on));
+    b.querySelector('.pl').innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">${on && !audio.paused ? ICON_PAUSE : ICON_PLAY}</svg>`;
+  });
+}
+audio.addEventListener('playing', syncPopRadio); audio.addEventListener('pause', syncPopRadio);
+$('#pp-rall').addEventListener('click', async () => {
+  await setLayer('radio', true);
+  if (L.radio.loaded) showNearby();
+  openPanel('layers');
+  toast('All radio stations of the world are now shown on the globe. Zoom in to see them one by one.', 5000);
+});
+
+/* ---------- Side panel: Wonders & records list, all layers ---------- */
+function openPanel(which, toggle) {
+  const sb = $('#sidebar');
+  for (const [k, box, btn] of [['records', '#records', '#rec-btn'], ['layers', '#layers', '#layers-btn']]) {
+    const on = k === which && !(toggle && !$(box).hidden);
+    $(box).hidden = !on; $(btn).setAttribute('aria-expanded', String(on));
+  }
+  const any = !$('#records').hidden || !$('#layers').hidden;
+  if (innerWidth < 768) {
+    sb.classList.toggle('collapsed', !any);
+    $('#sheet-handle').setAttribute('aria-expanded', String(any));
+    if (any) closePlacePop();
+  }
+  if (which === 'records' && !$('#records').hidden) buildRecords();
+  if (any) sb.scrollTop = 0;
+}
+$('#rec-btn').addEventListener('click', () => openPanel('records', true));
+$('#layers-btn').addEventListener('click', () => openPanel('layers', true));
+document.addEventListener('click', e => { if (e.target.closest('[data-open-layers]')) openPanel('layers'); });
+let recBuilt = false;
+async function buildRecords() {
+  if (recBuilt) return;
+  await loadWonders();
+  const pics = (await wPicsLoad()).items || [];
+  const ul = $('#rec-list');
+  ul.innerHTML = wonders.map(w => {
+    const im = pics.find(x => x.id === w.id)?.images?.[0];
+    const th = im ? `<img class="rec-th" src="data/live/${esc(im.src)}" alt="" loading="lazy" decoding="async">` : `<span class="rec-th" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg></span>`;
+    return `<li><button type="button" data-wonder="${esc(w.id)}">${th}<span class="rec-tx"><b>${esc(w.place)}</b><small>${esc(w.category)}</small><span class="v">${esc(w.stat.value)}</span></span></button></li>`;
+  }).join('');
+  recBuilt = true;
+}
+$('#rec-list').addEventListener('click', e => {
+  const b = e.target.closest('[data-wonder]'); if (!b) return;
+  if (!order.length) order = shuffle(wonders.map(w => w.id));
+  if (innerWidth < 768) openPanel(null);
+  nextWonder(b.dataset.wonder);
+});
 // keep the popup over its place: above it, or below when there is no room; hidden on the far side
 function placePop() {
   if (!popAt || pop.hidden) return;
+  if (innerWidth < 768) return; // a sheet at the bottom on phones (CSS)
   const sp = screenPos(popAt, 0.15);
   pop.style.visibility = sp ? '' : 'hidden';
   if (!sp) return;
@@ -3757,6 +4064,14 @@ function placePop() {
 // no room above the place: turn the globe a little so the place moves down and the popup fits above it
 function panForPop() {
   if (!renderer || flight || !popAt) return;
+  if (innerWidth < 768) {
+    // phones: the popup is a sheet at the bottom, so the place moves into the upper third
+    const ty = innerHeight * 0.3, sp = screenPos(popAt, -1);
+    setFocus(0, ty);
+    const y = sp ? sp.y - (ty - focus.y) : -1;
+    if (!sp || y < 60 || y > innerHeight * 0.36 || sp.x < 24 || sp.x > innerWidth - 24) { const p = shownPlace; flyTo(p.lat, p.lon, Math.min(camDist(), 2.4)); }
+    return;
+  }
   const sc = innerWidth >= 768 ? SET.win / 100 : 1, gap = 16 + 4 * symF();
   const sp = screenPos(popAt, -1); if (!sp) return;
   const y = sp.y;
@@ -3783,7 +4098,7 @@ function panForPop() {
 }
 // a click on the place marker opens the place info
 function hitMarker(x, y) {
-  if (!markerAt || !currentPlace || markerEl.hidden) return false;
+  if (!markerAt || !(currentPlace || markerTip) || markerEl.hidden) return false;
   const p = screenPos(markerAt, 0.2);
   return !!p && Math.hypot(p.x - x, p.y - y) < 22 * Math.max(1, symF());
 }
@@ -3888,10 +4203,16 @@ if (new URLSearchParams(location.search).has('debug')) window.__wian = { L, sele
 // warm the place index once the start screen stands (non-blocking, PRD F-01.5)
 (window.requestIdleCallback || (f => setTimeout(f, 1200)))(() => loadPlaces());
 
-// deep links: #wunder-<id> or #<place-slug>
+// deep links: #wonder-<id>, #<place-slug> or #<city>/<tip number>
 (async function route() {
   const h = decodeURIComponent(location.hash.slice(1));
   if (!h) return;
+  const tm = /^([a-z-]+)\/(\d)$/.exec(h);
+  if (tm) {
+    const c = (await loadDiscover()).find(x => x.id === tm[1]), i = +tm[2] - 1;
+    if (c?.tips[i]) { await loadPlaces(); currentPlace = cityPlace(c); here = { lat: c.lat, lon: c.lon, name: c.name }; hideStart(); mode = 'explore'; visitTip(c, i); }
+    return;
+  }
   if (h.startsWith('wonder-')) { await loadWonders(); if (wonders.some(w => w.id === h.slice(7))) { order = shuffle(wonders.map(w => w.id)); nextWonder(h.slice(7)); } return; }
   await loadPlaces();
   const p = places?.find(x => slug(x) === h);
