@@ -1,6 +1,8 @@
 # World in a Nutshell – Product Requirements Document (PRD) für den Prototyp
 
-Version 0.12 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+Version 0.13 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+
+Änderungen in v0.13 (Uwe, 14.11.2026): Der Globus soll sich wie ein interaktiver Atlas anfühlen. „Explore freely“ zeigt den Globus aus dem All statt Bielefeld (F-01.8). Nach der Landung öffnet nur noch das Stadt-Pop-up; Ortsname und Ebenenauswahl entfallen, die Ebenenliste ist eingeklappt und über „All layers“ erreichbar (F-01.6). Neu: „Discover here“ mit kuratierten lokalen Tipps und Fotos (F-25), „Radio nearby“ als lokaler Einstieg im Pop-up (F-07.6), „Wonders & records“ mit eigener Liste in der Seitenleiste, 16 Rekorden und einem anschaulichen Vergleich auf jeder Karte (F-02).
 
 Änderungen in v0.12 (Uwe, 14.11.2026): Vier Ergänzungen aus der Quellenprüfung: Relief aus Höhendaten in der Nahansicht (F-21), Ortsnamen, Straßen und Grenzen aus OpenStreetMap beim nahen Heranzoomen (F-22), Katastrophen-Kartierungen von Copernicus EMS (F-23) und eine Bevölkerungskarte aus GHSL (F-24).
 
@@ -92,10 +94,10 @@ Prüfmethoden: **M** = manueller Test nach Testskript, **A** = automatisierter T
 | F-01.3 | Ab 2 eingegebenen Zeichen erscheinen innerhalb von 150 ms bis zu 8 Vorschläge im Format „Ort, Region, Land“ auf Englisch (z. B. „Bielefeld, North Rhine-Westphalia, Germany“). Englische und lokale bzw. deutsche Namen sowie Schreibweisen ohne Akzent finden denselben Ort („Munich“, „München“, „Muenchen“ → „Munich“). | A |
 | F-01.4 | Die Suche läuft vollständig im Browser über einen statischen GeoNames-Index (Orte ≥ 5 000 Einwohner, CC BY 4.0). **Im Netzwerk-Log geht bei der Eingabe keine einzige Anfrage an einen Drittserver.** | R (DevTools-Netzwerk) |
 | F-01.5 | Der Ortsindex ist komprimiert ≤ 1,5 MB und wird erst geladen, wenn das Suchfeld den Fokus bekommt oder der Startscreen steht (nicht blockierend). | L |
-| F-01.6 | Nach Auswahl eines Ortes fliegt die Kamera in 1,5–3 s sanft dorthin, der Ort wird markiert, der Ortsname erscheint kurz, danach blendet die Ebenenauswahl ein (Styleframe „Arrival“). | M |
+| F-01.6 | Nach Auswahl eines Ortes fliegt die Kamera in 1,5–3 s sanft dorthin, der Ort wird markiert, und sobald die Kamera steht, öffnet das Stadt-Pop-up (F-09.8, F-25). Sonst blendet nichts ein; die Ebenenliste bleibt eingeklappt und ist über „All layers“ (Seitenleiste und Pop-up) erreichbar (v0.13). | M |
 | F-01.7 | Tastaturbedienung: Pfeiltasten wählen Vorschläge, Enter bestätigt, Esc schließt die Liste. | A |
-| F-01.8 | „Explore freely“ blendet den Startscreen aus, die Kamera kommt über **Bielefeld, Deutschland** (52,02° N, 8,53° O) zur Ruhe und die Ebenenauswahl blendet ein. | M, A |
-| F-01.8a | **Standard-Startort Bielefeld:** Wählt man keinen Wunschort (frei erkunden, Standort abgelehnt oder nicht verfügbar, Startscreen per Esc geschlossen), ist Bielefeld, Deutschland der Startort. Schon hinter dem Startscreen ist Bielefeld der Bezugspunkt der Drehung. Eine Ortsangabe in der URL hat Vorrang. | A |
+| F-01.8 | „Explore freely“ blendet den Startscreen aus und zeigt den Globus aus dem All, ohne Flug zu einem Ort und ohne Marker (v0.13). Esc auf dem Startscreen tut dasselbe. | M, A |
+| F-01.8a | **Standard-Startort Bielefeld:** Nur wenn die Standortabfrage abgelehnt wird oder fehlschlägt, geht die Kamera nach Bielefeld, Deutschland (v0.13; „Explore freely“ und Esc zeigen seitdem den ganzen Globus). | M |
 | F-01.9 | „Use my location“ löst **erst beim Klick** die Standortabfrage des Browsers aus. Vorher wird die Geolocation-API nachweislich nicht aufgerufen. | R, A |
 | F-01.10 | Lehnt man die Standortfreigabe ab oder schlägt sie fehl, erscheint ein kurzer Hinweis, die Kamera geht nach Bielefeld (F-01.8a), und die Suche bleibt ohne Neuladen nutzbar. | M |
 | F-01.11 | Bei aktivierter Systemeinstellung „Bewegung reduzieren“ springt die Kamera ohne Flug zum Ziel, die Erde dreht sich im Hintergrund nicht. | M, A |
@@ -105,13 +107,13 @@ Prüfmethoden: **M** = manueller Test nach Testskript, **A** = automatisierter T
 
 | AK | Kriterium | Prüfung |
 | --- | --- | --- |
-| F-02.1 | Ein Klick auf „Surprise me“ dreht den Globus zu einem der sechs Startorte (Mount Everest, Challenger-Tief, Sahara, Antarktis, Baikalsee, Salar de Uyuni) und öffnet eine Story-Karte (Styleframe „Wonder“). | M |
-| F-02.2 | Jede Karte ist eine Kurzinfo: überraschende Überschrift, höchstens zwei Sätze Erklärung, die Zahl des Rekords und die Quelle als Link. | R |
+| F-02.1 | „Surprise me“ dreht den Globus zu einem zufälligen Rekord und öffnet seine Story-Karte (Styleframe „Wonder“). In der Hauptansicht gibt es einen sichtbaren Einstieg „Wonders & records“ (Seitenleiste, mobil im Bottom Sheet) mit einer Liste aller Rekorde (Bild, Ort, Kategorie, Zahl) und „Surprise me“ (v0.13). | M |
+| F-02.2 | Jede Karte ist eine Kurzinfo nach dem Vorbild Challenger-Tief: starkes Foto, überraschende Überschrift, höchstens zwei Sätze erzählerischer Einstieg, ein anschaulicher Vergleich („Picture this“), die Zahl des Rekords und die Quelle als Link. | R |
 | F-02.2a | **Wikipedia-Link:** Jede Karte enthält „Read more on Wikipedia“ mit Link auf den passenden Artikel der englischsprachigen Wikipedia (en.wikipedia.org) (öffnet in neuem Tab, `rel="noopener"`). Alle Links sind vor dem Livegang auf Erreichbarkeit geprüft (HTTP 200, kein Begriffsklärungsartikel). Wikipedia wird nur verlinkt, es werden keine Inhalte übernommen. | R, A (Link-Check) |
 | F-02.3 | Alle Zahlen sind vor dem Livegang gegen die genannte Quelle geprüft; das Prüfdatum steht in der Datendatei je Eintrag. | R |
 | F-02.4 | Sahara und Antarktis zeigen die Region als Fläche, nicht als Punkt (Umriss aus Natural Earth). Punkt-Orte (Everest, Challenger-Tief) erhalten eine Markierung. | M |
 | F-02.5 | Wo ein Gegenstück existiert (Antarktis ↔ Sahara, Everest ↔ Challenger-Tief), bietet die Karte einen Link „Its counterpart: …“, der dorthin fliegt. | M |
-| F-02.6 | „Next wonder“ führt zum nächsten Ort; innerhalb einer Sitzung wiederholt sich kein Ort, bevor alle sechs gezeigt wurden. | A |
+| F-02.6 | „Next wonder“ führt zum nächsten Ort; innerhalb einer Sitzung wiederholt sich kein Ort, bevor alle gezeigt wurden (seit v0.13: 16 Rekorde). | A |
 | F-02.7 | Die Inhalte liegen in einer eigenen Datendatei (JSON), sodass weitere Einträge aus der Rekordtabelle ohne Codeänderung ergänzt werden können. | R |
 
 ### F-03 Globus, Tag-Nacht-Grenze, Wolken
@@ -168,7 +170,7 @@ Prüfmethoden: **M** = manueller Test nach Testskript, **A** = automatisierter T
 | F-07.3 | Klick auf einen Sender startet die Wiedergabe innerhalb von 5 s (bei funktionierendem Stream) und zeigt Sendername, Ort, Land, Genre, Quelle. | M |
 | F-07.4 | Ein Player bleibt sichtbar (Play/Pause, Lautstärke, Sendername), auch wenn andere Ebenen gewechselt werden. | M |
 | F-07.5 | Ist ein Stream nicht erreichbar, erscheint nach spätestens 8 s eine Meldung „Station not reachable right now“ und ein Vorschlag für einen Sender in der Nähe. | A |
-| F-07.6 | Kernszenario: Nach Ankunft in Bielefeld zeigt „Nearby“ die nächstgelegenen Sender sortiert nach Entfernung. | M |
+| F-07.6 | Kernszenario (v0.13): „Radio nearby“ im Stadt-Pop-up zeigt zuerst bis zu fünf Sender aus der Stadt oder Umgebung (bis 15 bzw. 60 km) mit Namen, Entfernung und Play-Button. Gibt es nur weiter entfernte Sender, nennt die Liste deren Region bzw. Land. Die weltweite Senderkarte bleibt über die Radioebene erreichbar („Show all stations of the world on the globe“). | M |
 | F-07.7 | Streams werden direkt vom Sender geladen und nicht über unsere Seite weitergeleitet (keine Kosten, keine Weiterverbreitung). | R |
 | F-07.8 | Wiedergabe startet nur nach aktivem Klick, nie automatisch. | M |
 
@@ -281,6 +283,20 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | --- | --- | --- |
 | F-24.1 | Schalter „Population“ unter „Earth“ zeigt, wie viele Menschen pro km² wo leben: *GHS-POP R2023A*, Schätzung für 2025 (Europäische Kommission, Joint Research Centre, CC BY 4.0), auf ein Raster von etwa 9 km verkleinert und logarithmisch eingefärbt (von 1 bis über 10.000 Menschen pro km²) mit Legende. | M |
 | F-24.2 | Die Karte wird einmal mit einem Werkzeug im Repo (`tools/build-population.py`) aus der Originaldatei berechnet und als PNG mit der Seite ausgeliefert; die Summe muss rund 8 Milliarden Menschen ergeben. | A |
+
+### F-25 „Discover here“ – lokale Entdeckungen im Stadt-Pop-up (v0.13)
+
+*Als Besucher:in möchte ich an einem vertrauten Ort landen, durch ein Foto neugierig werden und von dort ein paar Straßen weiter oder ans andere Ende der Welt reisen.*
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-25.1 | Unter dem Wetter zeigt das Stadt-Pop-up „Discover here“: ein Tipp mit Foto, Art (Sight, Person & place, Surprise nearby), Titel und einem Satz, warum der Ort interessant ist. Bis zu drei Tipps pro Ort, mit Pfeilen und auf Touchscreens per Wischen blätterbar. | M |
+| F-25.2 | Die Tipps sind kuratiert (`tools/discover-tips.py` → `site/data/discover.json`, eigene Texte). Jeder Tipp nennt einen realen Ort mit eigenem Artikel der englischen Wikipedia. Ein Ort bekommt die Tipps der nächsten kuratierten Stadt innerhalb ihres Radius (12–30 km). Start: 35 Städte, 99 Tipps, darunter Bielefeld. | R |
+| F-25.3 | Fotos: je Tipp ein Foto aus dem Wikipedia-Artikel des Ortes selbst (zuerst sein Hauptbild), nur Dateien auf Wikimedia Commons mit freier Lizenz. Urheber, Lizenz und Link zur Datei stehen unter dem Foto. Die GitHub Action lädt und verkleinert die Fotos (720 × 405 px) und legt sie auf unsere Seite; das Log nennt jede gewählte Datei zur Kontrolle. | R |
+| F-25.4 | „Visit on the globe“ fliegt zum Ziel (etwa 57 km Höhe) und öffnet eine kurze Detailkarte mit Foto, Text, Entfernung zur Stadt, Wikipedia-Link, „Back to …“ und „Next tip“. | M |
+| F-25.5 | Ohne passende Tipps zeigt das Pop-up wie bisher Ortszeit, Datum, Luftqualität, Koordinaten, Einwohner, Höhe und Kartenlinks. Mit Tipps sind diese Angaben unter „City details“ eingeklappt. | M |
+| F-25.6 | Das Pop-up ist leicht zu schließen (×, Esc, Klick auf den Globus) und hält das Weiterdrehen nicht auf. Auf dem Smartphone erscheint es als Sheet am unteren Rand, der Ort rückt ins obere Drittel. | M |
+| F-25.7 | Teilbare Links: `#<stadt>/<n>` öffnet direkt den n-ten Tipp einer Stadt. | A |
 
 ### F-09 Übergreifende Bedienung
 

@@ -1,0 +1,1378 @@
+{
+ "note": "Curated tips for the place popup (\"Discover here\", F-25). Texts are our own; each tip links to the English Wikipedia article of the place. Photos: Wikimedia Commons, copied by scripts/fetch-discover-pictures.mjs. Edit tools/discover-tips.py, not this file.",
+ "cities": [
+  {
+   "id": "bielefeld",
+   "name": "Bielefeld",
+   "cc": "DE",
+   "lat": 52.033,
+   "lon": 8.533,
+   "r": 12,
+   "tips": [
+    {
+     "id": "bielefeld-1",
+     "kind": "sight",
+     "title": "Sparrenburg",
+     "wiki": "Sparrenburg",
+     "lat": 52.0141,
+     "lon": 8.5266,
+     "text": "A 13th-century castle on the ridge above the old town, built by the Counts of Ravensberg.",
+     "more": "Its tower looks out over the city and the Teutoburg Forest. Below the walls, old passages run through the hill."
+    },
+    {
+     "id": "bielefeld-2",
+     "kind": "person",
+     "title": "Kunsthalle Bielefeld",
+     "wiki": "Kunsthalle Bielefeld",
+     "lat": 52.0157,
+     "lon": 8.5296,
+     "text": "The American architect Philip Johnson designed this red sandstone museum, opened in 1968.",
+     "more": "Johnson, famous for his Glass House in Connecticut, built very little in Europe. The Kunsthalle shows modern and contemporary art, with sculptures in the park beside it.",
+     "person": "Philip Johnson"
+    },
+    {
+     "id": "bielefeld-3",
+     "kind": "surprise",
+     "title": "Externsteine",
+     "wiki": "Externsteine",
+     "lat": 51.8687,
+     "lon": 8.9172,
+     "text": "Sandstone pillars rising out of the Teutoburg Forest, with a relief carved into the rock almost 900 years ago.",
+     "more": "Steps and a small chapel are cut into the rock, and a bridge links two of the pillars. A good outing from Bielefeld."
+    }
+   ]
+  },
+  {
+   "id": "berlin",
+   "name": "Berlin",
+   "cc": "DE",
+   "lat": 52.524,
+   "lon": 13.411,
+   "r": 25,
+   "tips": [
+    {
+     "id": "berlin-1",
+     "kind": "sight",
+     "title": "Berlin Wall Memorial",
+     "wiki": "Berlin Wall Memorial",
+     "lat": 52.5353,
+     "lon": 13.3903,
+     "text": "The last stretch of the Wall with its death strip intact, along Bernauer Strasse.",
+     "more": "The houses on this street stood right on the border, and in 1961 people jumped from their windows to the West. A viewing tower looks over the preserved border strip."
+    },
+    {
+     "id": "berlin-2",
+     "kind": "person",
+     "title": "Einstein Tower",
+     "wiki": "Einstein Tower",
+     "lat": 52.3787,
+     "lon": 13.0634,
+     "text": "An observatory built around 1920 to test Albert Einstein’s theory of relativity.",
+     "more": "Erich Mendelsohn’s curved tower on the Telegrafenberg in Potsdam became an icon of expressionist architecture. It still holds a solar telescope.",
+     "person": "Albert Einstein"
+    },
+    {
+     "id": "berlin-3",
+     "kind": "surprise",
+     "title": "Tempelhofer Feld",
+     "wiki": "Tempelhofer Feld",
+     "lat": 52.4731,
+     "lon": 13.4031,
+     "text": "An airport in the middle of the city that closed in 2008; its runways are now a park for everyone.",
+     "more": "People cycle, skate and fly kites on the old runways. During the Berlin Airlift of 1948–49 the planes supplying West Berlin landed here."
+    }
+   ]
+  },
+  {
+   "id": "hamburg",
+   "name": "Hamburg",
+   "cc": "DE",
+   "lat": 53.551,
+   "lon": 9.993,
+   "r": 20,
+   "tips": [
+    {
+     "id": "hamburg-1",
+     "kind": "sight",
+     "title": "Elbphilharmonie",
+     "wiki": "Elbphilharmonie",
+     "lat": 53.5413,
+     "lon": 9.9841,
+     "text": "A concert hall rising like a glass wave out of an old brick warehouse in the harbour.",
+     "more": "Its public viewing platform, the Plaza, sits 37 metres up between the old warehouse and the new glass building and is open to everyone."
+    },
+    {
+     "id": "hamburg-2",
+     "kind": "person",
+     "title": "Beatles-Platz",
+     "wiki": "Beatles-Platz",
+     "lat": 53.5498,
+     "lon": 9.9578,
+     "text": "Before they were famous, the Beatles played hundreds of nights in the clubs of the Grosse Freiheit, right here.",
+     "more": "Between 1960 and 1962 they performed at the Indra, the Kaiserkeller, the Top Ten and the Star-Club. The round square at the corner of the Reeperbahn remembers them with steel figures.",
+     "person": "The Beatles"
+    },
+    {
+     "id": "hamburg-3",
+     "kind": "surprise",
+     "title": "Old Elbe Tunnel",
+     "wiki": "Old Elbe Tunnel",
+     "lat": 53.5459,
+     "lon": 9.9665,
+     "text": "Lifts big enough for cars take you 24 metres down to a tiled tunnel under the Elbe, opened in 1911.",
+     "more": "Walk through it to the other bank and look back at the harbour and the Landungsbrücken."
+    }
+   ]
+  },
+  {
+   "id": "munich",
+   "name": "Munich",
+   "cc": "DE",
+   "lat": 48.137,
+   "lon": 11.575,
+   "r": 20,
+   "tips": [
+    {
+     "id": "munich-1",
+     "kind": "sight",
+     "title": "Viktualienmarkt",
+     "wiki": "Viktualienmarkt",
+     "lat": 48.1351,
+     "lon": 11.5763,
+     "text": "Munich’s open-air food market since 1807, with a maypole in the middle and a beer garden.",
+     "more": "Stalls sell fruit, cheese, flowers and Bavarian specialities a few steps from Marienplatz."
+    },
+    {
+     "id": "munich-2",
+     "kind": "person",
+     "title": "Lenbachhaus",
+     "wiki": "Lenbachhaus",
+     "lat": 48.1468,
+     "lon": 11.5638,
+     "text": "This villa museum holds the largest collection of the Blue Rider, the artists around Wassily Kandinsky and Franz Marc.",
+     "more": "Many of the works were a gift from Gabriele Münter, who hid them from the Nazis in her house in Murnau and gave them to the city in 1957.",
+     "person": "Gabriele Münter"
+    },
+    {
+     "id": "munich-3",
+     "kind": "surprise",
+     "title": "Olympiapark",
+     "wiki": "Olympiapark, Munich",
+     "lat": 48.1731,
+     "lon": 11.5466,
+     "text": "The park of the 1972 Olympic Games, with transparent tent roofs and a hill made of wartime rubble.",
+     "more": "From the top of the Olympiaberg the view reaches the Alps on clear days."
+    }
+   ]
+  },
+  {
+   "id": "cologne",
+   "name": "Cologne",
+   "cc": "DE",
+   "lat": 50.933,
+   "lon": 6.95,
+   "r": 15,
+   "tips": [
+    {
+     "id": "cologne-1",
+     "kind": "sight",
+     "title": "Cologne Cathedral",
+     "wiki": "Cologne Cathedral",
+     "lat": 50.9413,
+     "lon": 6.9583,
+     "text": "Building began in 1248 and was only finished in 1880; for a few years it was the tallest building in the world.",
+     "more": "533 steps lead up the south tower to a view over the Rhine. Inside stands the golden Shrine of the Three Kings."
+    },
+    {
+     "id": "cologne-2",
+     "kind": "sight",
+     "title": "Museum Ludwig",
+     "wiki": "Museum Ludwig",
+     "lat": 50.9409,
+     "lon": 6.9606,
+     "text": "Right next to the cathedral, one of the largest collections of Pop Art outside the United States.",
+     "more": "It also holds one of the biggest Picasso collections in Europe."
+    },
+    {
+     "id": "cologne-3",
+     "kind": "surprise",
+     "title": "Hohenzollern Bridge",
+     "wiki": "Hohenzollern Bridge",
+     "lat": 50.9413,
+     "lon": 6.9658,
+     "text": "Tens of thousands of love locks hang on the railway bridge leading to the cathedral.",
+     "more": "Couples have fastened padlocks to its fence since about 2008. Over 1,000 trains a day cross the bridge."
+    }
+   ]
+  },
+  {
+   "id": "frankfurt-am-main",
+   "name": "Frankfurt am Main",
+   "cc": "DE",
+   "lat": 50.116,
+   "lon": 8.684,
+   "r": 15,
+   "tips": [
+    {
+     "id": "frankfurt-am-main-1",
+     "kind": "sight",
+     "title": "Römer",
+     "wiki": "Römer (Frankfurt)",
+     "lat": 50.1105,
+     "lon": 8.6822,
+     "text": "The old town square with its half-timbered houses and the Römer, the city hall since 1405.",
+     "more": "Emperors were celebrated here after their coronation. Most of the houses were rebuilt after the Second World War."
+    },
+    {
+     "id": "frankfurt-am-main-2",
+     "kind": "person",
+     "title": "Goethe House",
+     "wiki": "Goethe House",
+     "lat": 50.111,
+     "lon": 8.6778,
+     "text": "Johann Wolfgang von Goethe was born in this house in 1749 and wrote his first works here.",
+     "more": "The house was destroyed in 1944 and rebuilt; much of the original furniture had been saved and is back in its place.",
+     "person": "Johann Wolfgang von Goethe"
+    },
+    {
+     "id": "frankfurt-am-main-3",
+     "kind": "surprise",
+     "title": "Main Tower",
+     "wiki": "Main Tower",
+     "lat": 50.1125,
+     "lon": 8.672,
+     "text": "Frankfurt’s only skyscraper with a viewing platform open to the public, about 200 metres up.",
+     "more": "From the top you look out over the towers of the banks, the river Main and the Taunus hills."
+    }
+   ]
+  },
+  {
+   "id": "leipzig",
+   "name": "Leipzig",
+   "cc": "DE",
+   "lat": 51.34,
+   "lon": 12.371,
+   "r": 15,
+   "tips": [
+    {
+     "id": "leipzig-1",
+     "kind": "sight",
+     "title": "St. Nicholas Church",
+     "wiki": "St. Nicholas Church, Leipzig",
+     "lat": 51.3404,
+     "lon": 12.3781,
+     "text": "The Monday prayers for peace in this church grew into the demonstrations of autumn 1989.",
+     "more": "On 9 October 1989, some 70,000 people marched peacefully around the city ring, a turning point on the way to the fall of the Wall."
+    },
+    {
+     "id": "leipzig-2",
+     "kind": "person",
+     "title": "St. Thomas Church",
+     "wiki": "St. Thomas Church, Leipzig",
+     "lat": 51.3393,
+     "lon": 12.3726,
+     "text": "Johann Sebastian Bach was cantor here for 27 years and is buried in front of the altar.",
+     "more": "The St. Thomas Boys Choir, which Bach led, still sings here every week.",
+     "person": "Johann Sebastian Bach"
+    },
+    {
+     "id": "leipzig-3",
+     "kind": "surprise",
+     "title": "Monument to the Battle of the Nations",
+     "wiki": "Monument to the Battle of the Nations",
+     "lat": 51.3124,
+     "lon": 12.4133,
+     "text": "A 91-metre stone monument to the battle of 1813 against Napoleon, finished in 1913.",
+     "more": "Inside, giant stone figures guard a crypt, and the platform at the top looks out over the whole city."
+    }
+   ]
+  },
+  {
+   "id": "dresden",
+   "name": "Dresden",
+   "cc": "DE",
+   "lat": 51.051,
+   "lon": 13.738,
+   "r": 15,
+   "tips": [
+    {
+     "id": "dresden-1",
+     "kind": "sight",
+     "title": "Frauenkirche",
+     "wiki": "Dresden Frauenkirche",
+     "lat": 51.0519,
+     "lon": 13.7416,
+     "text": "Destroyed in 1945, its ruins were a memorial for decades; it was rebuilt from 1994 and consecrated again in 2005.",
+     "more": "Many of the old stones were put back in their original places; they show up darker in the new walls."
+    },
+    {
+     "id": "dresden-2",
+     "kind": "surprise",
+     "title": "Blue Wonder",
+     "wiki": "Loschwitz Bridge",
+     "lat": 51.0526,
+     "lon": 13.8095,
+     "text": "A blue steel bridge across the Elbe from 1893 that the people of Dresden call the Blue Wonder.",
+     "more": "Next to it, one of the oldest suspension railways in the world climbs the hillside."
+    }
+   ]
+  },
+  {
+   "id": "bonn",
+   "name": "Bonn",
+   "cc": "DE",
+   "lat": 50.734,
+   "lon": 7.095,
+   "r": 12,
+   "tips": [
+    {
+     "id": "bonn-1",
+     "kind": "person",
+     "title": "Beethoven House",
+     "wiki": "Beethoven House",
+     "lat": 50.7372,
+     "lon": 7.1015,
+     "text": "Ludwig van Beethoven was born in this house in 1770.",
+     "more": "It holds the largest Beethoven collection in the world, among it his last grand piano and his ear trumpets.",
+     "person": "Ludwig van Beethoven"
+    }
+   ]
+  },
+  {
+   "id": "paris",
+   "name": "Paris",
+   "cc": "FR",
+   "lat": 48.853,
+   "lon": 2.349,
+   "r": 25,
+   "tips": [
+    {
+     "id": "paris-1",
+     "kind": "sight",
+     "title": "Musée d’Orsay",
+     "wiki": "Musée d'Orsay",
+     "lat": 48.86,
+     "lon": 2.3266,
+     "text": "A grand railway station from 1900 that now holds the world’s best-known collection of Impressionist paintings.",
+     "more": "Look for the huge station clocks; through the glass of one of them you see across the Seine to the Louvre and Montmartre."
+    },
+    {
+     "id": "paris-2",
+     "kind": "person",
+     "title": "Shakespeare and Company",
+     "wiki": "Shakespeare and Company (bookstore)",
+     "lat": 48.8526,
+     "lon": 2.3471,
+     "text": "An English-language bookshop by the Seine where young writers may sleep among the shelves.",
+     "more": "George Whitman opened it in 1951 and named it after Sylvia Beach’s shop of the 1920s, which first published James Joyce’s Ulysses.",
+     "person": "Sylvia Beach & George Whitman"
+    },
+    {
+     "id": "paris-3",
+     "kind": "surprise",
+     "title": "Catacombs of Paris",
+     "wiki": "Catacombs of Paris",
+     "lat": 48.8338,
+     "lon": 2.3324,
+     "text": "Below the streets lie the bones of some six million Parisians, moved here from overflowing cemeteries from the 1780s on.",
+     "more": "A walk of about 1.5 km leads through old quarry tunnels lined with stacked bones."
+    }
+   ]
+  },
+  {
+   "id": "london",
+   "name": "London",
+   "cc": "GB",
+   "lat": 51.509,
+   "lon": -0.126,
+   "r": 25,
+   "tips": [
+    {
+     "id": "london-1",
+     "kind": "sight",
+     "title": "Borough Market",
+     "wiki": "Borough Market",
+     "lat": 51.5055,
+     "lon": -0.091,
+     "text": "One of London’s oldest food markets, trading by London Bridge for many centuries.",
+     "more": "Under its Victorian iron roofs you find cheese, bread, game and street food from all over the world."
+    },
+    {
+     "id": "london-2",
+     "kind": "person",
+     "title": "Charles Dickens Museum",
+     "wiki": "Charles Dickens Museum",
+     "lat": 51.5235,
+     "lon": -0.1162,
+     "text": "Charles Dickens lived in this terraced house when he wrote Oliver Twist.",
+     "more": "He moved in with his young family in 1837. Rooms are furnished as in his day, with his writing desk.",
+     "person": "Charles Dickens",
+     "avoid": [
+      "Dickens_dream.jpg"
+     ]
+    },
+    {
+     "id": "london-3",
+     "kind": "surprise",
+     "title": "Royal Observatory, Greenwich",
+     "wiki": "Royal Observatory, Greenwich",
+     "lat": 51.4769,
+     "lon": -0.0005,
+     "text": "Stand with one foot in each hemisphere on the prime meridian, longitude 0°.",
+     "more": "All time zones of the world were once counted from here, Greenwich Mean Time. The red time ball on the roof still drops at 1 pm."
+    }
+   ]
+  },
+  {
+   "id": "rome",
+   "name": "Rome",
+   "cc": "IT",
+   "lat": 41.892,
+   "lon": 12.511,
+   "r": 25,
+   "tips": [
+    {
+     "id": "rome-1",
+     "kind": "sight",
+     "title": "Pantheon",
+     "wiki": "Pantheon, Rome",
+     "lat": 41.8986,
+     "lon": 12.4769,
+     "text": "A temple almost 1,900 years old whose dome is still the largest unreinforced concrete dome in the world.",
+     "more": "Light and rain fall through the open eye at the top, the oculus; small holes in the floor drain the water."
+    },
+    {
+     "id": "rome-2",
+     "kind": "person",
+     "title": "Keats-Shelley House",
+     "wiki": "Keats-Shelley Memorial House",
+     "lat": 41.9059,
+     "lon": 12.4828,
+     "text": "The English poet John Keats died in a room of this house at the Spanish Steps in 1821, aged 25.",
+     "more": "Today it is a museum of the English Romantic poets who loved Rome, among them Keats, Shelley and Byron.",
+     "person": "John Keats"
+    },
+    {
+     "id": "rome-3",
+     "kind": "surprise",
+     "title": "Mouth of Truth",
+     "wiki": "Mouth of Truth",
+     "lat": 41.8881,
+     "lon": 12.4814,
+     "text": "A marble face said to bite off the hand of anyone who tells a lie.",
+     "more": "The ancient disc, probably once a drain cover, hangs in the porch of the church of Santa Maria in Cosmedin."
+    }
+   ]
+  },
+  {
+   "id": "barcelona",
+   "name": "Barcelona",
+   "cc": "ES",
+   "lat": 41.389,
+   "lon": 2.159,
+   "r": 20,
+   "tips": [
+    {
+     "id": "barcelona-1",
+     "kind": "sight",
+     "title": "La Boqueria",
+     "wiki": "La Boqueria",
+     "lat": 41.3817,
+     "lon": 2.1716,
+     "text": "A covered market off La Rambla, with stalls of fruit, ham and seafood.",
+     "more": "Small bars inside the market cook what is sold around them."
+    },
+    {
+     "id": "barcelona-2",
+     "kind": "person",
+     "title": "Sagrada Família",
+     "wiki": "Sagrada Família",
+     "lat": 41.4036,
+     "lon": 2.1744,
+     "text": "Antoni Gaudí worked on this basilica for over 40 years and is buried in its crypt; building goes on to this day.",
+     "more": "Gaudí designed its columns like trees, so the light inside falls as in a forest.",
+     "person": "Antoni Gaudí"
+    },
+    {
+     "id": "barcelona-3",
+     "kind": "surprise",
+     "title": "Montserrat",
+     "wiki": "Montserrat (mountain)",
+     "lat": 41.5933,
+     "lon": 1.8378,
+     "text": "A saw-toothed mountain with a monastery on its side, about an hour from the city.",
+     "more": "A rack railway and a cable car climb to the monastery, home of the Black Madonna and one of Europe’s oldest boys’ choirs."
+    }
+   ]
+  },
+  {
+   "id": "lisbon",
+   "name": "Lisbon",
+   "cc": "PT",
+   "lat": 38.717,
+   "lon": -9.133,
+   "r": 15,
+   "tips": [
+    {
+     "id": "lisbon-1",
+     "kind": "sight",
+     "title": "Belém Tower",
+     "wiki": "Belém Tower",
+     "lat": 38.6916,
+     "lon": -9.216,
+     "text": "A 16th-century fortress on the Tagus that guarded the way in and out of the harbour in the Age of Discovery.",
+     "more": "Its stonework shows ropes, armillary spheres and a carved rhinoceros."
+    },
+    {
+     "id": "lisbon-2",
+     "kind": "person",
+     "title": "A Brasileira",
+     "wiki": "A Brasileira",
+     "lat": 38.7107,
+     "lon": -9.1424,
+     "text": "The poet Fernando Pessoa was a regular at this café, opened in 1905; his bronze figure sits at a table outside.",
+     "more": "Order a bica, the small Lisbon espresso, and take the seat next to him.",
+     "person": "Fernando Pessoa"
+    },
+    {
+     "id": "lisbon-3",
+     "kind": "surprise",
+     "title": "Pena Palace",
+     "wiki": "Pena Palace",
+     "lat": 38.7876,
+     "lon": -9.3906,
+     "text": "A brightly painted 19th-century palace on a hilltop in the forests of Sintra.",
+     "more": "On clear days you can see from its terraces to Lisbon and the Atlantic."
+    }
+   ]
+  },
+  {
+   "id": "amsterdam",
+   "name": "Amsterdam",
+   "cc": "NL",
+   "lat": 52.374,
+   "lon": 4.89,
+   "r": 15,
+   "tips": [
+    {
+     "id": "amsterdam-1",
+     "kind": "sight",
+     "title": "Rijksmuseum",
+     "wiki": "Rijksmuseum",
+     "lat": 52.36,
+     "lon": 4.8852,
+     "text": "The national museum of the Netherlands, home of Rembrandt’s Night Watch; a cycle path runs right through the building.",
+     "more": "Over 8,000 objects tell 800 years of Dutch art and history."
+    },
+    {
+     "id": "amsterdam-2",
+     "kind": "person",
+     "title": "Anne Frank House",
+     "wiki": "Anne Frank House",
+     "lat": 52.3752,
+     "lon": 4.884,
+     "text": "Anne Frank hid with her family in the secret annex of this canal house for two years and wrote her diary here.",
+     "more": "The bookcase that hid the entrance is still in place.",
+     "person": "Anne Frank"
+    },
+    {
+     "id": "amsterdam-3",
+     "kind": "surprise",
+     "title": "Zaanse Schans",
+     "wiki": "Zaanse Schans",
+     "lat": 52.4741,
+     "lon": 4.817,
+     "text": "Working windmills and green wooden houses by the river Zaan, about 15 km from the centre.",
+     "more": "Some of the mills still grind spices and press oil as they did 300 years ago."
+    }
+   ]
+  },
+  {
+   "id": "vienna",
+   "name": "Vienna",
+   "cc": "AT",
+   "lat": 48.208,
+   "lon": 16.372,
+   "r": 20,
+   "tips": [
+    {
+     "id": "vienna-1",
+     "kind": "sight",
+     "title": "Naschmarkt",
+     "wiki": "Naschmarkt",
+     "lat": 48.1986,
+     "lon": 16.3632,
+     "text": "Vienna’s best-known market, about 1.5 km of stalls along the Wienzeile.",
+     "more": "On Saturdays a flea market joins it at the far end."
+    },
+    {
+     "id": "vienna-2",
+     "kind": "person",
+     "title": "Mozarthaus",
+     "wiki": "Mozarthaus Vienna",
+     "lat": 48.2075,
+     "lon": 16.3755,
+     "text": "Wolfgang Amadeus Mozart lived in this apartment from 1784 to 1787 and wrote The Marriage of Figaro here.",
+     "more": "It is the only one of his Vienna homes that still stands.",
+     "person": "Wolfgang Amadeus Mozart"
+    },
+    {
+     "id": "vienna-3",
+     "kind": "surprise",
+     "title": "Wiener Riesenrad",
+     "wiki": "Wiener Riesenrad",
+     "lat": 48.2166,
+     "lon": 16.3958,
+     "text": "One of the oldest Ferris wheels still turning, built in 1897 in the Prater.",
+     "more": "Its red cabins rise to almost 65 metres above the amusement park."
+    }
+   ]
+  },
+  {
+   "id": "prague",
+   "name": "Prague",
+   "cc": "CZ",
+   "lat": 50.088,
+   "lon": 14.421,
+   "r": 15,
+   "tips": [
+    {
+     "id": "prague-1",
+     "kind": "sight",
+     "title": "Charles Bridge",
+     "wiki": "Charles Bridge",
+     "lat": 50.0865,
+     "lon": 14.4114,
+     "text": "A stone bridge from the 14th century lined with 30 statues of saints.",
+     "more": "Early in the morning, before the crowds arrive, it belongs to the photographers."
+    },
+    {
+     "id": "prague-2",
+     "kind": "person",
+     "title": "Golden Lane",
+     "wiki": "Golden Lane",
+     "lat": 50.092,
+     "lon": 14.4036,
+     "text": "Franz Kafka wrote in the little blue house at number 22 of this lane of tiny castle houses.",
+     "more": "He used it as a quiet place to write in 1916 and 1917, staying into the night.",
+     "person": "Franz Kafka"
+    },
+    {
+     "id": "prague-3",
+     "kind": "surprise",
+     "title": "Sedlec Ossuary",
+     "wiki": "Sedlec Ossuary",
+     "lat": 49.962,
+     "lon": 15.2882,
+     "text": "A chapel decorated with the bones of tens of thousands of people, in the town of Kutná Hora.",
+     "more": "Even the chandelier is made of bones. Kutná Hora is about an hour from Prague by train."
+    }
+   ]
+  },
+  {
+   "id": "istanbul",
+   "name": "Istanbul",
+   "cc": "TR",
+   "lat": 41.014,
+   "lon": 28.95,
+   "r": 30,
+   "tips": [
+    {
+     "id": "istanbul-1",
+     "kind": "sight",
+     "title": "Hagia Sophia",
+     "wiki": "Hagia Sophia",
+     "lat": 41.0086,
+     "lon": 28.9802,
+     "text": "Built as a church in 537, it became a mosque in 1453; its dome has shaped the city for almost 1,500 years.",
+     "more": "Christian mosaics and Islamic calligraphy are seen side by side inside."
+    },
+    {
+     "id": "istanbul-2",
+     "kind": "person",
+     "title": "Museum of Innocence",
+     "wiki": "Museum of Innocence",
+     "lat": 41.0315,
+     "lon": 28.9783,
+     "text": "Nobel laureate Orhan Pamuk wrote a novel and built this museum of everyday objects to go with it.",
+     "more": "Each display case belongs to a chapter of the book, and a ticket is printed inside the novel.",
+     "person": "Orhan Pamuk"
+    },
+    {
+     "id": "istanbul-3",
+     "kind": "surprise",
+     "title": "Basilica Cistern",
+     "wiki": "Basilica Cistern",
+     "lat": 41.0084,
+     "lon": 28.9779,
+     "text": "An underground water tank from the 6th century, held up by 336 columns; two of them rest on Medusa heads.",
+     "more": "It once stored water for the Great Palace of the Byzantine emperors."
+    }
+   ]
+  },
+  {
+   "id": "new-york-city",
+   "name": "New York City",
+   "cc": "US",
+   "lat": 40.714,
+   "lon": -74.006,
+   "r": 25,
+   "tips": [
+    {
+     "id": "new-york-city-1",
+     "kind": "sight",
+     "title": "High Line",
+     "wiki": "High Line",
+     "lat": 40.748,
+     "lon": -74.0048,
+     "text": "An old elevated freight railway on Manhattan’s West Side turned into a park in the air.",
+     "more": "The walk runs about 2.3 km above the streets, with plants that grew wild on the tracks."
+    },
+    {
+     "id": "new-york-city-2",
+     "kind": "person",
+     "title": "Louis Armstrong House",
+     "wiki": "Louis Armstrong House",
+     "lat": 40.7546,
+     "lon": -73.8616,
+     "text": "Louis Armstrong lived in this modest house in Queens from 1943 until his death in 1971.",
+     "more": "He could have lived anywhere, but chose to stay among his neighbours; his home recordings are played in the rooms.",
+     "person": "Louis Armstrong"
+    },
+    {
+     "id": "new-york-city-3",
+     "kind": "surprise",
+     "title": "Grand Central Terminal",
+     "wiki": "Grand Central Terminal",
+     "lat": 40.7527,
+     "lon": -73.9772,
+     "text": "Whisper into a corner of the tiled arches outside the Oyster Bar, and someone in the far corner hears you.",
+     "more": "Look up in the main hall: the ceiling shows the constellations, painted in reverse."
+    }
+   ]
+  },
+  {
+   "id": "san-francisco",
+   "name": "San Francisco",
+   "cc": "US",
+   "lat": 37.775,
+   "lon": -122.419,
+   "r": 15,
+   "tips": [
+    {
+     "id": "san-francisco-1",
+     "kind": "sight",
+     "title": "Alcatraz Island",
+     "wiki": "Alcatraz Island",
+     "lat": 37.8267,
+     "lon": -122.423,
+     "text": "The island prison in the bay, closed in 1963, once held Al Capone.",
+     "more": "Ferries leave from Pier 33; the audio tour is told by former guards and inmates."
+    },
+    {
+     "id": "san-francisco-2",
+     "kind": "person",
+     "title": "City Lights Bookstore",
+     "wiki": "City Lights Bookstore",
+     "lat": 37.7976,
+     "lon": -122.4066,
+     "text": "Poet Lawrence Ferlinghetti’s bookshop published Allen Ginsberg’s Howl in 1956 and became the home of the Beat writers.",
+     "more": "The poetry room upstairs invites you to sit down and read.",
+     "person": "Lawrence Ferlinghetti"
+    },
+    {
+     "id": "san-francisco-3",
+     "kind": "surprise",
+     "title": "Cable cars",
+     "wiki": "San Francisco cable car system",
+     "lat": 37.7848,
+     "lon": -122.4076,
+     "text": "The last cable cars in the world still worked by hand, running since 1873.",
+     "more": "At the end of the line on Powell Street the cars are turned around on a turntable, pushed by the crew."
+    }
+   ]
+  },
+  {
+   "id": "mexico-city",
+   "name": "Mexico City",
+   "cc": "MX",
+   "lat": 19.428,
+   "lon": -99.128,
+   "r": 30,
+   "tips": [
+    {
+     "id": "mexico-city-1",
+     "kind": "sight",
+     "title": "Palacio de Bellas Artes",
+     "wiki": "Palacio de Bellas Artes",
+     "lat": 19.4352,
+     "lon": -99.1412,
+     "text": "A white marble palace of the arts, with murals by Diego Rivera inside.",
+     "more": "Its stage curtain is made of nearly a million pieces of coloured glass by Tiffany."
+    },
+    {
+     "id": "mexico-city-2",
+     "kind": "person",
+     "title": "Frida Kahlo Museum",
+     "wiki": "Frida Kahlo Museum",
+     "lat": 19.3551,
+     "lon": -99.1625,
+     "text": "Frida Kahlo was born, lived and died in this blue house in Coyoacán.",
+     "more": "Her studio, her easel and her clothes are still in the house, which she shared with Diego Rivera.",
+     "person": "Frida Kahlo"
+    },
+    {
+     "id": "mexico-city-3",
+     "kind": "surprise",
+     "title": "Xochimilco",
+     "wiki": "Xochimilco",
+     "lat": 19.2574,
+     "lon": -99.1052,
+     "text": "Colourful boats glide along canals that are a remnant of the old Aztec lake landscape.",
+     "more": "Mariachi bands and food sellers pull up alongside in their own boats."
+    }
+   ]
+  },
+  {
+   "id": "rio-de-janeiro",
+   "name": "Rio de Janeiro",
+   "cc": "BR",
+   "lat": -22.906,
+   "lon": -43.182,
+   "r": 25,
+   "tips": [
+    {
+     "id": "rio-de-janeiro-1",
+     "kind": "sight",
+     "title": "Christ the Redeemer",
+     "wiki": "Christ the Redeemer (statue)",
+     "lat": -22.9519,
+     "lon": -43.2105,
+     "text": "The 30-metre statue on Corcovado mountain, 700 metres above the city.",
+     "more": "A rack railway through the Tijuca forest climbs to its feet."
+    },
+    {
+     "id": "rio-de-janeiro-2",
+     "kind": "person",
+     "title": "Selarón Steps",
+     "wiki": "Escadaria Selarón",
+     "lat": -22.9153,
+     "lon": -43.1792,
+     "text": "Chilean artist Jorge Selarón covered these 215 steps with tiles from all over the world.",
+     "more": "He worked on them for more than 20 years; visitors sent him tiles from their home countries.",
+     "person": "Jorge Selarón"
+    },
+    {
+     "id": "rio-de-janeiro-3",
+     "kind": "surprise",
+     "title": "Sugarloaf Mountain",
+     "wiki": "Sugarloaf Mountain",
+     "lat": -22.9486,
+     "lon": -43.1566,
+     "text": "Two cable cars climb via Urca hill to the top of the granite peak at the mouth of the bay.",
+     "more": "Come for the sunset over the city and Copacabana."
+    }
+   ]
+  },
+  {
+   "id": "buenos-aires",
+   "name": "Buenos Aires",
+   "cc": "AR",
+   "lat": -34.613,
+   "lon": -58.377,
+   "r": 25,
+   "tips": [
+    {
+     "id": "buenos-aires-1",
+     "kind": "sight",
+     "title": "Caminito",
+     "wiki": "Caminito",
+     "lat": -34.6393,
+     "lon": -58.3627,
+     "text": "A colourful street in La Boca, painted like the houses of the dock workers who settled here.",
+     "more": "Tango dancers perform on the pavement for passers-by."
+    },
+    {
+     "id": "buenos-aires-2",
+     "kind": "person",
+     "title": "Café Tortoni",
+     "wiki": "Café Tortoni",
+     "lat": -34.6088,
+     "lon": -58.3787,
+     "text": "The city’s oldest café, opened in 1858, where Jorge Luis Borges and Carlos Gardel were guests.",
+     "more": "Tango shows still take place in its cellar.",
+     "person": "Jorge Luis Borges"
+    },
+    {
+     "id": "buenos-aires-3",
+     "kind": "surprise",
+     "title": "Recoleta Cemetery",
+     "wiki": "La Recoleta Cemetery",
+     "lat": -34.5875,
+     "lon": -58.3934,
+     "text": "A city of marble mausoleums where Eva Perón is buried.",
+     "more": "Its avenues and statues make it one of the most visited cemeteries in the world."
+    }
+   ]
+  },
+  {
+   "id": "cairo",
+   "name": "Cairo",
+   "cc": "EG",
+   "lat": 30.063,
+   "lon": 31.25,
+   "r": 30,
+   "tips": [
+    {
+     "id": "cairo-1",
+     "kind": "sight",
+     "title": "Khan el-Khalili",
+     "wiki": "Khan el-Khalili",
+     "lat": 30.0477,
+     "lon": 31.2622,
+     "text": "A bazaar of narrow lanes founded in the 14th century in the heart of old Cairo.",
+     "more": "Stop at one of the old coffee houses for mint tea."
+    },
+    {
+     "id": "cairo-2",
+     "kind": "surprise",
+     "title": "Pyramids of Giza",
+     "wiki": "Giza pyramid complex",
+     "lat": 29.9792,
+     "lon": 31.1342,
+     "text": "The last of the Seven Wonders of the Ancient World still standing, right at the edge of the city.",
+     "more": "The Great Pyramid was the tallest structure built by people for more than 3,800 years."
+    }
+   ]
+  },
+  {
+   "id": "cape-town",
+   "name": "Cape Town",
+   "cc": "ZA",
+   "lat": -33.926,
+   "lon": 18.423,
+   "r": 25,
+   "tips": [
+    {
+     "id": "cape-town-1",
+     "kind": "sight",
+     "title": "Table Mountain",
+     "wiki": "Table Mountain",
+     "lat": -33.9628,
+     "lon": 18.4098,
+     "text": "The flat-topped mountain above the city, reached by a cable car whose floor turns as it climbs.",
+     "more": "When clouds pour over its edge, people here say the table cloth is laid."
+    },
+    {
+     "id": "cape-town-2",
+     "kind": "person",
+     "title": "Robben Island",
+     "wiki": "Robben Island",
+     "lat": -33.8067,
+     "lon": 18.3664,
+     "text": "Nelson Mandela spent 18 of his 27 years in prison on this island.",
+     "more": "Tours are led by former political prisoners and stop at his cell.",
+     "person": "Nelson Mandela"
+    },
+    {
+     "id": "cape-town-3",
+     "kind": "surprise",
+     "title": "Boulders Beach",
+     "wiki": "Boulders Beach",
+     "lat": -34.1972,
+     "lon": 18.4517,
+     "text": "African penguins nest on this beach between granite boulders.",
+     "more": "Wooden walkways lead you right past the colony."
+    }
+   ]
+  },
+  {
+   "id": "nairobi",
+   "name": "Nairobi",
+   "cc": "KE",
+   "lat": -1.283,
+   "lon": 36.817,
+   "r": 25,
+   "tips": [
+    {
+     "id": "nairobi-1",
+     "kind": "sight",
+     "title": "Nairobi National Museum",
+     "wiki": "Nairobi National Museum",
+     "lat": -1.274,
+     "lon": 36.8146,
+     "text": "Kenya’s national museum, with collections on the country’s history, nature, culture and art.",
+     "more": "A snake park is part of the museum grounds."
+    },
+    {
+     "id": "nairobi-2",
+     "kind": "surprise",
+     "title": "Nairobi National Park",
+     "wiki": "Nairobi National Park",
+     "lat": -1.3733,
+     "lon": 36.8589,
+     "text": "Lions, rhinos and giraffes live in a national park with the city skyline in the background.",
+     "more": "It lies only about 7 km from the centre of the capital."
+    }
+   ]
+  },
+  {
+   "id": "tokyo",
+   "name": "Tokyo",
+   "cc": "JP",
+   "lat": 35.69,
+   "lon": 139.692,
+   "r": 30,
+   "tips": [
+    {
+     "id": "tokyo-1",
+     "kind": "sight",
+     "title": "Sensō-ji",
+     "wiki": "Sensō-ji",
+     "lat": 35.7148,
+     "lon": 139.7967,
+     "text": "Tokyo’s oldest temple, reached through the Thunder Gate with its giant red lantern.",
+     "more": "The shopping street in front of it has sold snacks and souvenirs to pilgrims for centuries."
+    },
+    {
+     "id": "tokyo-2",
+     "kind": "person",
+     "title": "Ghibli Museum",
+     "wiki": "Ghibli Museum",
+     "lat": 35.6962,
+     "lon": 139.5704,
+     "text": "Hayao Miyazaki designed this museum of the Studio Ghibli films himself; a robot soldier guards its roof garden.",
+     "more": "Tickets name a date and time and are sold in advance only.",
+     "person": "Hayao Miyazaki"
+    },
+    {
+     "id": "tokyo-3",
+     "kind": "surprise",
+     "title": "Shibuya Crossing",
+     "wiki": "Shibuya Crossing",
+     "lat": 35.6595,
+     "lon": 139.7005,
+     "text": "When the lights turn green, crowds cross this junction from all sides at once.",
+     "more": "The statue of the faithful dog Hachikō waits by the station exit."
+    }
+   ]
+  },
+  {
+   "id": "kyoto",
+   "name": "Kyoto",
+   "cc": "JP",
+   "lat": 35.021,
+   "lon": 135.754,
+   "r": 15,
+   "tips": [
+    {
+     "id": "kyoto-1",
+     "kind": "sight",
+     "title": "Kinkaku-ji",
+     "wiki": "Kinkaku-ji",
+     "lat": 35.0394,
+     "lon": 135.7292,
+     "text": "A Zen temple whose top two floors are covered in gold leaf.",
+     "more": "It is mirrored in the pond in front of it."
+    },
+    {
+     "id": "kyoto-2",
+     "kind": "surprise",
+     "title": "Fushimi Inari-taisha",
+     "wiki": "Fushimi Inari-taisha",
+     "lat": 34.9671,
+     "lon": 135.7727,
+     "text": "Thousands of vermilion torii gates form tunnels up a wooded mountain.",
+     "more": "Each gate was given by a person or a company; the walk to the top takes about two hours."
+    }
+   ]
+  },
+  {
+   "id": "seoul",
+   "name": "Seoul",
+   "cc": "KR",
+   "lat": 37.566,
+   "lon": 126.978,
+   "r": 25,
+   "tips": [
+    {
+     "id": "seoul-1",
+     "kind": "sight",
+     "title": "Gyeongbokgung",
+     "wiki": "Gyeongbokgung",
+     "lat": 37.5796,
+     "lon": 126.977,
+     "text": "The main royal palace of the Joseon dynasty, first built in 1395.",
+     "more": "The changing of the guard takes place at its main gate.",
+     "avoid": [
+      "조선물산공진회_광고지-1_(부분)_(cropped).jpg"
+     ]
+    },
+    {
+     "id": "seoul-2",
+     "kind": "sight",
+     "title": "Gwangjang Market",
+     "wiki": "Gwangjang Market",
+     "lat": 37.57,
+     "lon": 126.9996,
+     "text": "One of Korea’s oldest markets, famous for its mung bean pancakes.",
+     "more": "Hundreds of food stalls fill the covered lanes."
+    },
+    {
+     "id": "seoul-3",
+     "kind": "surprise",
+     "title": "Cheonggyecheon",
+     "wiki": "Cheonggyecheon",
+     "lat": 37.569,
+     "lon": 126.9785,
+     "text": "A stream once buried under an elevated highway flows through the city centre again.",
+     "more": "The highway was torn down and the stream opened up in 2005; it is now an almost 11 km walk."
+    }
+   ]
+  },
+  {
+   "id": "beijing",
+   "name": "Beijing",
+   "cc": "CN",
+   "lat": 39.907,
+   "lon": 116.397,
+   "r": 30,
+   "tips": [
+    {
+     "id": "beijing-1",
+     "kind": "sight",
+     "title": "Forbidden City",
+     "wiki": "Forbidden City",
+     "lat": 39.9163,
+     "lon": 116.3972,
+     "text": "The palace of 24 emperors of the Ming and Qing dynasties.",
+     "more": "For almost 500 years no one could enter without the emperor’s permission."
+    },
+    {
+     "id": "beijing-2",
+     "kind": "sight",
+     "title": "Temple of Heaven",
+     "wiki": "Temple of Heaven",
+     "lat": 39.8822,
+     "lon": 116.4066,
+     "text": "Emperors prayed here for good harvests, in a round hall of wood under a blue roof.",
+     "more": "Today the park is full of people doing tai chi, dancing and playing cards in the mornings."
+    },
+    {
+     "id": "beijing-3",
+     "kind": "surprise",
+     "title": "Mutianyu",
+     "wiki": "Mutianyu",
+     "lat": 40.4319,
+     "lon": 116.5704,
+     "text": "A restored stretch of the Great Wall about 70 km from the city.",
+     "more": "A chairlift goes up and a toboggan run brings you back down."
+    }
+   ]
+  },
+  {
+   "id": "singapore",
+   "name": "Singapore",
+   "cc": "SG",
+   "lat": 1.29,
+   "lon": 103.85,
+   "r": 25,
+   "tips": [
+    {
+     "id": "singapore-1",
+     "kind": "sight",
+     "title": "Gardens by the Bay",
+     "wiki": "Gardens by the Bay",
+     "lat": 1.2816,
+     "lon": 103.8636,
+     "text": "Steel Supertrees up to 50 metres tall, planted with ferns and orchids.",
+     "more": "Every evening they light up to music."
+    },
+    {
+     "id": "singapore-2",
+     "kind": "sight",
+     "title": "Lau Pa Sat",
+     "wiki": "Lau Pa Sat",
+     "lat": 1.2806,
+     "lon": 103.8504,
+     "text": "A Victorian cast-iron market hall that is now a busy food centre.",
+     "more": "At night the street beside it fills with satay stalls."
+    },
+    {
+     "id": "singapore-3",
+     "kind": "surprise",
+     "title": "Pulau Ubin",
+     "wiki": "Pulau Ubin",
+     "lat": 1.4044,
+     "lon": 103.9625,
+     "text": "An island of village houses and mangroves, a short boat ride from the mainland.",
+     "more": "Rent a bicycle and explore one of the last kampongs, traditional villages, of Singapore."
+    }
+   ]
+  },
+  {
+   "id": "mumbai",
+   "name": "Mumbai",
+   "cc": "IN",
+   "lat": 19.073,
+   "lon": 72.883,
+   "r": 25,
+   "tips": [
+    {
+     "id": "mumbai-1",
+     "kind": "sight",
+     "title": "Chhatrapati Shivaji Terminus",
+     "wiki": "Chhatrapati Shivaji Maharaj Terminus",
+     "lat": 18.9398,
+     "lon": 72.8355,
+     "text": "A Victorian Gothic railway station, still one of the busiest in India.",
+     "more": "It was finished in 1888 and is a World Heritage Site."
+    },
+    {
+     "id": "mumbai-2",
+     "kind": "person",
+     "title": "Mani Bhavan",
+     "wiki": "Mani Bhavan",
+     "lat": 18.9596,
+     "lon": 72.8114,
+     "text": "Mahatma Gandhi stayed in this house whenever he was in Bombay from 1917 to 1934.",
+     "more": "His room, with his spinning wheel, is kept as it was.",
+     "person": "Mahatma Gandhi"
+    },
+    {
+     "id": "mumbai-3",
+     "kind": "surprise",
+     "title": "Elephanta Caves",
+     "wiki": "Elephanta Caves",
+     "lat": 18.9633,
+     "lon": 72.9315,
+     "text": "Rock-cut temples with a huge three-headed Shiva, on an island in the harbour.",
+     "more": "Ferries leave from the Gateway of India."
+    }
+   ]
+  },
+  {
+   "id": "sydney",
+   "name": "Sydney",
+   "cc": "AU",
+   "lat": -33.868,
+   "lon": 151.207,
+   "r": 25,
+   "tips": [
+    {
+     "id": "sydney-1",
+     "kind": "person",
+     "title": "Sydney Opera House",
+     "wiki": "Sydney Opera House",
+     "lat": -33.8568,
+     "lon": 151.2153,
+     "text": "Danish architect Jørn Utzon won the design competition in 1957, but left in 1966 and never saw the finished building.",
+     "more": "The roof shells are covered with more than a million tiles.",
+     "person": "Jørn Utzon"
+    },
+    {
+     "id": "sydney-2",
+     "kind": "sight",
+     "title": "Sydney Harbour Bridge",
+     "wiki": "Sydney Harbour Bridge",
+     "lat": -33.8523,
+     "lon": 151.2108,
+     "text": "You can climb the arch of the bridge, 134 metres above the harbour.",
+     "more": "Locals call it the Coathanger."
+    },
+    {
+     "id": "sydney-3",
+     "kind": "surprise",
+     "title": "Bondi Beach",
+     "wiki": "Bondi Beach",
+     "lat": -33.8915,
+     "lon": 151.2767,
+     "text": "Australia’s best-known beach, with an ocean pool cut into the rocks at its southern end.",
+     "more": "A coastal path leads along the cliffs to Coogee."
+    }
+   ]
+  },
+  {
+   "id": "athens",
+   "name": "Athens",
+   "cc": "GR",
+   "lat": 37.984,
+   "lon": 23.728,
+   "r": 20,
+   "tips": [
+    {
+     "id": "athens-1",
+     "kind": "sight",
+     "title": "Acropolis",
+     "wiki": "Acropolis of Athens",
+     "lat": 37.9715,
+     "lon": 23.7257,
+     "text": "The Parthenon has stood on this rock above the city for almost 2,500 years.",
+     "more": "The Acropolis Museum at its foot shows the sculptures that once decorated the temples."
+    },
+    {
+     "id": "athens-2",
+     "kind": "person",
+     "title": "Ancient Agora",
+     "wiki": "Ancient Agora of Athens",
+     "lat": 37.9747,
+     "lon": 23.7223,
+     "text": "Socrates questioned the citizens of Athens in this marketplace.",
+     "more": "The Temple of Hephaestus above the agora is one of the best preserved Greek temples.",
+     "person": "Socrates"
+    },
+    {
+     "id": "athens-3",
+     "kind": "surprise",
+     "title": "Cape Sounion",
+     "wiki": "Cape Sounion",
+     "lat": 37.6503,
+     "lon": 24.0246,
+     "text": "The ruins of a temple of Poseidon on a cape above the Aegean, about 70 km from Athens.",
+     "more": "Lord Byron carved his name into one of its columns."
+    }
+   ]
+  },
+  {
+   "id": "stockholm",
+   "name": "Stockholm",
+   "cc": "SE",
+   "lat": 59.329,
+   "lon": 18.069,
+   "r": 20,
+   "tips": [
+    {
+     "id": "stockholm-1",
+     "kind": "sight",
+     "title": "Vasa Museum",
+     "wiki": "Vasa Museum",
+     "lat": 59.328,
+     "lon": 18.0914,
+     "text": "A warship that sank on its maiden voyage in 1628 and was raised almost intact in 1961.",
+     "more": "It is the best preserved ship of its time anywhere."
+    },
+    {
+     "id": "stockholm-2",
+     "kind": "person",
+     "title": "ABBA The Museum",
+     "wiki": "ABBA The Museum",
+     "lat": 59.3251,
+     "lon": 18.0963,
+     "text": "The story of the band that won the Eurovision Song Contest in 1974 with Waterloo.",
+     "more": "Costumes, gold records and a copy of the studio where many of the songs were recorded.",
+     "person": "ABBA"
+    },
+    {
+     "id": "stockholm-3",
+     "kind": "surprise",
+     "title": "Metro art",
+     "wiki": "Stockholm metro",
+     "lat": 59.3313,
+     "lon": 18.0596,
+     "text": "Over 90 of the 100 metro stations are decorated with art; some look like painted caves.",
+     "more": "Start at T-Centralen, with its blue vines on the rock walls."
+    }
+   ]
+  }
+ ]
+}

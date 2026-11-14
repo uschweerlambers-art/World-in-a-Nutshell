@@ -13,15 +13,19 @@ const SKIP = /\.svg$|map|locator|location|flag|coat[_ ]of[_ ]arms|logo|icon|diag
 // photos only: no PNG (mostly maps and diagrams), no old engravings, fossils or reconstructions
 const NOT_PHOTO = /\.png$|fossil|rainforest|painting|engraving|drawing|illustration|reconstruction|vegetation|(?<!\d)1[0-8]\d\d(?!\d)/i;
 
+// true when a file name looks like a photo (not a map, logo, painting or old print)
+export const isPhoto = (f) => /\.(jpe?g|webp|tiff?)$/i.test(f) && !SKIP.test(f) && !NOT_PHOTO.test(f);
+
 // prefer: Commons file names picked by hand, used first (still only with a free licence)
-// photos: skip files that are rarely photos of the place itself
-export async function pictures(wiki, MAX_PICS = 5, { prefer = [], photos = false } = {}) {
+// photos: skip files that are rarely photos of the place itself; avoid: file names never to use
+export async function pictures(wiki, MAX_PICS = 5, { prefer = [], photos = false, avoid = [] } = {}) {
   // files in article order (lead image first)
   const ml = await get(`https://en.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(wiki)}`);
   const auto = [...new Set((ml.items || []).filter((it) => it.type === 'image' && it.title).map((it) => it.title.replace(/^File:/, '')))]
     .filter((f) => /\.(jpe?g|png|webp|tiff?)$/i.test(f) && !SKIP.test(f) && !(photos && NOT_PHOTO.test(f)));
+  const no = new Set(avoid.map((f) => f.replace(/ /g, '_')));
   const chosen = new Set(prefer.map((f) => f.replace(/ /g, '_')));
-  const files = [...new Set([...chosen, ...auto.map((f) => f.replace(/ /g, '_'))])].slice(0, 30);
+  const files = [...new Set([...chosen, ...auto.map((f) => f.replace(/ /g, '_'))])].filter((f) => !no.has(f)).slice(0, 30);
   if (!files.length) return [];
   // only files hosted on Wikimedia Commons, which only takes freely licensed works
   const q = new URLSearchParams({ action: 'query', format: 'json', formatversion: '2', prop: 'imageinfo', iiprop: 'url|size|extmetadata', iiurlwidth: '1280', titles: files.map((f) => 'File:' + f).join('|') });

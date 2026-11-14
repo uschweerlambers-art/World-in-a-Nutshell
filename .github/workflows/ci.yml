@@ -20,7 +20,7 @@ jobs:
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Scripts parse
-        run: node --check scripts/fetch-snapshots.mjs && node --check scripts/fetch-clouds.mjs && node --check scripts/fetch-textures.mjs && node --check scripts/fetch-weather.mjs && node --check scripts/fetch-ships.mjs && node --check scripts/commons-pictures.mjs && node --check scripts/fetch-place-of-day.mjs && node --check scripts/fetch-wonder-pictures.mjs && node --check tools/build-power.mjs
+        run: node --check scripts/fetch-snapshots.mjs && node --check scripts/fetch-clouds.mjs && node --check scripts/fetch-textures.mjs && node --check scripts/fetch-weather.mjs && node --check scripts/fetch-ships.mjs && node --check scripts/commons-pictures.mjs && node --check scripts/fetch-place-of-day.mjs && node --check scripts/fetch-wonder-pictures.mjs && node --check scripts/fetch-discover-pictures.mjs && node --check tools/build-power.mjs
       - name: Data files are valid JSON
         run: |
           for f in site/data/*.json; do node -e "JSON.parse(require('fs').readFileSync('$f','utf8'))" && echo "ok $f"; done
@@ -38,6 +38,7 @@ jobs:
           AIS_LISTEN_SECONDS=20 node scripts/fetch-ships.mjs .cache/live site/data/live
           node scripts/fetch-place-of-day.mjs .cache/live site/data/live && cat site/data/live/placeofday.json && ls -la site/data/live/pod
           node scripts/fetch-wonder-pictures.mjs .cache/live site/data/live && cat site/data/live/wonders-pictures.json && ls -la site/data/live/wonders
+          DISCOVER_DEBUG=1 node scripts/fetch-discover-pictures.mjs .cache/live site/data/live
           node -e "for (const f of ['cables','ships','disasters']) { try { const j = require('./site/data/live/' + f + '.json'); console.log(f, j.count, JSON.stringify(j).length) } catch (e) { console.log(f, 'missing') } }"
           cat site/data/live/weather.json || true
           node scripts/fetch-textures.mjs .cache/textures site/img/hi
