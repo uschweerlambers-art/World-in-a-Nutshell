@@ -1309,7 +1309,15 @@ function frameView(now) {
     }
     MORPH.uLon0.value = VIEW.lon0;
     flatCamera();
-  } else if (flight) stepFlight(now); else controls.update();
+  } else if (flight) stepFlight(now); else { tuneControls(); controls.update(); }
+}
+// Globe: rotation and zoom get finer as the camera nears the surface. Speeds scale with the
+// altitude above the ground, so a drag moves the ground about as far as the pointer moves at
+// any zoom. The whole-globe view (distance 3 and beyond) keeps the original feel.
+function tuneControls() {
+  const h = Math.max(0.05, controls.getDistance() - 1);
+  controls.rotateSpeed = 0.45 * Math.min(1, h / 2);
+  controls.zoomSpeed = 0.7 * Math.min(1, 1.5 * h / (h + 1));
 }
 // map navigation: drag to move, wheel or pinch to zoom (the globe keeps its orbit controls)
 const FP = new Map();
