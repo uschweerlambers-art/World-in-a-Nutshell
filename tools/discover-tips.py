@@ -760,10 +760,9 @@ tip('sight', 'Notre-Dame Basilica', 'Notre-Dame Basilica (Montreal)', 45.5045, -
     'Céline Dion was married here in 1994.')
 
 city('Vancouver', 'CA', 20)
-tip('sight', 'Stanley Park', 'Stanley Park', 49.3043, -123.1443,
-    'A forest park larger than New York’s Central Park, almost surrounded by the sea.',
-    'A seawall path runs about 9 km around it.',
-    avoid=['Indian_dugout_canoe_on_Burrard_Inlet.jpg'])
+tip('sight', 'Stanley Park Seawall', 'Stanley Park Seawall', 49.3043, -123.1443,
+    'A path about 9 km long along the sea around Stanley Park, a forest park larger than New York’s Central Park.',
+    'Walkers, cyclists and skaters share it, with views of the mountains and the harbour.')
 tip('surprise', 'Capilano Suspension Bridge', 'Capilano Suspension Bridge', 49.3429, -123.1149,
     'A swaying footbridge 140 metres long, high above a river canyon in the rainforest.',
     'The first bridge across the canyon here was built of hemp rope in 1889.')

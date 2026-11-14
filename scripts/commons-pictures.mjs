@@ -18,11 +18,11 @@ export const isPhoto = (f) => /\.(jpe?g|webp|tiff?)$/i.test(f) && !SKIP.test(f) 
 
 // prefer: Commons file names picked by hand, used first (still only with a free licence)
 // photos: skip files that are rarely photos of the place itself; avoid: file names never to use
-export async function pictures(wiki, MAX_PICS = 5, { prefer = [], photos = false, avoid = [] } = {}) {
+export async function pictures(wiki, MAX_PICS = 5, { prefer = [], photos = false, avoid = [], skip = null, debug = false } = {}) {
   // files in article order (lead image first)
   const ml = await get(`https://en.wikipedia.org/api/rest_v1/page/media-list/${encodeURIComponent(wiki)}`);
   const auto = [...new Set((ml.items || []).filter((it) => it.type === 'image' && it.title).map((it) => it.title.replace(/^File:/, '')))]
-    .filter((f) => /\.(jpe?g|png|webp|tiff?)$/i.test(f) && !SKIP.test(f) && !(photos && NOT_PHOTO.test(f)));
+    .filter((f) => /\.(jpe?g|png|webp|tiff?)$/i.test(f) && !SKIP.test(f) && !(photos && NOT_PHOTO.test(f)) && !(skip && skip.test(f)));
   const no = new Set(avoid.map((f) => f.replace(/ /g, '_')));
   const chosen = new Set(prefer.map((f) => f.replace(/ /g, '_')));
   const files = [...new Set([...chosen, ...auto.map((f) => f.replace(/ /g, '_'))])].filter((f) => !no.has(f)).slice(0, 30);
@@ -34,10 +34,12 @@ export async function pictures(wiki, MAX_PICS = 5, { prefer = [], photos = false
   const first = [], wide = [], tall = [];
   for (const f of files) {
     const p = byTitle.get(f.replace(/ /g, '_')); const ii = p?.imageinfo?.[0];
-    if (!p || p.missing || !ii?.thumburl) continue;
+    const why = (r) => { if (debug && chosen.has(f)) console.log(`    skipped ${f}: ${r}`); };
+    if (!p || p.missing || !ii?.thumburl) { why(p ? 'missing on Commons' : 'not returned'); continue; }
     const m = ii.extmetadata || {}, lic = plain(m.LicenseShortName?.value);
-    if (m.NonFree?.value || !/^(cc|public domain|pd|cc0|attribution|no restrictions)/i.test(lic)) continue;
-    if (Math.max(ii.width, ii.height) < 800) continue;
+    const nonFree = m.NonFree?.value && !/^(false|0|no)$/i.test(String(m.NonFree.value).trim());
+    if (nonFree || !/^(cc|public domain|pd|cc0|attribution|no restrictions)/i.test(lic)) { why(`licence ${lic || '?'}${nonFree ? ' (non-free)' : ''}`); continue; }
+    if (Math.max(ii.width, ii.height) < 800) { why('too small'); continue; }
     const author = plain(m.Artist?.value).replace(/^(.{3,}?)(?:\s+\1)+$/, '$1').slice(0, 90) || 'Unknown author';
     // landscape pictures fit the slider best; upright ones (towers) only fill up
     if (!chosen.has(f) && photos && /^public domain$/i.test(lic) && /^unknown/i.test(plain(m.Artist?.value) || 'unknown')) continue;

@@ -2602,15 +2602,12 @@
     {
      "id": "vancouver-1",
      "kind": "sight",
-     "title": "Stanley Park",
-     "wiki": "Stanley Park",
+     "title": "Stanley Park Seawall",
+     "wiki": "Stanley Park Seawall",
      "lat": 49.3043,
      "lon": -123.1443,
-     "text": "A forest park larger than New York’s Central Park, almost surrounded by the sea.",
-     "more": "A seawall path runs about 9 km around it.",
-     "avoid": [
-      "Indian_dugout_canoe_on_Burrard_Inlet.jpg"
-     ]
+     "text": "A path about 9 km long along the sea around Stanley Park, a forest park larger than New York’s Central Park.",
+     "more": "Walkers, cyclists and skaters share it, with views of the mountains and the harbour."
     },
     {
      "id": "vancouver-2",
