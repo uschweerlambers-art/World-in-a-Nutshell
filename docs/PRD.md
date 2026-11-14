@@ -1,6 +1,8 @@
 # World in a Nutshell – Product Requirements Document (PRD) für den Prototyp
 
-Version 0.9 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+Version 0.10 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
+
+Änderungen in v0.10 (Uwe, 14.11.2026): Feinere Steuerung beim Heranzoomen und scharfe Nahansicht (F-19). Drehen und Zoomen werden nahe am Boden feiner; beim Heranzoomen laden Satellitenbild-Kacheln nur für den sichtbaren Ausschnitt nach (bis etwa 10 m pro Pixel), und man kann bis auf etwa 40 km Höhe heran.
 
 Änderungen in v0.9 (Uwe, 14.11.2026): Echte Kartenansicht (F-18). Der Umschalter „Globe / Map“ rollt den Globus in derselben 3D-Szene zu einer flachen Weltkarte ab, alle Ebenen bleiben erhalten.
 
@@ -226,6 +228,16 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | F-18.2 | Projektion: Plattkarte (equirectangular), wie alle Texturen. Die Kartenmitte folgt der Ansicht, die Karte lässt sich nach Osten und Westen endlos verschieben; Linien über den Kartenrand (Datumsgrenze auf der Rückseite) werden dort getrennt. | M |
 | F-18.3 | Alle Ebenen, Beschriftungen, Popups, Hervorhebungen und Klicks funktionieren auf der Karte wie auf dem Globus. Satelliten liegen über ihrem Bodenpunkt. Tag und Nacht, Wolken, Wetterkarten und Konfliktgebiete liegen auf der Karte. | M |
 | F-18.4 | Bedienung der Karte: ziehen verschiebt, Mausrad oder zwei Finger zoomen zur Zeigerposition. Weitester Zoom: die ganze Breite der Welt passt auf den Bildschirm; nach Norden und Süden endet die Karte an den Polen. Suche, „Surprise me“ und „Mein Standort“ fliegen auf der Karte zum Ziel. | M |
+
+### F-19 Feine Steuerung und scharfe Nahansicht (v0.10)
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-19.1 | Drehen und Zoomen auf dem Globus richten sich nach der Höhe über dem Boden: In der Gesamtansicht bleibt die Bedienung wie bisher, nahe am Boden bewegt derselbe Mausweg die Erde entsprechend weniger, ein Mausrad-Schritt ändert die Höhe um etwa 5 %. Auf der Karte folgt das Verschieben ohnehin dem Zeiger. | M |
+| F-19.2 | Heranzoomen bis etwa 40 km Höhe, auf Globus und Karte. | M |
+| F-19.3 | **Nachladen nach Detailstufe (LOD):** Unter etwa 5.700 km Höhe laden Kacheln von *Sentinel-2 cloudless 2016* (EOX IT Services GmbH, CC BY 4.0, enthält veränderte Copernicus-Sentinel-Daten 2016, Web-Mercator-Stufen 6 bis 14, bis etwa 10 m pro Pixel). Es laden nur Kacheln, die auf dem Bildschirm zu sehen sind, jeweils so fein, wie ihr Abstand zur Kamera es braucht; bis eine Kachel da ist, füllt ihre gröbere Vorgängerin aus, sonst die 8k-Erde. Neue Kacheln blenden weich ein. Höchstens 6 Anfragen gleichzeitig, etwa 260 Kacheln bleiben im Speicher. | M, A |
+| F-19.4 | Die Kacheln liegen auf Globus und Karte, auch während des Wechsels, mit Tag und Nacht wie die übrige Erde (nachts bleiben die Stadtlichter der 8k-Nachtkarte). Nahe am Boden werden die groben Wolken durchsichtiger. | M |
+| F-19.5 | Solange Kacheln zu sehen sind, nennt die Quellenzeile „Close-up: Sentinel-2 cloudless 2016 by EOX IT Services GmbH (CC BY 4.0, contains modified Copernicus Sentinel data 2016)“ mit Link; „Sources & licences“ und „Privacy“ nennen EOX. Ist der Dienst nicht erreichbar, bleibt die 8k-Erde ohne Fehlermeldung. | R |
 
 ### F-09 Übergreifende Bedienung
 
