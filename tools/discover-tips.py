@@ -458,7 +458,7 @@ tip('surprise', 'Akademgorodok', 'Akademgorodok', 54.8443, 83.1030,
     'Its beach on the Ob Reservoir is known locally as the Ob Sea.')
 
 city('Irkutsk', 'RU', 80)
-tip('surprise', 'Listvyanka on Lake Baikal', 'Listvyanka', 51.8536, 104.8697,
+tip('surprise', 'Lake Baikal at Listvyanka', 'Lake Baikal', 51.8536, 104.8697,
     'A village on the shore of Lake Baikal, the deepest and oldest lake on Earth.',
     'In winter the ice gets thick enough for cars and you can look through it into the clear water.')
 tip('sight', 'Circum-Baikal Railway', 'Circum-Baikal Railway', 51.8700, 104.8200,
@@ -639,7 +639,8 @@ tip('sight', 'Qutb Minar', 'Qutb Minar', 28.5245, 77.1855,
     'Nearby stands an iron pillar that has hardly rusted in over 1,500 years.')
 tip('sight', 'Humayun’s Tomb', "Humayun's Tomb", 28.5933, 77.2507,
     'A garden tomb of the Mughal emperor Humayun that set the pattern for the Taj Mahal.',
-    'It is surrounded by a garden divided into four parts by water channels.')
+    'It is surrounded by a garden divided into four parts by water channels.',
+    avoid=['The_capture_of_the_king_of_delhi_by_Captain_Hodson.jpg'])
 tip('person', 'Raj Ghat', 'Raj Ghat', 28.6406, 77.2495,
     'A black marble platform marks the place where Mahatma Gandhi was cremated in 1948.',
     'An eternal flame burns at one end.',
@@ -750,7 +751,8 @@ tip('sight', 'Stone Town', 'Stone Town', -6.1622, 39.1921,
 city('Toronto', 'CA', 25)
 tip('sight', 'CN Tower', 'CN Tower', 43.6426, -79.3871,
     'A tower 553 metres tall that was the world’s tallest free-standing structure for over 30 years.',
-    'A glass floor lets you look straight down 342 metres.')
+    'A glass floor lets you look straight down 342 metres.',
+    avoid=['CN_Tower_footings_1973.jpg'])
 
 city('Montréal', 'CA', 20)
 tip('sight', 'Notre-Dame Basilica', 'Notre-Dame Basilica (Montreal)', 45.5045, -73.5562,
@@ -760,7 +762,8 @@ tip('sight', 'Notre-Dame Basilica', 'Notre-Dame Basilica (Montreal)', 45.5045, -
 city('Vancouver', 'CA', 20)
 tip('sight', 'Stanley Park', 'Stanley Park', 49.3043, -123.1443,
     'A forest park larger than New York’s Central Park, almost surrounded by the sea.',
-    'A seawall path runs about 9 km around it.')
+    'A seawall path runs about 9 km around it.',
+    avoid=['Indian_dugout_canoe_on_Burrard_Inlet.jpg'])
 tip('surprise', 'Capilano Suspension Bridge', 'Capilano Suspension Bridge', 49.3429, -123.1149,
     'A swaying footbridge 140 metres long, high above a river canyon in the rainforest.',
     'The first bridge across the canyon here was built of hemp rope in 1889.')
@@ -824,7 +827,7 @@ tip('person', 'La Chascona', 'La Chascona', -33.4310, -70.6346,
     person='Pablo Neruda')
 
 city('Honolulu', 'US', 30)
-tip('sight', 'Diamond Head', 'Diamond Head', 21.2620, -157.8056,
+tip('sight', 'Diamond Head', 'Diamond Head, Hawaii', 21.2620, -157.8056,
     'A volcanic crater behind Waikiki Beach; a trail leads up to its rim.',
     'Sailors once mistook calcite crystals on its slopes for diamonds.')
 tip('sight', 'USS Arizona Memorial', 'USS Arizona Memorial', 21.3649, -157.9500,

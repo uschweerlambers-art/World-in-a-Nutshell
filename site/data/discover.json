@@ -1517,8 +1517,8 @@
     {
      "id": "irkutsk-1",
      "kind": "surprise",
-     "title": "Listvyanka on Lake Baikal",
-     "wiki": "Listvyanka",
+     "title": "Lake Baikal at Listvyanka",
+     "wiki": "Lake Baikal",
      "lat": 51.8536,
      "lon": 104.8697,
      "text": "A village on the shore of Lake Baikal, the deepest and oldest lake on Earth.",
@@ -2165,7 +2165,10 @@
      "lat": 28.5933,
      "lon": 77.2507,
      "text": "A garden tomb of the Mughal emperor Humayun that set the pattern for the Taj Mahal.",
-     "more": "It is surrounded by a garden divided into four parts by water channels."
+     "more": "It is surrounded by a garden divided into four parts by water channels.",
+     "avoid": [
+      "The_capture_of_the_king_of_delhi_by_Captain_Hodson.jpg"
+     ]
     },
     {
      "id": "delhi-3",
@@ -2561,7 +2564,10 @@
      "lat": 43.6426,
      "lon": -79.3871,
      "text": "A tower 553 metres tall that was the world’s tallest free-standing structure for over 30 years.",
-     "more": "A glass floor lets you look straight down 342 metres."
+     "more": "A glass floor lets you look straight down 342 metres.",
+     "avoid": [
+      "CN_Tower_footings_1973.jpg"
+     ]
     }
    ]
   },
@@ -2601,7 +2607,10 @@
      "lat": 49.3043,
      "lon": -123.1443,
      "text": "A forest park larger than New York’s Central Park, almost surrounded by the sea.",
-     "more": "A seawall path runs about 9 km around it."
+     "more": "A seawall path runs about 9 km around it.",
+     "avoid": [
+      "Indian_dugout_canoe_on_Burrard_Inlet.jpg"
+     ]
     },
     {
      "id": "vancouver-2",
@@ -2839,7 +2848,7 @@
      "id": "honolulu-1",
      "kind": "sight",
      "title": "Diamond Head",
-     "wiki": "Diamond Head",
+     "wiki": "Diamond Head, Hawaii",
      "lat": 21.262,
      "lon": -157.8056,
      "text": "A volcanic crater behind Waikiki Beach; a trail leads up to its rim.",
