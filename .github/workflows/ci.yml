@@ -42,6 +42,16 @@ jobs:
           node scripts/fetch-textures.mjs .cache/textures site/img/hi
           ls -la site/img/hi || true
           ls -la site/data/live
+      # Close-up imagery tiles are loaded by the browser, so they must answer with CORS headers
+      - name: Imagery tiles answer with CORS (smoke test)
+        run: |
+          for u in \
+            "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/GoogleMapsCompatible/10/339/533.jpg" \
+            "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/GoogleMapsCompatible/14/5430/8540.jpg" \
+            "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_NextGeneration/default/2004-08-01/GoogleMapsCompatible_Level8/5/10/16.jpeg" \
+            "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble/default/2016-01-01/GoogleMapsCompatible_Level8/5/10/16.png"; do
+            echo "== $u"; curl -s -m 20 -o /tmp/tile -D - -H "Origin: https://uschweerlambers-art.github.io" "$u" | grep -iE "^HTTP|access-control|content-type|cache-control" || true; ls -la /tmp/tile || true
+          done
       # The preview build lets reviewers download and open the site locally (N-7.4).
       - uses: actions/upload-artifact@v4
         with:
