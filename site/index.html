@@ -2470,7 +2470,8 @@ function pickConflict(x, y) {
 }
 function conflictPanel(it) {
   const kinds = CONFLICT_TYPES.filter(([b]) => it.mask & b).map(([, t]) => t).join(', ');
-  const main = it.conflicts.slice(0, 3).map(([n, d]) => `${esc(n)} <small style="color:var(--text-3)">${fmtInt(d)}</small>`).join('<br>');
+  const nm = n => n.replace(/XXX\d+/g, 'unidentified group');
+  const main = it.conflicts.slice(0, 3).map(([n, d]) => `${esc(nm(n))} <small style="color:var(--text-3)">${fmtInt(d)}</small>`).join('<br>');
   const [from, to] = L.conflict.period, fmt = d => new Date(d + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
   return {
     head: esc(it.name),
