@@ -38,39 +38,26 @@ jobs:
           AIS_LISTEN_SECONDS=20 node scripts/fetch-ships.mjs .cache/live site/data/live
           node scripts/fetch-place-of-day.mjs .cache/live site/data/live && cat site/data/live/placeofday.json && ls -la site/data/live/pod
           node scripts/fetch-wonder-pictures.mjs .cache/live site/data/live && cat site/data/live/wonders-pictures.json && ls -la site/data/live/wonders
-          node -e "for (const f of ['cables','ships']) { try { const j = require('./site/data/live/' + f + '.json'); console.log(f, j.count, JSON.stringify(j).length) } catch (e) { console.log(f, 'missing') } }"
+          node -e "for (const f of ['cables','ships','disasters']) { try { const j = require('./site/data/live/' + f + '.json'); console.log(f, j.count, JSON.stringify(j).length) } catch (e) { console.log(f, 'missing') } }"
           cat site/data/live/weather.json || true
           node scripts/fetch-textures.mjs .cache/textures site/img/hi
           ls -la site/img/hi || true
           ls -la site/data/live
-      # Close-up imagery tiles are loaded by the browser, so they must answer with CORS headers
+      # Close-up imagery, elevation and map tiles are loaded by the browser, so they must answer with CORS headers
       - name: Imagery tiles answer with CORS (smoke test)
         run: |
           for u in \
             "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/GoogleMapsCompatible/10/339/533.jpg" \
             "https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless_3857/default/GoogleMapsCompatible/14/5430/8540.jpg" \
             "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_NextGeneration/default/2004-08-01/GoogleMapsCompatible_Level8/5/10/16.jpeg" \
-            "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble/default/2016-01-01/GoogleMapsCompatible_Level8/5/10/16.png"; do
+            "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/VIIRS_Black_Marble/default/2016-01-01/GoogleMapsCompatible_Level8/5/10/16.png" \
+            "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/10/544/339.png" \
+            "https://tiles.openfreemap.org/planet"; do
             echo "== $u"; curl -s -m 20 -o /tmp/tile -D - -H "Origin: https://uschweerlambers-art.github.io" "$u" | grep -iE "^HTTP|access-control|content-type|cache-control" || true; ls -la /tmp/tile || true
           done
-      # TEMPORARY probe for relief, labels, disasters and population (removed before merge)
-      - name: Probe new sources (temporary)
-        continue-on-error: true
-        run: |
-          O="Origin: https://uschweerlambers-art.github.io"
-          for u in \
-            "https://rapidmapping.emergency.copernicus.eu/backend/dashboard-api/public-activations-info/?limit=2"; do
-            echo "== $u"; curl -sL -m 30 -o /tmp/p -D - -H "$O" "$u" | grep -iE "^HTTP|access-control-allow-origin|content-type|location" || true; ls -la /tmp/p; head -c 4000 /tmp/p | tr -c '[:print:]\n' '?'; echo
-          done
-          T=$(curl -s -m 30 https://tiles.openfreemap.org/planet | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>{const j=JSON.parse(s);console.log(j.tiles[0]);console.error(JSON.stringify({maxzoom:j.maxzoom,attribution:j.attribution,layers:(j.vector_layers||[]).map(l=>l.id+':'+Object.keys(l.fields||{}).filter(k=>!/^name:/.test(k)||/^name:(en|latin|de)$/.test(k)).join(','))}))})")
-          echo "tile template $T"; u=$(echo "$T" | sed 's#{z}/{x}/{y}#12/2133/1347#')
-          echo "== $u"; curl -s -m 30 -o /tmp/p -D - -H "$O" "$u" | grep -iE "^HTTP|access-control-allow-origin|content-type|content-encoding" || true; ls -la /tmp/p
-          G="https://jeodpp.jrc.ec.europa.eu/ftp/jrc-opendata/GHSL/GHS_POP_GLOBE_R2023A/GHS_POP_E2025_GLOBE_R2023A_4326_30ss/V1-0/GHS_POP_E2025_GLOBE_R2023A_4326_30ss_V1_0.zip"
-          echo "== $G"; curl -sIL -m 30 "$G" | grep -iE "^HTTP|content-length|content-type" || true
-          sudo apt-get -qq update >/dev/null && sudo apt-get -qq install -y gdal-bin python3-gdal >/dev/null && echo gdal ok
-          curl -sL -m 600 -o /tmp/pop.zip "$G" && ls -la /tmp/pop.zip && unzip -o -q /tmp/pop.zip -d /tmp/pop && ls -la /tmp/pop
-          rm -f /tmp/pop/*.ovr /tmp/pop.zip; python3 tools/build-population.py /tmp/pop/GHS_POP_E2025_GLOBE_R2023A_4326_30ss_V1_0.tif /tmp/population.png
-          echo "BEGIN-POPULATION-PNG"; base64 -w 100 /tmp/population.png; echo "END-POPULATION-PNG"
+      # The vector tile decoder in the page must read a real OpenFreeMap tile (F-22)
+      - name: Map tiles decode (smoke test)
+        run: node scripts/check-vector-tile.mjs
       # The preview build lets reviewers download and open the site locally (N-7.4).
       - uses: actions/upload-artifact@v4
         with:
