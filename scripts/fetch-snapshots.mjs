@@ -200,6 +200,65 @@ out tags geom qt;`;
       return { source: 'OpenStreetMap contributors (Overpass API)', sourceUrl: 'https://www.openstreetmap.org/copyright', license: 'ODbL 1.0', fields: ['osmWay', 'kind(0 telecom,1 power)', 'name', 'operator', 'voltage', 'lonlat[]'], count: rows.length, rows };
     },
   },
+  conflicts: {
+    maxAge: 3 * 24 * 60 * MIN, // UCDP publishes candidate events once a month
+    async fetch() {
+      // UCDP Candidate Events Dataset (CC BY 4.0): every event of organised violence with at least one death
+      const base = 'https://ucdp.uu.se/downloads/';
+      const html = await (await get(base + 'index.html', 60000, 'text/html')).text();
+      const monthly = [...html.matchAll(/candidateged\/GEDEvent_v(\d{2})_0_(\d{1,2})\.csv/gi)].map((m) => [+m[1], +m[2]]);
+      if (!monthly.length) throw new Error('no candidate event file listed');
+      const [yy, mm] = monthly.sort((a, b) => b[0] - a[0] || b[1] - a[1])[0];
+      // the latest month and the eleven before it; the year-to-date file stands in for missing months of this year
+      const want = []; for (let k = 0; k < 12; k++) { const d = new Date(Date.UTC(2000 + yy, mm - 1 - k, 1)); want.push([d.getUTCFullYear() % 100, d.getUTCMonth() + 1]); }
+      const parse = (text) => {
+        const rows = []; let row = [], cell = '', q = false;
+        for (let i = 0; i < text.length; i++) {
+          const c = text[i];
+          if (q) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; }
+          else if (c === '"') q = true; else if (c === ',') { row.push(cell); cell = ''; }
+          else if (c === '\n') { row.push(cell); rows.push(row); row = []; cell = ''; } else if (c !== '\r') cell += c;
+        }
+        if (cell || row.length) { row.push(cell); rows.push(row); }
+        return rows;
+      };
+      const events = new Map(), used = [];
+      const take = (text, label) => {
+        const [head, ...data] = parse(text); const col = Object.fromEntries(head.map((h, i) => [h.trim(), i]));
+        for (const k of ['id', 'type_of_violence', 'conflict_name', 'country', 'latitude', 'longitude', 'date_start', 'best']) if (!(k in col)) throw new Error(`${label}: no column ${k}`);
+        let n = 0;
+        for (const r of data) { if (r.length < 10) continue; events.set(r[col.id], [+r[col.latitude], +r[col.longitude], +r[col.best] || 0, +r[col.type_of_violence], r[col.date_start].slice(0, 10), r[col.country], r[col.conflict_name]]); n++; }
+        used.push(`${label} (${n})`);
+      };
+      const missing = [];
+      for (const [y, m] of want) {
+        try { take(await (await get(`${base}candidateged/GEDEvent_v${y}_0_${m}.csv`, 90000, 'text/csv,*/*')).text(), `${y}-${m}`); }
+        catch { missing.push([y, m]); }
+      }
+      if (missing.some(([y]) => y === yy)) {
+        try { take(await (await get(`${base}candidateged/GEDEvent_v${yy}_01_${yy}_${String(mm).padStart(2, '0')}.csv`, 120000, 'text/csv,*/*')).text(), `${yy} year to date`); } catch (e) { console.log(`  conflicts: year file ${e.message}`); }
+      }
+      if (!events.size) throw new Error('no events');
+      const dates = [...events.values()].map((e) => e[4]).sort(), to = dates.at(-1);
+      const from = new Date(Date.parse(to) - 365 * 864e5).toISOString().slice(0, 10);
+      // half-degree cells; each cell belongs to the country with the most deaths in it
+      const cells = new Map(), countries = new Map();
+      for (const [lat, lon, deaths, type, date, country, conflict] of events.values()) {
+        if (date < from || !Number.isFinite(lat) || !Number.isFinite(lon)) continue;
+        const r = Math.min(359, Math.floor((90 - lat) * 2)), c = Math.min(719, Math.floor((lon + 180) * 2)), key = r * 720 + c;
+        let x = cells.get(key); if (!x) cells.set(key, x = { r, c, deaths: 0, events: 0, by: {} });
+        x.deaths += deaths; x.events++; x.by[country] = (x.by[country] || 0) + deaths + 0.01;
+        let k = countries.get(country); if (!k) countries.set(country, k = { deaths: 0, events: 0, mask: 0, last: '', conflicts: {} });
+        k.deaths += deaths; k.events++; k.mask |= 1 << (type - 1); if (date > k.last) k.last = date;
+        k.conflicts[conflict] = (k.conflicts[conflict] || 0) + deaths;
+      }
+      const names = [...countries.keys()].sort();
+      const countryRows = names.map((n) => { const k = countries.get(n); return [n, k.deaths, k.events, k.mask, k.last, Object.entries(k.conflicts).sort((a, b) => b[1] - a[1]).slice(0, 5)]; });
+      const rows = [...cells.values()].map((x) => [x.r, x.c, x.deaths, x.events, names.indexOf(Object.entries(x.by).sort((a, b) => b[1] - a[1])[0][0])]);
+      console.log(`  conflicts: ${used.join(', ')}; ${events.size} events, ${rows.length} cells, ${names.length} countries, ${from} to ${to}`);
+      return { source: 'UCDP Candidate Events Dataset, Uppsala Conflict Data Program', sourceUrl: 'https://ucdp.uu.se', license: 'CC BY 4.0', from, to, grid: '0.5 degree, row 0 = 90..89.5 N, col 0 = 180..179.5 W', countryFields: ['country', 'deaths', 'events', 'typeMask(1 state-based,2 non-state,4 one-sided)', 'lastEvent', 'topConflicts[name,deaths]'], countries: countryRows, fields: ['row', 'col', 'deaths', 'events', 'countryIndex'], count: rows.length, rows };
+    },
+  },
 };
 
 async function get(url, timeout = 30000, accept = 'application/json') {

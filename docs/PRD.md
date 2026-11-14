@@ -2,7 +2,7 @@
 
 Version 0.8 · Stand: 14.11.2026 · Status: **Entwurf zur Freigabe durch Uwe**
 
-Änderungen in v0.8 (Uwe, 14.11.2026): Ort des Tages auf dem Startscreen (F-16). Geplant: Konfliktgebiete (UCDP) und eine echte Kartenansicht.
+Änderungen in v0.8 (Uwe, 14.11.2026): Ort des Tages auf dem Startscreen (F-16), Konfliktgebiete nach UCDP (F-17). Geplant: eine echte Kartenansicht.
 
 Änderungen in v0.7 (Uwe, 13.11.2026, 23:14): Neue Ebenen Gradnetz, Vulkane, Wirbelstürme und weitere Naturereignisse (F-13); Flugzeug- und Satelliten-Details erweitert (F-04.8, F-05.6). Dazu Wetterkarten und Luftqualität (F-14) sowie Schiffe, Kraftwerke und Seekabel (F-15). Fracht, Passagiere und Crew gibt es in keiner offenen Quelle und werden nicht angezeigt.
 
@@ -207,6 +207,14 @@ Entfällt im Prototyp (Entscheidung Uwe, 13.11.2026). Die Lizenz der NUFORC-Date
 | F-16.2 | Mini-Slider mit bis zu 5 Bildern, wechselt alle 6 s (nicht bei „Bewegung reduzieren“, pausiert bei Maus oder Fokus), Punkte, Pfeile und Wischen. Unter jedem Bild Urheber und Lizenz mit Link zur Commons-Seite. | M, A |
 | F-16.3 | Bilder nur von Wikimedia Commons (freie Lizenzen, keine „non-free“-Dateien). Die Action lädt sie einmal täglich, verkleinert sie und legt sie auf unsere Seite; der Browser fragt Wikimedia nicht an. | R, A |
 | F-16.4 | Der Ort wechselt um 00:00 Uhr Berliner Zeit nach fester Reihenfolge aus `scripts/places-of-the-day.json` (63 Orte, Start 14.11.2026). Die Datei enthält heute und morgen, eine offene Seite wechselt um Mitternacht selbst. Fehlt die Datei, bleibt der Startscreen wie bisher. | A |
+
+### F-17 Bewaffnete Konflikte (v0.8)
+
+| AK | Kriterium | Prüfung |
+| --- | --- | --- |
+| F-17.1 | Ebene „Armed conflicts“ (Standard aus): rot schraffierte Gebiete, in denen in den letzten 12 Monaten der Daten mindestens 25 Menschen durch organisierte Gewalt im Umkreis von etwa 75 km starben (3 × 3 Zellen à 0,5°; 25 Tote ist auch die UCDP-Schwelle für einen bewaffneten Konflikt). Dichte der Schraffur nach Zahl der Toten. | M |
+| F-17.2 | Quelle: UCDP Candidate Events Dataset (Uppsala Conflict Data Program, CC BY 4.0), monatlich, etwa zwei Monate Verzug. Die Action lädt die Monatsdateien der letzten 12 Monate (höchstens alle 3 Tage) und fasst sie zu Zellen und Ländern zusammen. ACLED scheidet aus (Registrierung, Weitergabe eingeschränkt). | A, R |
+| F-17.3 | Klick auf eine schraffierte Fläche zeigt das Land: Tote (beste Schätzung), Ereignisse, Art der Gewalt, die drei größten Konflikte, letztes Ereignis, Zeitraum, Hinweis „vorläufige Daten“, Links zu UCDP und Wikipedia. Unbekannte Akteure (XXX…) heißen „unidentified group“. | M |
 ### F-09 Übergreifende Bedienung
 
 | AK | Kriterium | Prüfung |
